@@ -3,6 +3,7 @@
 import os
 import pygame
 import settings
+import itertools
 from pygame import locals
 from patterns import pattern
 from selector import PatternSelector
@@ -210,258 +211,29 @@ class Grid:
         size = settings.CELL
         min_x, max_x = settings.MIN_X, settings.MAX_X
         min_y, max_y = settings.MIN_Y, settings.MAX_Y
-
-        # TODO: Fix this mess later... even though it works.
-        # Cells inside the border except the cells next to the border.
-        if min_x < x < max_x and min_y < y < max_y:
-            # Left
-            if self.cells[x-size, y].alive:
+        # Calculate positions of all neighbors.
+        nlist = list(itertools.product(range(x-size, x+size*2, size), range(y-size, y+size*2, size)))
+        # Remove the cell that we checked neighbors for from the list.
+        nlist.remove((x, y))
+        # Fix calculated positions that are outside the border.
+        new_nlist = []
+        for _x, _y in nlist:
+            tmpx, tmpy = _x, _y
+            if _x < min_x or _x > max_x or _y < min_y or _y > max_y:
+                if _x < min_x:
+                    tmpx = max_x
+                elif _x > max_x:
+                    tmpx = min_x
+                if _y < min_y:
+                    tmpy = max_y
+                elif _y > max_y:
+                    tmpy = min_y
+            new_nlist.append((tmpx, tmpy))
+        nlist = new_nlist
+        # Count live neighbors
+        for _x, _y in nlist:
+            if self.cells[_x, _y].alive:
                 neighbors += 1
-            # Right
-            if self.cells[x+size, y].alive:
-                neighbors += 1
-            # Up
-            if self.cells[x, y-size].alive:
-                neighbors += 1
-            # Down
-            if self.cells[x, y+size].alive:
-                neighbors += 1
-            # Leftup
-            if self.cells[x-size, y-size].alive:
-                neighbors += 1
-            # Leftdown
-            if self.cells[x-size, y+size].alive:
-                neighbors += 1
-            # Rightup
-            if self.cells[x+size, y-size].alive:
-                neighbors += 1
-            # Rightdown
-            if self.cells[x+size, y+size].alive:
-                neighbors += 1
-
-        # Every cell on the edge of the border.
-        elif x == min_x or x == max_x or y == min_y or y == max_y:
-
-            # Left up down corners
-            if x == min_x and y == min_y:  # Upper left corner.
-                # Special case.
-                # Left
-                if self.cells[max_x, y].alive:
-                    neighbors += 1
-                # Up
-                if self.cells[x, max_y].alive:
-                    neighbors += 1
-                # Leftup
-                if self.cells[max_x, max_y].alive:
-                    neighbors += 1
-                # Leftdown
-                if self.cells[max_x, min_y].alive:
-                    neighbors += 1
-                # Rightup
-                if self.cells[min_x+size, max_y].alive:
-                    neighbors += 1
-                # Normal case.
-                # Right
-                if self.cells[x+size, y].alive:
-                    neighbors += 1
-                # Down
-                if self.cells[x, y+size].alive:
-                    neighbors += 1
-                # Rightdown
-                if self.cells[x+size, y+size].alive:
-                    neighbors += 1
-
-            if x == min_x and y == max_y:  # Bottom left corner.
-                # Special case.
-                # Left
-                if self.cells[max_x, max_y].alive:
-                    neighbors += 1
-                # Leftup
-                if self.cells[max_x, max_y-size].alive:
-                    neighbors += 1
-                # Leftdown
-                if self.cells[max_x, min_y].alive:
-                    neighbors += 1
-                # Down
-                if self.cells[min_x, min_y].alive:
-                    neighbors += 1
-                # Normal cases
-                # Up
-                if self.cells[min_x, max_y-size].alive:
-                    neighbors += 1
-                # Rightup
-                if self.cells[min_x+size, max_y].alive:
-                    neighbors += 1
-                # Right
-                if self.cells[x+size, y].alive:
-                    neighbors += 1
-                # Rightdown
-                if self.cells[min_x+size, min_y].alive:
-                    neighbors += 1
-
-            # Right up corners
-            if x == max_x and y == min_y:  # Upper right corner.
-                # Special cases.
-                # Up
-                if self.cells[max_x, max_y].alive:
-                    neighbors += 1
-                # Leftup
-                if self.cells[x-size, max_y].alive:
-                    neighbors += 1
-                # Rightup
-                if self.cells[min_x, max_y].alive:
-                    neighbors += 1
-                # Rightdown
-                if self.cells[min_x, y+size].alive:
-                    neighbors += 1
-                # Right
-                if self.cells[min_x, y].alive:
-                    neighbors += 1
-                # Normal cases
-                # Left
-                if self.cells[x-size, y].alive:
-                    neighbors += 1
-                # Down
-                if self.cells[x, y+size].alive:
-                    neighbors += 1
-                # Leftdown
-                if self.cells[x-size, y+size].alive:
-                    neighbors += 1
-
-            if x == max_x and y == max_y:  # Bottom right corner.
-                # Left
-                if self.cells[x-size, y].alive:
-                    neighbors += 1
-                # Right
-                if self.cells[min_x, y].alive:
-                    neighbors += 1
-                # Up
-                if self.cells[x, y-size].alive:
-                    neighbors += 1
-                # Down
-                if self.cells[x, min_y].alive:
-                    neighbors += 1
-                # Leftup
-                if self.cells[x-size, y-size].alive:
-                    neighbors += 1
-                # Leftdown
-                if self.cells[max_x-size, min_y].alive:
-                    neighbors += 1
-                # Rightup
-                if self.cells[min_x, max_y-size].alive:
-                    neighbors += 1
-                # Rightdown
-                if self.cells[min_x, min_y].alive:
-                    neighbors += 1
-
-            # Between the four corners.
-            # Between upper corners.
-            if min_x < x < max_x and y == min_y:
-                # Left
-                if self.cells[x-size, y].alive:
-                    neighbors += 1
-                # Right
-                if self.cells[x+size, y].alive:
-                    neighbors += 1
-                # Up
-                if self.cells[x, max_y].alive:
-                    neighbors += 1
-                # Down
-                if self.cells[x, y+size].alive:
-                    neighbors += 1
-                # Leftup
-                if self.cells[x-size, max_y].alive:
-                    neighbors += 1
-                # Leftdown
-                if self.cells[x-size, y+size].alive:
-                    neighbors += 1
-                # Rightup
-                if self.cells[x+size, max_y].alive:
-                    neighbors += 1
-                # Rightdown
-                if self.cells[x+size, y+size].alive:
-                    neighbors += 1
-
-            # Between bottom corners.
-            if min_x < x < max_x and y == max_y:
-                # Left
-                if self.cells[x-size, y].alive:
-                    neighbors += 1
-                # Right
-                if self.cells[x+size, y].alive:
-                    neighbors += 1
-                # Up
-                if self.cells[x, y-size].alive:
-                    neighbors += 1
-                # Down
-                if self.cells[x, min_y].alive:
-                    neighbors += 1
-                # Leftup
-                if self.cells[x-size, y-size].alive:
-                    neighbors += 1
-                # Leftdown
-                if self.cells[x-size, min_y].alive:
-                    neighbors += 1
-                # Rightup
-                if self.cells[x+size, y-size].alive:
-                    neighbors += 1
-                # Rightdown
-                if self.cells[x+size, min_y].alive:
-                    neighbors += 1
-
-            # Between left corners.
-            if x == min_x and min_y < y < max_y:
-                # Left
-                if self.cells[max_x, y].alive:
-                    neighbors += 1
-                # Right
-                if self.cells[x+size, y].alive:
-                    neighbors += 1
-                # Up
-                if self.cells[x, y-size].alive:
-                    neighbors += 1
-                # Down
-                if self.cells[x, y+size].alive:
-                    neighbors += 1
-                # Leftup
-                if self.cells[max_x, y-size].alive:
-                    neighbors += 1
-                # Leftdown
-                if self.cells[max_x, y+size].alive:
-                    neighbors += 1
-                # Rightup
-                if self.cells[x+size, y-size].alive:
-                    neighbors += 1
-                # Rightdown
-                if self.cells[x+size, y+size].alive:
-                    neighbors += 1
-
-            # Between right corners.
-            if x == max_x and min_y < y < max_y:
-                # Left
-                if self.cells[x-size, y].alive:
-                    neighbors += 1
-                # Right
-                if self.cells[min_x, y].alive:
-                    neighbors += 1
-                # Up
-                if self.cells[x, y-size].alive:
-                    neighbors += 1
-                # Down
-                if self.cells[x, y+size].alive:
-                    neighbors += 1
-                # Leftup
-                if self.cells[x-size, y-size].alive:
-                    neighbors += 1
-                # Leftdown
-                if self.cells[x-size, y+size].alive:
-                    neighbors += 1
-                # Rightup
-                if self.cells[min_x, y-size].alive:
-                    neighbors += 1
-                # Rightdown
-                if self.cells[min_x, y+size].alive:
-                    neighbors += 1
 
         return neighbors
 
