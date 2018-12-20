@@ -1,6 +1,3 @@
-#!/usr/bin/env python3.6
-
-
 class Node:
     """Node in the linked list to store a individual pattern in."""
 
