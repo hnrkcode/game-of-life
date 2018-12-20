@@ -3,7 +3,7 @@
 import sys
 import text
 import settings
-import gameoflife
+import pattern
 import pygame
 from pygame import locals
 
@@ -19,7 +19,7 @@ class Main:
         self.mouse_down = False
         self.left_ctrl_held = False
         self.clock = pygame.time.Clock()
-        self.cell = gameoflife.Pattern()
+        self.cell = pattern.Pattern()
         self.name, self.func = self.cell.select.get_current()
 
         pygame.display.set_caption("GAME OF LIFE")
