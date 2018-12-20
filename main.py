@@ -19,7 +19,7 @@ class Main:
         self.mouse_down = False
         self.left_ctrl_held = False
         self.clock = pygame.time.Clock()
-        self.cell = pattern.Pattern()
+        self.cell = pattern.PastePattern()
         self.name, self.func = self.cell.select.get_current()
 
         pygame.display.set_caption("GAME OF LIFE")

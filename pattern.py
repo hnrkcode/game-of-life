@@ -3,22 +3,13 @@ import settings
 from grid import Grid
 from selector import PatternSelector
 
-class Pattern(Grid):
+class PastePattern(Grid):
 
     def __init__(self):
         super().__init__()
-
         self.select = PatternSelector()
-        self.select.append(("Blinker", self.paste_pattern))
-        self.select.append(("Pulsar", self.paste_pattern))
-        self.select.append(("Pinwheel", self.paste_pattern))
-        self.select.append(("Octagon 2", self.paste_pattern))
-        self.select.append(("Glider", self.paste_pattern))
-        self.select.append(("LWSS", self.paste_pattern))
-        self.select.append(("25P3H1V0.1", self.paste_pattern))
-        self.select.append(("Weekender", self.paste_pattern))
-        self.select.append(("Gosperglidergun", self.paste_pattern))
-        self.select.append(("Garden of Eden", self.paste_pattern))
+        for name in patterns.pattern.keys():
+            self.select.append((name, self.paste))
 
     def is_inside_grid(self, pos, matrix):
         """Make sure the pattern is pasted inside the grids boundary."""
@@ -38,12 +29,12 @@ class Pattern(Grid):
 
     def calc_size(self, matrix):
         """Calculate the patterns size."""
-        width, height = len(matrix[0]), len(matrix)
-        width, height = width*settings.CELL, height*settings.CELL
+        w, h = len(matrix[0]), len(matrix)
+        width, height = w*settings.CELL, h*settings.CELL
 
         return width, height
 
-    def paste_pattern(self, pos, name):
+    def paste(self, pos, name):
         """Paste any predefined patterns on the grid."""
         matrix = patterns.pattern[name]
         position = self.calc_pos(pos)
