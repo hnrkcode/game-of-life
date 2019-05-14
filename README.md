@@ -28,4 +28,4 @@ Game of life is an algorithm invented by John Horton Conway in 1970. The game of
 ## BUILT WITH
 
 - [Python 3.6.7](https://www.python.org/)
-- [Pygame 1.9.4](https://www.pygame.org/)
+- [Pygame 1.9.6](https://www.pygame.org/)
