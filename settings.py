@@ -3,10 +3,16 @@ import os.path
 # Frame per second.
 FPS = 30
 
+# Paths to files in the project
+BASE_DIR = os.path.dirname(__file__)
+ASSETS_ROOT = os.path.join(BASE_DIR, 'assets')
+IMAGES = os.path.join(ASSETS_ROOT, 'images')
+FONTS = os.path.join(ASSETS_ROOT, 'fonts')
+
 # File paths to important files.
-ICON_FILE = os.path.join('assets', 'img', 'logo.png')
-HEADER = os.path.join('assets', 'font', 'LLPIXEL3.ttf')
-FONT = os.path.join('assets', 'font', 'Rheiborn_Sans_Clean.ttf')
+ICON_FILE = os.path.join(IMAGES, 'logo.png')
+HEADER = os.path.join(FONTS, 'LLPIXEL3.ttf')
+FONT = os.path.join(FONTS, 'Rheiborn_Sans_Clean.ttf')
 
 # Color settings.
 TEXT_COLOR = (150, 150, 150)
