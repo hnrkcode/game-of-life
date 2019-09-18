@@ -1,15 +1,14 @@
-#!/usr/bin/env python3.6
-
 import sys
-import text
-import settings
-import pattern
+
 import pygame
 from pygame import locals
 
+from gameoflife import settings
+from gameoflife.pattern import paste
+from gameoflife.util import text
 
-class Main:
 
+class MainClass:
     def __init__(self):
         pygame.init()
         self.size = (settings.WIDTH, settings.HEIGHT)
@@ -19,7 +18,7 @@ class Main:
         self.mouse_down = False
         self.left_ctrl_held = False
         self.clock = pygame.time.Clock()
-        self.cell = pattern.PastePattern()
+        self.cell = paste.PastePattern()
         self.name, self.func = self.cell.select.get_current()
 
         pygame.display.set_caption("GAME OF LIFE")
@@ -30,7 +29,14 @@ class Main:
         self.p = 20
 
         self.header_pos = (settings.BOARD_WIDTH_SIZE / 1.6, 0)
-        self.header = text.InfoText(self.h1, "GAME OF LIFE", pos=self.header_pos, font=settings.HEADER),
+        self.header = (
+            text.InfoText(
+                self.h1,
+                "GAME OF LIFE",
+                pos=self.header_pos,
+                font=settings.HEADER,
+            ),
+        )
 
         self.info = [
             text.InfoText(self.h2, "INFORMATION"),
@@ -44,7 +50,9 @@ class Main:
             text.InfoText(self.p, f"{self.name}"),
         ]
         self.info_text = self.format(self.info)
-        self.info_group = pygame.sprite.RenderUpdates(self.header, self.info_text)
+        self.info_group = pygame.sprite.RenderUpdates(
+            self.header, self.info_text
+        )
 
     def format(self, information):
         """Arrange the information text on the screen."""
@@ -79,9 +87,11 @@ class Main:
         """Handles the events triggered by the user."""
 
         # Exit the program.
-        if (event.type == locals.QUIT or
-                event.type == locals.KEYDOWN and
-                event.key == locals.K_ESCAPE):
+        if (
+            event.type == locals.QUIT
+            or event.type == locals.KEYDOWN
+            and event.key == locals.K_ESCAPE
+        ):
             self.exit()
 
         elif event.type == locals.KEYDOWN:
@@ -112,12 +122,16 @@ class Main:
                 self.left_ctrl_held = False
 
         # Scroll through patterns.
-        elif (event.type == locals.MOUSEBUTTONDOWN and
-                event.button == settings.SCROLL_DOWN):
+        elif (
+            event.type == locals.MOUSEBUTTONDOWN
+            and event.button == settings.SCROLL_DOWN
+        ):
             self.cell.select.next()
             self.name, self.func = self.cell.select.get_current()
-        elif (event.type == locals.MOUSEBUTTONDOWN and
-                event.button == settings.SCROLL_UP):
+        elif (
+            event.type == locals.MOUSEBUTTONDOWN
+            and event.button == settings.SCROLL_UP
+        ):
             self.cell.select.previous()
             self.name, self.func = self.cell.select.get_current()
 
@@ -173,7 +187,10 @@ class Main:
             pygame.display.update()
 
 
-if __name__ == "__main__":
-
-    gameoflife = Main()
+def main():
+    gameoflife = MainClass()
     gameoflife.main()
+
+
+if __name__ == "__main__":
+    main()

@@ -1,14 +1,15 @@
-import patterns
-import settings
-from grid import Grid
-from selector import PatternSelector
+from gameoflife import settings
+from gameoflife.board.grid import Grid
+
+from . import blueprint
+from .select import PatternSelector
+
 
 class PastePattern(Grid):
-
     def __init__(self):
         super().__init__()
         self.select = PatternSelector()
-        for name in patterns.pattern.keys():
+        for name in blueprint.pattern.keys():
             self.select.append((name, self.paste))
 
     def is_inside_grid(self, pos, matrix):
@@ -17,9 +18,9 @@ class PastePattern(Grid):
         x, y = pos
 
         left = settings.MIN_X
-        right = settings.MAX_X-w
+        right = settings.MAX_X - w
         up = settings.MIN_Y
-        down = settings.MAX_Y-h
+        down = settings.MAX_Y - h
 
         # True if inside the girds boundary.
         if left <= x <= right and up <= y <= down:
@@ -30,13 +31,13 @@ class PastePattern(Grid):
     def calc_size(self, matrix):
         """Calculate the patterns size."""
         w, h = len(matrix[0]), len(matrix)
-        width, height = w*settings.CELL, h*settings.CELL
+        width, height = w * settings.CELL, h * settings.CELL
 
         return width, height
 
     def paste(self, pos, name):
         """Paste any predefined patterns on the grid."""
-        matrix = patterns.pattern[name]
+        matrix = blueprint.pattern[name]
         position = self.calc_pos(pos)
         x, y = position
 

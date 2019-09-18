@@ -1,6 +1,9 @@
-import settings
 import itertools
-from cell import Cell
+
+from gameoflife import settings
+
+from .cell import Cell
+
 
 class Grid:
     """The 2D grid where the magic happens."""
@@ -59,13 +62,13 @@ class Grid:
         """Calculate the key for the current mouse position."""
         x, y = pos
         # Calculate the acceptable interval the exact coordinate has.
-        low_x = ((x // settings.CELL) * settings.CELL)
+        low_x = (x // settings.CELL) * settings.CELL
         high_x = low_x + (settings.CELL - 1)
-        low_y = ((y // settings.CELL) * settings.CELL)
+        low_y = (y // settings.CELL) * settings.CELL
         high_y = low_y + (settings.CELL - 1)
 
         # Find the key that should get the value.
-        if (low_x <= x <= high_x and low_y <= y <= high_y):
+        if low_x <= x <= high_x and low_y <= y <= high_y:
             # Calculate the exact key.
             x = x // settings.CELL * settings.CELL
             y = y // settings.CELL * settings.CELL
@@ -142,7 +145,12 @@ class Grid:
         min_x, max_x = settings.MIN_X, settings.MAX_X
         min_y, max_y = settings.MIN_Y, settings.MAX_Y
         # Calculate positions of all neighbors.
-        nlist = list(itertools.product(range(x-size, x+size*2, size), range(y-size, y+size*2, size)))
+        nlist = list(
+            itertools.product(
+                range(x - size, x + size * 2, size),
+                range(y - size, y + size * 2, size),
+            )
+        )
         # Remove the cell that we checked neighbors for from the list.
         nlist.remove((x, y))
         # Fix calculated positions that are outside the border.

@@ -1,9 +1,9 @@
 import pygame
-import settings
+
+from gameoflife import settings
 
 
 class InfoText(pygame.sprite.DirtySprite):
-
     def __init__(self, fontsize, text, pos=(0, 0), font=settings.FONT):
         super().__init__()
         self.text = text

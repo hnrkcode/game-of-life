@@ -1,5 +1,7 @@
 import pygame
-import settings
+
+from gameoflife import settings
+
 
 class Cell(pygame.sprite.Sprite):
     """Individual cells on the grid."""
