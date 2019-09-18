@@ -4,7 +4,7 @@ import os.path
 FPS = 30
 
 # Paths to files in the project
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+BASE_DIR = os.path.dirname(__file__)
 ASSETS_ROOT = os.path.join(BASE_DIR, "data")
 IMAGES = os.path.join(ASSETS_ROOT, "images")
 FONTS = os.path.join(ASSETS_ROOT, "fonts")
