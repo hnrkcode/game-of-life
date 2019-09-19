@@ -8,6 +8,7 @@ BASE_DIR = os.path.dirname(__file__)
 ASSETS_ROOT = os.path.join(BASE_DIR, "data")
 IMAGES = os.path.join(ASSETS_ROOT, "images")
 FONTS = os.path.join(ASSETS_ROOT, "fonts")
+TEXT_DIR = os.path.join(ASSETS_ROOT, "text")
 
 # File paths to important files.
 ICON_FILE = os.path.join(IMAGES, "logo.png")

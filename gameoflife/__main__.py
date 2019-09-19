@@ -26,7 +26,7 @@ class MainClass:
 
         self.h1 = 35
         self.h2 = 25
-        self.p = 20
+        self.p = 15
 
         self.header_pos = (settings.BOARD_WIDTH_SIZE / 1.6, 0)
         self.header = (

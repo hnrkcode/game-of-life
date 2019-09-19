@@ -21,6 +21,9 @@ class TestSettings(unittest.TestCase):
     def test_fonts_dir(self):
         self.assertEqual(os.path.basename(settings.FONTS), "fonts")
 
+    def test_fonts_dir(self):
+        self.assertEqual(os.path.basename(settings.TEXT_DIR), "text")
+
     def test_icon_file(self):
         self.assertRegex(os.path.basename(settings.ICON_FILE), "[a-z].png$")
 

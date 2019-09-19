@@ -9,7 +9,8 @@ class PastePattern(Grid):
     def __init__(self):
         super().__init__()
         self.select = PatternSelector()
-        for name in blueprint.pattern.keys():
+        self.pattern = blueprint.get_patterns()
+        for name in self.pattern.keys():
             self.select.append((name, self.paste))
 
     def is_inside_grid(self, pos, matrix):
@@ -37,7 +38,7 @@ class PastePattern(Grid):
 
     def paste(self, pos, name):
         """Paste any predefined patterns on the grid."""
-        matrix = blueprint.pattern[name]
+        matrix = self.pattern[name]
         position = self.calc_pos(pos)
         x, y = position
 
