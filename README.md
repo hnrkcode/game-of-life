@@ -10,10 +10,10 @@
 
 Game of life is an algorithm invented by John Horton Conway in 1970. The game of life is set on a 2-dimensional grid made up by many small cells. Each cells is in one of two states, alive or dead. A cells state is decided by the algorithm, which has four simple rules:
 
->1. A cell dies if it has less than two living neighbors.
-2. A cell survives until the next generation if it has two or three neighbors.
-3. A cell with more than three neighbors dies.
-4. A dead cell with exactly three neighbors turns into a living cell.
+> 1. A cell dies if it has less than two living neighbors.
+> 2. A cell survives until the next generation if it has two or three neighbors.
+> 3. A cell with more than three neighbors dies.
+> 4. A dead cell with exactly three neighbors turns into a living cell.
 
 ## Setup
 
