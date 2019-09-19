@@ -58,24 +58,25 @@ class MainClass:
         """Arrange the information text on the screen."""
 
         x, y = 30, settings.BOARD_Y_POS
+
         for info in information:
             if info.fontsize > self.p:
-                pos = (x, y)
-                info.set_position(pos)
+                info.set_position((x, y))
                 y += 40
             else:
-                pos = (x, y)
-                info.set_position(pos)
+                info.set_position((x, y))
                 y += 20
 
         return information
 
     def exit(self):
         """Exit the game of life simulator."""
+
         sys.exit()
 
     def toggle_fullscreen(self):
         """Change to fullscreen mode."""
+
         if self.fullscreen:
             self.fullscreen = False
             self.screen = pygame.display.set_mode(self.size)
@@ -150,6 +151,7 @@ class MainClass:
 
     def main(self):
         """Main method of the program."""
+
         while True:
 
             # Control the frame rate.

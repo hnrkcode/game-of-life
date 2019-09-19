@@ -18,6 +18,7 @@ class Cell(pygame.sprite.Sprite):
 
     def custom_state(self, state):
         """Switch to the chosen state."""
+
         self.alive = state
         if self.alive:
             self.color = settings.ALIVE
@@ -28,6 +29,7 @@ class Cell(pygame.sprite.Sprite):
 
     def change_state(self):
         """Switch to the opposite state."""
+
         if self.alive:
             self.alive = False
             self.color = settings.DEAD
@@ -39,6 +41,7 @@ class Cell(pygame.sprite.Sprite):
 
     def next_gen(self):
         """Update the generations the cell has existed and colorize it."""
+
         if self.alive:
             self.generation += 1
             if 1 < self.generation <= 5:
@@ -61,6 +64,7 @@ class Cell(pygame.sprite.Sprite):
 
     def reset(self):
         """Set the generation back to zero if cell has died."""
+
         self.generation = 0
         self.color = settings.DEAD
         self.image.fill(self.color)

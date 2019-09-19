@@ -1,16 +1,15 @@
 import os.path
 import string
 
-from gameoflife import settings
+from gameoflife.settings import PATTERN_LIST
 
 
 def get_patterns():
     """Read patterns from text file."""
 
     patterns = {}
-    patterns_list = os.path.join(settings.TEXT_DIR, "patterns.txt")
 
-    with open(patterns_list, "r") as patterns_file:
+    with open(PATTERN_LIST, "r") as patterns_file:
 
         name = None
         layout = []

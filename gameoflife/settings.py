@@ -14,6 +14,7 @@ TEXT_DIR = os.path.join(ASSETS_ROOT, "text")
 ICON_FILE = os.path.join(IMAGES, "logo.png")
 HEADER = os.path.join(FONTS, "LLPIXEL3.ttf")
 FONT = os.path.join(FONTS, "Rheiborn_Sans_Clean.ttf")
+PATTERN_LIST = os.path.join(TEXT_DIR, "patterns.txt")
 
 # Color settings.
 TEXT_COLOR = (150, 150, 150)

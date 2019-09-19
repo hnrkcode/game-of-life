@@ -6,6 +6,8 @@ from .select import PatternSelector
 
 
 class PastePattern(Grid):
+    """Read in predefined patterns and paste them on the grid."""
+
     def __init__(self):
         super().__init__()
         self.select = PatternSelector()
@@ -15,6 +17,7 @@ class PastePattern(Grid):
 
     def is_inside_grid(self, pos, matrix):
         """Make sure the pattern is pasted inside the grids boundary."""
+
         w, h = self.calc_size(matrix)
         x, y = pos
 
@@ -31,6 +34,7 @@ class PastePattern(Grid):
 
     def calc_size(self, matrix):
         """Calculate the patterns size."""
+
         w, h = len(matrix[0]), len(matrix)
         width, height = w * settings.CELL, h * settings.CELL
 
@@ -38,6 +42,7 @@ class PastePattern(Grid):
 
     def paste(self, pos, name):
         """Paste any predefined patterns on the grid."""
+
         matrix = self.pattern[name]
         position = self.calc_pos(pos)
         x, y = position
