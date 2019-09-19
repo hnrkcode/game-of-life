@@ -5,15 +5,15 @@ FPS = 30
 
 # Paths to files in the project
 BASE_DIR = os.path.dirname(__file__)
-ASSETS_ROOT = os.path.join(BASE_DIR, "data")
-IMAGES = os.path.join(ASSETS_ROOT, "images")
-FONTS = os.path.join(ASSETS_ROOT, "fonts")
-TEXT_DIR = os.path.join(ASSETS_ROOT, "text")
+DATA_DIR = os.path.join(BASE_DIR, "data")
+IMAGE_DIR = os.path.join(DATA_DIR, "images")
+FONT_DIR = os.path.join(DATA_DIR, "fonts")
+TEXT_DIR = os.path.join(DATA_DIR, "text")
 
 # File paths to important files.
-ICON_FILE = os.path.join(IMAGES, "logo.png")
-HEADER = os.path.join(FONTS, "LLPIXEL3.ttf")
-FONT = os.path.join(FONTS, "Rheiborn_Sans_Clean.ttf")
+ICON_FILE = os.path.join(IMAGE_DIR, "logo.png")
+HEADER_FONT = os.path.join(FONT_DIR, "LLPIXEL3.ttf")
+TEXT_FONT = os.path.join(FONT_DIR, "Rheiborn_Sans_Clean.ttf")
 PATTERN_LIST = os.path.join(TEXT_DIR, "patterns.txt")
 
 # Color settings.
@@ -26,6 +26,14 @@ GEN2 = (0, 255, 206)
 GEN3 = (233, 255, 131)
 GEN4 = (255, 141, 61)
 GEN5 = (232, 0, 25)
+
+# Pattern scroll list colors.
+ACTIVE = (255, 255, 255)
+ADJACENT_1 = (130, 130, 130)
+ADJACENT_2 = (100, 100, 100)
+ADJACENT_3 = (90, 90, 90)
+ADJACENT_4 = (50, 50, 50)
+ADJACENT_5 = (30, 30, 30)
 
 # Window size.
 WIDTH = 1280

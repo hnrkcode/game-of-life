@@ -20,6 +20,8 @@ class MainClass:
         self.clock = pygame.time.Clock()
         self.cell = paste.PastePattern()
         self.name, self.func = self.cell.select.get_current()
+        self.prev = [self.cell.select.before_current(i) for i in range(1, 6)]
+        self.next = [self.cell.select.after_current(i) for i in range(1, 6)]
 
         pygame.display.set_caption("GAME OF LIFE")
         pygame.display.set_icon(pygame.image.load(settings.ICON_FILE))
@@ -34,7 +36,7 @@ class MainClass:
                 self.h1,
                 "GAME OF LIFE",
                 pos=self.header_pos,
-                font=settings.HEADER,
+                font=settings.HEADER_FONT,
             ),
         )
 
@@ -47,7 +49,17 @@ class MainClass:
             text.InfoText(self.p, f"FPS: {self.clock.get_fps():.1f}"),
             text.InfoText(self.p, f""),
             text.InfoText(self.h2, "PATTERNS"),
-            text.InfoText(self.p, f"{self.name}"),
+            text.InfoText(self.p, f"{self.next[4]}", color=settings.ADJACENT_5),
+            text.InfoText(self.p, f"{self.next[3]}", color=settings.ADJACENT_4),
+            text.InfoText(self.p, f"{self.next[2]}", color=settings.ADJACENT_3),
+            text.InfoText(self.p, f"{self.next[1]}", color=settings.ADJACENT_2),
+            text.InfoText(self.p, f"{self.next[0]}", color=settings.ADJACENT_1),
+            text.InfoText(self.p, f"{self.name}", color=settings.ACTIVE),
+            text.InfoText(self.p, f"{self.prev[0]}", color=settings.ADJACENT_1),
+            text.InfoText(self.p, f"{self.prev[1]}", color=settings.ADJACENT_2),
+            text.InfoText(self.p, f"{self.prev[2]}", color=settings.ADJACENT_3),
+            text.InfoText(self.p, f"{self.prev[3]}", color=settings.ADJACENT_4),
+            text.InfoText(self.p, f"{self.prev[4]}", color=settings.ADJACENT_5),
         ]
         self.info_text = self.format(self.info)
         self.info_group = pygame.sprite.RenderUpdates(
@@ -112,9 +124,23 @@ class MainClass:
             if event.key == locals.K_UP:
                 self.cell.select.previous()
                 self.name, self.func = self.cell.select.get_current()
+                self.prev = [
+                    self.cell.select.before_current(i) for i in range(1, 6)
+                ]
+                self.next = [
+                    self.cell.select.after_current(i) for i in range(1, 6)
+                ]
+
             if event.key == locals.K_DOWN:
                 self.cell.select.next()
                 self.name, self.func = self.cell.select.get_current()
+                self.prev = [
+                    self.cell.select.before_current(i) for i in range(1, 6)
+                ]
+                self.next = [
+                    self.cell.select.after_current(i) for i in range(1, 6)
+                ]
+
             # Hold left control button to paste pattern when left clicking.
             if event.key == locals.K_LCTRL:
                 self.left_ctrl_held = True
@@ -129,12 +155,21 @@ class MainClass:
         ):
             self.cell.select.next()
             self.name, self.func = self.cell.select.get_current()
+            self.prev = [
+                self.cell.select.before_current(i) for i in range(1, 6)
+            ]
+            self.next = [self.cell.select.after_current(i) for i in range(1, 6)]
+
         elif (
             event.type == locals.MOUSEBUTTONDOWN
             and event.button == settings.SCROLL_UP
         ):
             self.cell.select.previous()
             self.name, self.func = self.cell.select.get_current()
+            self.prev = [
+                self.cell.select.before_current(i) for i in range(1, 6)
+            ]
+            self.next = [self.cell.select.after_current(i) for i in range(1, 6)]
 
         # Left click to deploy cells or right click to remove cells.
         elif event.type == locals.MOUSEBUTTONDOWN:
@@ -176,7 +211,20 @@ class MainClass:
             self.info_text[2].update(f"Living cells: {self.cell.living}")
             self.info_text[3].update(f"Total deaths: {self.cell.deaths}")
             self.info_text[5].update(f"FPS: {self.clock.get_fps():.1f}")
-            self.info_text[8].update(f"{self.name}")
+
+            # Update pattern scroll list.
+            next_index = 4
+            prev_index = 0
+
+            for i in range(8, 19):
+                if 7 < i < 13:
+                    self.info_text[i].update(f"{self.next[next_index]}")
+                    next_index -= 1
+                elif i == 13:
+                    self.info_text[i].update(f"{self.name}")
+                elif 13 < i < 19:
+                    self.info_text[i].update(f"{self.prev[prev_index]}")
+                    prev_index += 1
 
             # Draw everything to the screen.
             self.screen.fill(settings.BG_COLOR)

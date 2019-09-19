@@ -54,3 +54,23 @@ class PatternSelector:
         func = self.current.data[1]
 
         return name, func
+
+    def before_current(self, num):
+        """Return pattern name n times before active pattern."""
+
+        name = self.current
+
+        for n in range(num):
+            name = name.next
+
+        return name.data[0]
+
+    def after_current(self, num):
+        """Return pattern name n times after active pattern."""
+
+        name = self.current
+
+        for n in range(num):
+            name = name.prev
+
+        return name.data[0]

@@ -39,8 +39,33 @@ Still life: Carrier
 Oscillator: Blinker
 111
 
-Oscillator: Pulsar
+Oscillator: Beacon
+1100
+1000
+0001
+0011
+
+Oscillator: Pulsar line
 1111111111
+
+Oscillator: Pulsar
+0011100011100
+0000000000000
+1000010100001
+1000010100001
+1000010100001
+0011100011100
+0000000000000
+0011100011100
+1000010100001
+1000010100001
+1000010100001
+0000000000000
+0011100011100
+
+Oscillator: Toad
+0111
+1110
 
 Oscillator: Figure eight
 110000
@@ -212,6 +237,9 @@ Methuselah: GardenofEden
 101110111010
 100110010101
 000000000010
+
+Methuselah: Infinite 3
+111111110111110001110000001111111011111
 
 #######################################################
 ## WICK                                              ##

@@ -7,6 +7,7 @@ from gameoflife.settings import PATTERN_LIST
 def get_patterns():
     """Read patterns from text file."""
 
+    count = 1
     patterns = {}
 
     with open(PATTERN_LIST, "r") as patterns_file:
@@ -26,8 +27,9 @@ def get_patterns():
 
             # Use name as dictionary key.
             if is_name:
-                name = line.strip("\n")
+                name = f"{count}. " + line.strip("\n")
                 patterns[name] = []
+                count += 1
                 continue
 
             # All other lines that isn't empty are part of the pattern.
