@@ -4,13 +4,17 @@ import pygame
 from pygame import locals
 
 from gameoflife import settings
-from gameoflife.pattern import paste
+from gameoflife.pattern import menu, paste
 from gameoflife.util import text
 
 
 class MainClass:
     def __init__(self):
+
+        # Initialize display screen.
         pygame.init()
+        pygame.display.set_caption("GAME OF LIFE")
+        pygame.display.set_icon(pygame.image.load(settings.ICON_FILE))
         self.size = (settings.WIDTH, settings.HEIGHT)
         self.screen = pygame.display.set_mode(self.size)
 
@@ -20,47 +24,31 @@ class MainClass:
         self.clock = pygame.time.Clock()
         self.cell = paste.PastePattern()
         self.name, self.func = self.cell.select.get_current()
-        self.prev = [self.cell.select.before_current(i) for i in range(1, 6)]
-        self.next = [self.cell.select.after_current(i) for i in range(1, 6)]
-
-        pygame.display.set_caption("GAME OF LIFE")
-        pygame.display.set_icon(pygame.image.load(settings.ICON_FILE))
+        self.menu = menu.ScrollMenu()
+        self.menu_obj = self.menu.setup(self.cell.select)
 
         self.h1 = 35
         self.h2 = 25
         self.p = 15
 
         self.header_pos = (settings.BOARD_WIDTH_SIZE / 1.6, 0)
-        self.header = (
-            text.InfoText(
-                self.h1,
-                "GAME OF LIFE",
-                pos=self.header_pos,
-                font=settings.HEADER_FONT,
-            ),
+        self.header = text.InfoText(
+            "GAME OF LIFE",
+            self.h1,
+            pos=self.header_pos,
+            font=settings.HEADER_FONT,
         )
 
         self.info = [
-            text.InfoText(self.h2, "INFORMATION"),
-            text.InfoText(self.p, f"Generation: {self.cell.generation}"),
-            text.InfoText(self.p, f"Living cells: {self.cell.living}"),
-            text.InfoText(self.p, f"Total deaths: {self.cell.deaths}"),
-            text.InfoText(self.p, f"Grid: {settings.TOTAL_CELLS}"),
-            text.InfoText(self.p, f"FPS: {self.clock.get_fps():.1f}"),
-            text.InfoText(self.p, f""),
-            text.InfoText(self.h2, "PATTERNS"),
-            text.InfoText(self.p, f"{self.next[4]}", color=settings.ADJACENT_5),
-            text.InfoText(self.p, f"{self.next[3]}", color=settings.ADJACENT_4),
-            text.InfoText(self.p, f"{self.next[2]}", color=settings.ADJACENT_3),
-            text.InfoText(self.p, f"{self.next[1]}", color=settings.ADJACENT_2),
-            text.InfoText(self.p, f"{self.next[0]}", color=settings.ADJACENT_1),
-            text.InfoText(self.p, f"{self.name}", color=settings.ACTIVE),
-            text.InfoText(self.p, f"{self.prev[0]}", color=settings.ADJACENT_1),
-            text.InfoText(self.p, f"{self.prev[1]}", color=settings.ADJACENT_2),
-            text.InfoText(self.p, f"{self.prev[2]}", color=settings.ADJACENT_3),
-            text.InfoText(self.p, f"{self.prev[3]}", color=settings.ADJACENT_4),
-            text.InfoText(self.p, f"{self.prev[4]}", color=settings.ADJACENT_5),
-        ]
+            text.InfoText("INFORMATION", self.h2),
+            text.InfoText(f"Generation: {self.cell.generation}", self.p),
+            text.InfoText(f"Living cells: {self.cell.living}", self.p),
+            text.InfoText(f"Total deaths: {self.cell.deaths}", self.p),
+            text.InfoText(f"Grid: {settings.TOTAL_CELLS}", self.p),
+            text.InfoText(f"FPS: {self.clock.get_fps():.1f}", self.p),
+            text.InfoText(None, self.p),
+        ] + self.menu.format("PATTERNS", self.name, self.menu_obj)
+
         self.info_text = self.format(self.info)
         self.info_group = pygame.sprite.RenderUpdates(
             self.header, self.info_text
@@ -124,26 +112,15 @@ class MainClass:
             if event.key == locals.K_UP:
                 self.cell.select.previous()
                 self.name, self.func = self.cell.select.get_current()
-                self.prev = [
-                    self.cell.select.before_current(i) for i in range(1, 6)
-                ]
-                self.next = [
-                    self.cell.select.after_current(i) for i in range(1, 6)
-                ]
-
+                self.menu_obj = self.menu.setup(self.cell.select)
             if event.key == locals.K_DOWN:
                 self.cell.select.next()
                 self.name, self.func = self.cell.select.get_current()
-                self.prev = [
-                    self.cell.select.before_current(i) for i in range(1, 6)
-                ]
-                self.next = [
-                    self.cell.select.after_current(i) for i in range(1, 6)
-                ]
-
+                self.menu_obj = self.menu.setup(self.cell.select)
             # Hold left control button to paste pattern when left clicking.
             if event.key == locals.K_LCTRL:
                 self.left_ctrl_held = True
+
         elif event.type == locals.KEYUP:
             if event.key == locals.K_LCTRL:
                 self.left_ctrl_held = False
@@ -155,10 +132,7 @@ class MainClass:
         ):
             self.cell.select.next()
             self.name, self.func = self.cell.select.get_current()
-            self.prev = [
-                self.cell.select.before_current(i) for i in range(1, 6)
-            ]
-            self.next = [self.cell.select.after_current(i) for i in range(1, 6)]
+            self.menu_obj = self.menu.setup(self.cell.select)
 
         elif (
             event.type == locals.MOUSEBUTTONDOWN
@@ -166,10 +140,7 @@ class MainClass:
         ):
             self.cell.select.previous()
             self.name, self.func = self.cell.select.get_current()
-            self.prev = [
-                self.cell.select.before_current(i) for i in range(1, 6)
-            ]
-            self.next = [self.cell.select.after_current(i) for i in range(1, 6)]
+            self.menu_obj = self.menu.setup(self.cell.select)
 
         # Left click to deploy cells or right click to remove cells.
         elif event.type == locals.MOUSEBUTTONDOWN:
@@ -181,6 +152,7 @@ class MainClass:
             else:
                 # Hold mouse button to draw or erase without clicking.
                 self.mouse_down = True
+
         elif event.type == locals.MOUSEBUTTONUP:
             self.mouse_down = False
 
@@ -212,19 +184,8 @@ class MainClass:
             self.info_text[3].update(f"Total deaths: {self.cell.deaths}")
             self.info_text[5].update(f"FPS: {self.clock.get_fps():.1f}")
 
-            # Update pattern scroll list.
-            next_index = 4
-            prev_index = 0
-
-            for i in range(8, 19):
-                if 7 < i < 13:
-                    self.info_text[i].update(f"{self.next[next_index]}")
-                    next_index -= 1
-                elif i == 13:
-                    self.info_text[i].update(f"{self.name}")
-                elif 13 < i < 19:
-                    self.info_text[i].update(f"{self.prev[prev_index]}")
-                    prev_index += 1
+            # Update pattern scroll menu.
+            self.menu.update(self.info_text, self.menu_obj, self.name, 8, 19)
 
             # Draw everything to the screen.
             self.screen.fill(settings.BG_COLOR)

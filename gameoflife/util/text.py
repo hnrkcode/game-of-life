@@ -6,8 +6,8 @@ from gameoflife import settings
 class InfoText(pygame.sprite.DirtySprite):
     def __init__(
         self,
-        fontsize,
         text,
+        size,
         pos=(0, 0),
         font=settings.TEXT_FONT,
         color=settings.TEXT_COLOR,
@@ -15,9 +15,9 @@ class InfoText(pygame.sprite.DirtySprite):
         super().__init__()
         self.color = color
         self.text = text
-        self.fontsize = fontsize
-        self._font = pygame.font.Font(font, self.fontsize)
-        self.image = self._font.render(self.text, 1, self.color)
+        self.fontsize = size
+        self._font = pygame.font.Font(font, size)
+        self.image = self._font.render(text, 1, color)
         self.rect = pos
 
     def set_position(self, pos):

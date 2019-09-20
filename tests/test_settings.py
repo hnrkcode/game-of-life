@@ -12,24 +12,27 @@ class TestSettings(unittest.TestCase):
     def test_base_dir(self):
         self.assertEqual(os.path.basename(settings.BASE_DIR), "gameoflife")
 
-    def test_assets_root_dir(self):
-        self.assertEqual(os.path.basename(settings.ASSETS_ROOT), "data")
+    def test_data_dir(self):
+        self.assertEqual(os.path.basename(settings.DATA_DIR), "data")
 
-    def test_images_dir(self):
-        self.assertEqual(os.path.basename(settings.IMAGES), "images")
+    def test_image_dir(self):
+        self.assertEqual(os.path.basename(settings.IMAGE_DIR), "images")
 
-    def test_fonts_dir(self):
-        self.assertEqual(os.path.basename(settings.FONTS), "fonts")
+    def test_font_dir(self):
+        self.assertEqual(os.path.basename(settings.FONT_DIR), "fonts")
 
-    def test_fonts_dir(self):
+    def test_text_dir(self):
         self.assertEqual(os.path.basename(settings.TEXT_DIR), "text")
 
     def test_icon_file(self):
-        self.assertRegex(os.path.basename(settings.ICON_FILE), "[a-z].png$")
+        self.assertRegex(os.path.basename(settings.ICON_FILE), "logo.png$")
 
     def test_font_files(self):
-        self.assertRegex(os.path.basename(settings.HEADER), "[a-z0-9].ttf$")
-        self.assertRegex(os.path.basename(settings.FONT), "[a-z0-9_].ttf$")
+        self.assertRegex(os.path.basename(settings.HEADER_FONT), "[a-z0-9].ttf$")
+        self.assertRegex(os.path.basename(settings.TEXT_FONT), "[a-z0-9_].ttf$")
+
+    def test_patterns_file(self):
+        self.assertRegex(os.path.basename(settings.PATTERN_LIST), "patterns.txt$")
 
     def test_text_color(self):
         self.assertEqual(settings.TEXT_COLOR, (150, 150, 150))
@@ -49,6 +52,9 @@ class TestSettings(unittest.TestCase):
         self.assertEqual(settings.GEN3, (233, 255, 131))
         self.assertEqual(settings.GEN4, (255, 141, 61))
         self.assertEqual(settings.GEN5, (232, 0, 25))
+
+    def test_active_menu_pattern_color(self):
+        self.assertEqual(settings.ACTIVE, (255, 255, 255))
 
     def test_window_size(self):
         self.assertEqual((settings.WIDTH, settings.HEIGHT), (1280, 720))

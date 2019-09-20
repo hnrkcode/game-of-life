@@ -29,11 +29,6 @@ GEN5 = (232, 0, 25)
 
 # Pattern scroll list colors.
 ACTIVE = (255, 255, 255)
-ADJACENT_1 = (130, 130, 130)
-ADJACENT_2 = (100, 100, 100)
-ADJACENT_3 = (90, 90, 90)
-ADJACENT_4 = (50, 50, 50)
-ADJACENT_5 = (30, 30, 30)
 
 # Window size.
 WIDTH = 1280
