@@ -1,6 +1,8 @@
+import pygame
+
 from gameoflife import settings
-from gameoflife.board.grid import Grid, calc_pos
 from gameoflife.board.cell import Cell
+from gameoflife.board.grid import Grid, calc_pos
 
 from . import blueprint
 from .select import PatternSelector
@@ -37,6 +39,27 @@ class PastePattern(Grid):
         width, height = w * settings.CELL_SIZE, h * settings.CELL_SIZE
 
         return width, height
+
+    def preview(self, name, pos):
+        matrix = self.pattern[name]
+        x, y = position = calc_pos(pos)
+
+        rects = []
+
+        for row in range(len(matrix)):
+            for col in range(len(matrix[row])):
+                if matrix[row][col]:
+                    rects.append(pygame.Rect(x, y, 10, 10))
+                else:
+                    pass
+                x += settings.CELL_SIZE
+            x = position[0]
+            y += settings.CELL_SIZE
+
+        if not self.is_inside_grid(position, matrix):
+            return False, rects
+
+        return True, rects
 
     def paste(self, pos, name):
         """Paste any predefined patterns on the grid."""

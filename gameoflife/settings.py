@@ -27,6 +27,9 @@ GEN3 = (233, 255, 131)
 GEN4 = (255, 141, 61)
 GEN5 = (232, 0, 25)
 
+PASTE_ON = (138, 226, 52)
+PASTE_OFF = (239, 41, 41)
+
 # Pattern scroll list colors.
 ACTIVE = (255, 255, 255)
 

@@ -4,9 +4,9 @@ import pygame
 from pygame import locals
 
 from gameoflife import settings
+from gameoflife.board import Board
 from gameoflife.pattern import menu, paste
 from gameoflife.util import text
-from gameoflife.board import Board
 
 
 class MainClass:
@@ -87,6 +87,17 @@ class MainClass:
         else:
             self.fullscreen = True
             self.screen = pygame.display.set_mode(self.size, locals.FULLSCREEN)
+
+    def preview_patterns(self):
+        """Preview selected patterns and show if you can paste it."""
+
+        pos = pygame.mouse.get_pos()
+        can_paste, rects = self.grid.preview(self.name, pos)
+        for rect in rects:
+            if can_paste:
+                pygame.draw.rect(self.screen, settings.PASTE_ON, rect)
+            else:
+                pygame.draw.rect(self.screen, settings.PASTE_OFF, rect)
 
     def event_handler(self, event):
         """Handles the events triggered by the user."""
@@ -195,6 +206,10 @@ class MainClass:
             self.screen.fill(settings.BG_COLOR)
             self.info_group.draw(self.screen)
             self.bg_group.draw(self.screen)
+
+            # Preview selected pattern.
+            if self.left_ctrl_held:
+                self.preview_patterns()
 
             for key in self.grid.cell.keys():
                 if self.grid.cell[key] == 1:
