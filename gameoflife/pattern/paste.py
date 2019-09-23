@@ -23,8 +23,12 @@ class PastePattern(Grid):
 
         x, y = pos
         w, h = self.calc_size(matrix)
-        left, right = settings.MIN_X, settings.MAX_X - w
-        up, down = settings.MIN_Y, settings.MAX_Y - h
+
+        left = settings.MIN_X
+        up = settings.MIN_Y
+
+        right = settings.MAX_X - w + settings.CELL_SIZE
+        down = settings.MAX_Y - h + settings.CELL_SIZE
 
         # True if inside the girds boundary.
         if left <= x <= right and up <= y <= down:
