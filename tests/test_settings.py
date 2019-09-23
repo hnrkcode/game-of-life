@@ -28,11 +28,15 @@ class TestSettings(unittest.TestCase):
         self.assertRegex(os.path.basename(settings.ICON_FILE), "logo.png$")
 
     def test_font_files(self):
-        self.assertRegex(os.path.basename(settings.HEADER_FONT), "[a-z0-9].ttf$")
+        self.assertRegex(
+            os.path.basename(settings.HEADER_FONT), "[a-z0-9].ttf$"
+        )
         self.assertRegex(os.path.basename(settings.TEXT_FONT), "[a-z0-9_].ttf$")
 
     def test_patterns_file(self):
-        self.assertRegex(os.path.basename(settings.PATTERN_LIST), "patterns.txt$")
+        self.assertRegex(
+            os.path.basename(settings.PATTERN_LIST), "patterns.txt$"
+        )
 
     def test_text_color(self):
         self.assertEqual(settings.TEXT_COLOR, (150, 150, 150))

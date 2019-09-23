@@ -1,17 +1,17 @@
 import itertools
 
 from gameoflife.settings import (
-    CELL_SIZE,
-    MIN_X,
-    MIN_Y,
-    MAX_X,
-    MAX_Y,
-    LEFT_CLICK,
-    RIGHT_CLICK,
+    BOARD_HEIGHT,
+    BOARD_WIDTH,
     BOARD_X_POS,
     BOARD_Y_POS,
-    BOARD_WIDTH,
-    BOARD_HEIGHT,
+    CELL_SIZE,
+    LEFT_CLICK,
+    MAX_X,
+    MAX_Y,
+    MIN_X,
+    MIN_Y,
+    RIGHT_CLICK,
 )
 
 from .cell import Cell
