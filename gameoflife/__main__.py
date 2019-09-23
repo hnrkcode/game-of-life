@@ -6,6 +6,7 @@ from pygame import locals
 from gameoflife import settings
 from gameoflife.pattern import menu, paste
 from gameoflife.util import text
+from gameoflife.board import Board
 
 
 class MainClass:
@@ -22,10 +23,10 @@ class MainClass:
         self.mouse_down = False
         self.left_ctrl_held = False
         self.clock = pygame.time.Clock()
-        self.cell = paste.PastePattern()
-        self.name, self.func = self.cell.select.get_current()
+        self.grid = paste.PastePattern()
+        self.name, self.func = self.grid.select.get_current()
         self.menu = menu.ScrollMenu()
-        self.menu_obj = self.menu.setup(self.cell.select)
+        self.menu_obj = self.menu.setup(self.grid.select)
 
         self.h1 = 35
         self.h2 = 25
@@ -41,9 +42,9 @@ class MainClass:
 
         self.info = [
             text.InfoText("INFORMATION", self.h2),
-            text.InfoText(f"Generation: {self.cell.generation}", self.p),
-            text.InfoText(f"Living cells: {self.cell.living}", self.p),
-            text.InfoText(f"Total deaths: {self.cell.deaths}", self.p),
+            text.InfoText(f"Generation: {self.grid.generation}", self.p),
+            text.InfoText(f"Cells: {len(self.grid.cell_sprite)}", self.p),
+            text.InfoText(f"Total deaths: {self.grid.deaths}", self.p),
             text.InfoText(f"Grid: {settings.TOTAL_CELLS}", self.p),
             text.InfoText(f"FPS: {self.clock.get_fps():.1f}", self.p),
             text.InfoText(None, self.p),
@@ -53,6 +54,9 @@ class MainClass:
         self.info_group = pygame.sprite.RenderUpdates(
             self.header, self.info_text
         )
+
+        self.board = Board()
+        self.bg_group = pygame.sprite.RenderUpdates(self.board)
 
     def format(self, information):
         """Arrange the information text on the screen."""
@@ -98,25 +102,25 @@ class MainClass:
         elif event.type == locals.KEYDOWN:
             # Press enter to start the simulation.
             if event.key == locals.K_RETURN:
-                self.cell.start()
+                self.grid.start()
             # Press R to clear the screen.
             if event.key == locals.K_r:
-                self.cell.reset()
+                self.grid.reset()
             # Press P to stop the simulation temporarily.
             if event.key == locals.K_p:
-                self.cell.stop()
+                self.grid.stop()
             # Press F11 to toggle to fullscreen mode.
             if event.key == locals.K_F11:
                 self.toggle_fullscreen()
             # Choose predefined pattern.
             if event.key == locals.K_UP:
-                self.cell.select.previous()
-                self.name, self.func = self.cell.select.get_current()
-                self.menu_obj = self.menu.setup(self.cell.select)
+                self.grid.select.previous()
+                self.name, self.func = self.grid.select.get_current()
+                self.menu_obj = self.menu.setup(self.grid.select)
             if event.key == locals.K_DOWN:
-                self.cell.select.next()
-                self.name, self.func = self.cell.select.get_current()
-                self.menu_obj = self.menu.setup(self.cell.select)
+                self.grid.select.next()
+                self.name, self.func = self.grid.select.get_current()
+                self.menu_obj = self.menu.setup(self.grid.select)
             # Hold left control button to paste pattern when left clicking.
             if event.key == locals.K_LCTRL:
                 self.left_ctrl_held = True
@@ -130,17 +134,17 @@ class MainClass:
             event.type == locals.MOUSEBUTTONDOWN
             and event.button == settings.SCROLL_DOWN
         ):
-            self.cell.select.next()
-            self.name, self.func = self.cell.select.get_current()
-            self.menu_obj = self.menu.setup(self.cell.select)
+            self.grid.select.next()
+            self.name, self.func = self.grid.select.get_current()
+            self.menu_obj = self.menu.setup(self.grid.select)
 
         elif (
             event.type == locals.MOUSEBUTTONDOWN
             and event.button == settings.SCROLL_UP
         ):
-            self.cell.select.previous()
-            self.name, self.func = self.cell.select.get_current()
-            self.menu_obj = self.menu.setup(self.cell.select)
+            self.grid.select.previous()
+            self.name, self.func = self.grid.select.get_current()
+            self.menu_obj = self.menu.setup(self.grid.select)
 
         # Left click to deploy cells or right click to remove cells.
         elif event.type == locals.MOUSEBUTTONDOWN:
@@ -172,16 +176,16 @@ class MainClass:
             if self.mouse_down:
                 position = pygame.mouse.get_pos()
                 button = pygame.mouse.get_pressed()
-                self.cell.change_status(position, button)
+                self.grid.change_status(position, button)
 
             # Update the grid.
-            if self.cell.run:
-                self.cell.update()
+            if self.grid.run:
+                self.grid.update()
 
             # Update runtime information.
-            self.info_text[1].update(f"Generation: {self.cell.generation}")
-            self.info_text[2].update(f"Living cells: {self.cell.living}")
-            self.info_text[3].update(f"Total deaths: {self.cell.deaths}")
+            self.info_text[1].update(f"Generation: {self.grid.generation}")
+            self.info_text[2].update(f"Cells: {len(self.grid.cell_sprite)}")
+            self.info_text[3].update(f"Total deaths: {self.grid.deaths}")
             self.info_text[5].update(f"FPS: {self.clock.get_fps():.1f}")
 
             # Update pattern scroll menu.
@@ -190,10 +194,15 @@ class MainClass:
             # Draw everything to the screen.
             self.screen.fill(settings.BG_COLOR)
             self.info_group.draw(self.screen)
-            for key in self.cell.cells.keys():
-                color = self.cell.cells[key].color
-                cell = self.cell.cells[key]
-                pygame.draw.rect(self.screen, color, cell)
+            self.bg_group.draw(self.screen)
+
+            for key in self.grid.cell.keys():
+                if self.grid.cell[key] == 1:
+                    pygame.draw.rect(
+                        self.screen,
+                        self.grid.cell_sprite[key].color,
+                        self.grid.cell_sprite[key],
+                    )
 
             pygame.display.update()
 
