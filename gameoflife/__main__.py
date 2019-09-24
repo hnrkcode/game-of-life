@@ -92,12 +92,8 @@ class MainClass:
         """Preview selected patterns and show if you can paste it."""
 
         pos = pygame.mouse.get_pos()
-        can_paste, rects = self.grid.preview(self.name, pos)
-        for rect in rects:
-            if can_paste:
-                pygame.draw.rect(self.screen, settings.PASTE_ON, rect)
-            else:
-                pygame.draw.rect(self.screen, settings.PASTE_OFF, rect)
+        pattern = self.grid.preview(self.name, pos)
+        self.screen.blit(pattern, pos)
 
     def event_handler(self, event):
         """Handles the events triggered by the user."""

@@ -44,26 +44,35 @@ class PastePattern(Grid):
 
         return width, height
 
+    def set_color(self, pos, matrix):
+        if not self.is_inside_grid(pos, matrix):
+            return settings.PASTE_OFF
+        return settings.PASTE_ON
+
     def preview(self, name, pos):
-        matrix = self.pattern[name]
-        x, y = position = calc_pos(pos)
+        """Show preview of selected pattern."""
 
-        rects = []
+        size = settings.CELL_SIZE
+        pattern_matrix = self.pattern[name]
+        w, h = len(pattern_matrix[0]) * size, len(pattern_matrix) * size
+        pattern_surface = pygame.Surface((w, h))
+        pattern_surface.set_colorkey((0, 0, 0))
+        pattern_surface.set_alpha(50)
+        pattern_color = self.set_color(pos, pattern_matrix)
 
-        for row in range(len(matrix)):
-            for col in range(len(matrix[row])):
-                if matrix[row][col]:
-                    rects.append(pygame.Rect(x, y, 10, 10))
-                else:
-                    pass
-                x += settings.CELL_SIZE
-            x = position[0]
-            y += settings.CELL_SIZE
+        # Draw pattern to a surface with the same size.
+        for row in range(len(pattern_matrix)):
+            for col in range(len(pattern_matrix[row])):
+                # Draw only parts of the pattern that is visible.
+                if pattern_matrix[row][col]:
+                    xy_coords = [col * size, row * size]
+                    wh_size = [size] * 2
+                    pattern_rect = pygame.Rect(xy_coords, wh_size)
+                    pygame.draw.rect(
+                        pattern_surface, pattern_color, pattern_rect
+                    )
 
-        if not self.is_inside_grid(position, matrix):
-            return False, rects
-
-        return True, rects
+        return pattern_surface
 
     def paste(self, pos, name):
         """Paste any predefined patterns on the grid."""
