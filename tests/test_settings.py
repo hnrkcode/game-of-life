@@ -64,7 +64,7 @@ class TestSettings(unittest.TestCase):
         self.assertEqual((settings.WIDTH, settings.HEIGHT), (1280, 720))
 
     def test_cell_size(self):
-        self.assertEqual(settings.CELL, 10)
+        self.assertEqual(settings.CELL_SIZE, 10)
 
     def test_board_position(self):
         board_pos = (settings.BOARD_X_POS, settings.BOARD_Y_POS)
