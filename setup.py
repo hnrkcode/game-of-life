@@ -12,6 +12,6 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(),
     package_data={"": ["*.ttf", "*.png", "*.txt"]},
-    python_requires=">=3.7.4",
+    python_requires=">=3.6",
     entry_points={"console_scripts": ["gameoflife = gameoflife.__main__:main"]},
 )
