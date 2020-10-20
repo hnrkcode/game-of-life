@@ -8,7 +8,7 @@ from gameoflife.board import Board
 from gameoflife.pattern import menu, paste
 from gameoflife.util import text
 
-from gameoflife.modal import Modal, Overlay
+from gameoflife.modal import Modal, Overlay, Pause
 
 class MainClass:
     def __init__(self):
@@ -70,6 +70,9 @@ class MainClass:
         self.overlay = Overlay()
         self.modal_group = pygame.sprite.RenderUpdates(self.overlay, self.modal)
         self.active_modal = False
+
+        self.pause_screen = Pause()
+        self.pause_group = pygame.sprite.RenderUpdates(self.pause_screen)
 
     def format(self, information):
         """Arrange the information text on the screen."""
@@ -182,6 +185,9 @@ class MainClass:
     def main(self):
         """Main method of the program."""
 
+        # Update pause text intervall.
+        pygame.time.set_timer(pygame.USEREVENT, 200)
+
         while True:
 
             # Control the frame rate.
@@ -189,8 +195,12 @@ class MainClass:
 
             # Handel user inputs.
             for event in pygame.event.get():
+                # Update pause text.
+                if event.type == pygame.USEREVENT and self.paused:
+                    self.pause_group.update()
+
                 # Exit the program.
-                if (
+                elif (
                     event.type == locals.QUIT
                     or event.type == locals.KEYDOWN
                     and event.key == locals.K_ESCAPE
@@ -254,6 +264,9 @@ class MainClass:
                         self.grid.cell_sprite[key],
                     )
             
+            if self.paused:
+                self.pause_group.draw(self.screen)
+
             if self.active_modal:
                 self.modal_group.draw(self.screen)
 
