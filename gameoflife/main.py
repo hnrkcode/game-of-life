@@ -8,6 +8,7 @@ from gameoflife.board import Board
 from gameoflife.pattern import menu, paste
 from gameoflife.util import text
 
+from gameoflife.modal import Modal, Overlay
 
 class MainClass:
     def __init__(self):
@@ -50,6 +51,12 @@ class MainClass:
             text.InfoText(None, self.p),
         ] + self.menu.format("PATTERNS", self.name, self.menu_obj)
 
+        self.info += [
+            text.InfoText(None, self.p),
+            text.InfoText("HELP", self.h2),
+            text.InfoText("Press (H) for help", self.p)
+        ]
+
         self.info_text = self.format(self.info)
         self.info_group = pygame.sprite.RenderUpdates(
             self.header, self.info_text
@@ -57,6 +64,11 @@ class MainClass:
 
         self.board = Board()
         self.bg_group = pygame.sprite.RenderUpdates(self.board)
+
+        self.modal = Modal()
+        self.overlay = Overlay()
+        self.modal_group = pygame.sprite.RenderUpdates(self.overlay, self.modal)
+        self.active_modal = False
 
     def format(self, information):
         """Arrange the information text on the screen."""
@@ -98,15 +110,7 @@ class MainClass:
     def event_handler(self, event):
         """Handles the events triggered by the user."""
 
-        # Exit the program.
-        if (
-            event.type == locals.QUIT
-            or event.type == locals.KEYDOWN
-            and event.key == locals.K_ESCAPE
-        ):
-            self.exit()
-
-        elif event.type == locals.KEYDOWN:
+        if event.type == locals.KEYDOWN:
             # Press enter to start the simulation.
             if event.key == locals.K_RETURN:
                 self.grid.start()
@@ -129,11 +133,11 @@ class MainClass:
                 self.name, self.func = self.grid.select.get_current()
                 self.menu_obj = self.menu.setup(self.grid.select)
             # Hold left control button to paste pattern when left clicking.
-            if event.key == locals.K_LCTRL:
+            if event.key == locals.K_LCTRL or event.key == locals.K_RCTRL:
                 self.left_ctrl_held = True
 
         elif event.type == locals.KEYUP:
-            if event.key == locals.K_LCTRL:
+            if event.key == locals.K_LCTRL or event.key == locals.K_RCTRL:
                 self.left_ctrl_held = False
 
         # Scroll through patterns.
@@ -177,7 +181,30 @@ class MainClass:
 
             # Handel user inputs.
             for event in pygame.event.get():
-                self.event_handler(event)
+                # Exit the program.
+                if (
+                    event.type == locals.QUIT
+                    or event.type == locals.KEYDOWN
+                    and event.key == locals.K_ESCAPE
+                ):
+                    self.exit()
+
+                # Toggle modal.
+                elif event.type == locals.KEYDOWN and event.key == locals.K_h:
+                    self.active_modal = not self.active_modal
+                    
+                    # Pause everything when modal is activated and
+                    # start everything when modal is inactivated, but
+                    # only if the board already was started.
+                    if self.active_modal and self.grid.generation:
+                        self.grid.stop()
+                    
+                    if not self.active_modal and self.grid.generation:
+                        self.grid.start()
+                
+                # User can only interact with the board when the modal isn't active.
+                if not self.active_modal:
+                    self.event_handler(event)
 
             # Draw/erase cells on the grid.
             if self.mouse_down:
@@ -214,6 +241,9 @@ class MainClass:
                         self.grid.cell_sprite[key].color,
                         self.grid.cell_sprite[key],
                     )
+            
+            if self.active_modal:
+                self.modal_group.draw(self.screen)
 
             pygame.display.update()
 

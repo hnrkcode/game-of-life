@@ -19,6 +19,8 @@ PATTERN_LIST = os.path.join(TEXT_DIR, "patterns.txt")
 # Color settings.
 TEXT_COLOR = (150, 150, 150)
 BG_COLOR = (19, 19, 19)
+MODAL_COLOR = (40, 40, 40)
+OVERLAY_COLOR = (10, 10, 10)
 DEAD = (27, 27, 27)
 ALIVE = (150, 150, 150)
 GEN1 = (40, 160, 255)
