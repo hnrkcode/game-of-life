@@ -41,3 +41,11 @@ Mor information about installing Pygame: https://www.pygame.org/wiki/GettingStar
 | `RIGHT MOUSE BUTTON` | Click or hold to erase cells |
 | `UP` `DOWN` `SCROLL WHEEL` | Choose pattern from predefined patterns |
 | `LEFT CTRL` + `LEFT MOUSE BUTTON` | Paste chosen pattern onto the grid |
+
+## Tests
+
+Run all tests.
+
+```bash
+python3 -m unittest --verbose
+```
