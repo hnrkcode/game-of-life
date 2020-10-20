@@ -23,6 +23,7 @@ class MainClass:
         self.fullscreen = False
         self.mouse_down = False
         self.left_ctrl_held = False
+        self.paused = False
         self.clock = pygame.time.Clock()
         self.grid = paste.PastePattern()
         self.name, self.func = self.grid.select.get_current()
@@ -113,13 +114,23 @@ class MainClass:
         if event.type == locals.KEYDOWN:
             # Press enter to start the simulation.
             if event.key == locals.K_RETURN:
-                self.grid.start()
+                # Can only start if there are any cells on the board.
+                if len(self.grid.cell_sprite):
+                    self.grid.start()
+                    self.paused = False
             # Press R to clear the screen.
             if event.key == locals.K_r:
                 self.grid.reset()
+                self.paused = False
             # Press P to stop the simulation temporarily.
             if event.key == locals.K_p:
-                self.grid.stop()
+                # Can only pause if there are cells and the generation is more than zero.
+                if len(self.grid.cell_sprite) and self.grid.generation:
+                    if self.paused:
+                        self.grid.start()
+                    else:
+                        self.grid.stop()
+                    self.paused = not self.paused
             # Choose predefined pattern.
             if event.key == locals.K_UP:
                 self.grid.select.previous()
@@ -197,10 +208,10 @@ class MainClass:
                     # Pause everything when modal is activated and
                     # start everything when modal is inactivated, but
                     # only if the board already was started.
-                    if self.active_modal and self.grid.generation:
+                    if self.active_modal and self.grid.generation and not self.paused:
                         self.grid.stop()
                     
-                    if not self.active_modal and self.grid.generation:
+                    if not self.active_modal and self.grid.generation and not self.paused:
                         self.grid.start()
                 
                 # User can only interact with the board when the modal isn't active.
