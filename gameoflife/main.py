@@ -120,9 +120,6 @@ class MainClass:
             # Press P to stop the simulation temporarily.
             if event.key == locals.K_p:
                 self.grid.stop()
-            # Press F11 to toggle to fullscreen mode.
-            if event.key == locals.K_F11:
-                self.toggle_fullscreen()
             # Choose predefined pattern.
             if event.key == locals.K_UP:
                 self.grid.select.previous()
@@ -188,6 +185,10 @@ class MainClass:
                     and event.key == locals.K_ESCAPE
                 ):
                     self.exit()
+
+                # Press F11 to toggle to fullscreen mode.
+                elif event.type == locals.KEYDOWN and event.key == locals.K_F11:
+                    self.toggle_fullscreen()
 
                 # Toggle modal.
                 elif event.type == locals.KEYDOWN and event.key == locals.K_h:
