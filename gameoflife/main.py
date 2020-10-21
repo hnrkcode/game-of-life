@@ -46,7 +46,7 @@ class MainClass:
         self.info = [
             text.InfoText("INFORMATION", self.h2),
             text.InfoText(f"Generation: {self.grid.generation}", self.p),
-            text.InfoText(f"Cells: {len(self.grid.cell_sprite)}", self.p),
+            text.InfoText(f"Cells: {self.get_cell_count()}", self.p),
             text.InfoText(f"Total deaths: {self.grid.deaths}", self.p),
             text.InfoText(f"Grid: {settings.TOTAL_CELLS}", self.p),
             text.InfoText(f"FPS: {self.clock.get_fps():.1f}", self.p),
@@ -121,6 +121,11 @@ class MainClass:
         self.grid.reset()
         self.paused = False
         self.is_finished = False
+    
+    def get_cell_count(self):
+        """Return number alive cells on the grid."""
+
+        return len(self.grid.cell_sprite)
 
     def event_handler(self, event):
         """Handles the events triggered by the user."""
@@ -129,7 +134,7 @@ class MainClass:
             # Press enter to start the simulation.
             if event.key == locals.K_RETURN:
                 # Can only start if there are any cells on the board.
-                if len(self.grid.cell_sprite):
+                if self.get_cell_count():
                     self.grid.start()
                     self.paused = False
             # Press R to clear the screen.
@@ -138,7 +143,7 @@ class MainClass:
             # Press P to stop the simulation temporarily.
             if event.key == locals.K_p:
                 # Can only pause if there are cells and the generation is more than zero.
-                if len(self.grid.cell_sprite) and self.grid.generation:
+                if self.get_cell_count() and self.grid.generation:
                     if self.paused:
                         self.grid.start()
                     else:
@@ -213,7 +218,7 @@ class MainClass:
                 if event.type == pygame.USEREVENT and self.paused:
                     self.pause_group.update()
                 
-                if event.type == pygame.USEREVENT and not len(self.grid.cell_sprite) and self.grid.generation:
+                if event.type == pygame.USEREVENT and not self.get_cell_count() and self.grid.generation:
                     self.end_group.update()
 
                 # Exit the program.
@@ -257,7 +262,7 @@ class MainClass:
 
             # Update runtime information.
             self.info_text[1].update(f"Generation: {self.grid.generation}")
-            self.info_text[2].update(f"Cells: {len(self.grid.cell_sprite)}")
+            self.info_text[2].update(f"Cells: {self.get_cell_count()}")
             self.info_text[3].update(f"Total deaths: {self.grid.deaths}")
             self.info_text[5].update(f"FPS: {self.clock.get_fps():.1f}")
 
@@ -285,7 +290,7 @@ class MainClass:
                 self.pause_group.draw(self.screen)
 
             # Show end screen when there are no more cells left on the board.
-            if not len(self.grid.cell_sprite) and self.grid.generation:
+            if not self.get_cell_count() and self.grid.generation:
                 self.grid.stop()
                 self.end_group.draw(self.screen)
                 self.is_finished = True
