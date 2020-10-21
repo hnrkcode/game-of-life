@@ -1,5 +1,7 @@
 import os.path
 
+GAME_NAME = "GAME OF LIFE"
+
 # Frame per second.
 FPS = 30
 
@@ -38,6 +40,7 @@ ACTIVE = (255, 255, 255)
 # Window size.
 WIDTH = 1280
 HEIGHT = 720
+WINDOW_SIZE = (WIDTH, HEIGHT)
 
 # Cell size.
 CELL_SIZE = 10
@@ -64,3 +67,10 @@ LEFT_CLICK = (1, 0, 0)
 RIGHT_CLICK = (0, 0, 1)
 SCROLL_DOWN = 5
 SCROLL_UP = 4
+
+# Text sizes.
+H1 = 100
+H2 = 35
+H3 = 25
+H4 = 20
+TEXT = 15

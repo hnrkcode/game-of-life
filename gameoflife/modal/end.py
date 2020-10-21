@@ -2,7 +2,7 @@ import math
 import pygame
 
 from gameoflife import settings
-from gameoflife.util import text
+from gameoflife.util.text import InfoText
 
 
 class End(pygame.sprite.Sprite):
@@ -27,9 +27,9 @@ class End(pygame.sprite.Sprite):
         self.image.fill(self.color)
 
         letters = (
-            text.InfoText("E", 100, [0, 0]),
-            text.InfoText("N", 100, [50, 0]),
-            text.InfoText("D", 100, [100, 0]),
+            InfoText("E", size=settings.H1, pos=[0, 0]),
+            InfoText("N", size=settings.H1, pos=[50, 0]),
+            InfoText("D", size=settings.H1, pos=[100, 0]),
         )
 
         text_width = sum(map(lambda letter: letter.image.get_width(), letters))

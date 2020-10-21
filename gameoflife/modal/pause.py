@@ -2,7 +2,7 @@ import math
 import pygame
 
 from gameoflife import settings
-from gameoflife.util import text
+from gameoflife.util.text import InfoText
 
 
 class Pause(pygame.sprite.Sprite):
@@ -27,11 +27,11 @@ class Pause(pygame.sprite.Sprite):
         self.image.fill(self.color)
 
         letters = (
-            text.InfoText("P", 100, [0, 0]),
-            text.InfoText("A", 100, [50, 0]),
-            text.InfoText("U", 100, [100, 0]),
-            text.InfoText("S", 100, [150, 0]),
-            text.InfoText("E", 100, [200, 0]),
+            InfoText("P", size=settings.H1, pos=[0, 0]),
+            InfoText("A", size=settings.H1, pos=[50, 0]),
+            InfoText("U", size=settings.H1, pos=[100, 0]),
+            InfoText("S", size=settings.H1, pos=[150, 0]),
+            InfoText("E", size=settings.H1, pos=[200, 0]),
         )
 
         text_width = sum(map(lambda letter: letter.image.get_width(), letters))

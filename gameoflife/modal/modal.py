@@ -1,7 +1,7 @@
 import pygame
 
 from gameoflife import settings
-from gameoflife.util import text
+from gameoflife.util.text import InfoText
 
 
 class Modal(pygame.sprite.Sprite):
@@ -26,29 +26,29 @@ class Modal(pygame.sprite.Sprite):
 
         # Content inside modal.
         content = [
-            text.InfoText("CONTROLS", 35, [(width / 2) - 40, 20]),
+            InfoText("CONTROLS", size=settings.H2, pos=[(width / 2) - 40, 20]),
             # Keyboard controls.
-            text.InfoText("Keyboard controls", 20, [80, 75]),
-            text.InfoText("Pause:", 15, [80, 100]),
-            text.InfoText("P", 15, [180, 100]),
-            text.InfoText("Reset:", 15, [80, 120]),
-            text.InfoText("R", 15, [180, 120]),
-            text.InfoText("Fullscreen:", 15, [80, 140]),
-            text.InfoText("F11", 15, [180, 140]),
-            text.InfoText("Choose pattern:", 15, [80, 160]),
-            text.InfoText("Up/Down", 15, [180, 160]),
-            text.InfoText("Quit:", 15, [80, 180]),
-            text.InfoText("ESC", 15, [180, 180]),
+            InfoText("Keyboard controls", size=settings.H4, pos=[80, 75]),
+            InfoText("Pause:", size=settings.TEXT, pos=[80, 100]),
+            InfoText("P", size=settings.TEXT, pos=[180, 100]),
+            InfoText("Reset:", size=settings.TEXT, pos=[80, 120]),
+            InfoText("R", size=settings.TEXT, pos=[180, 120]),
+            InfoText("Fullscreen:", size=settings.TEXT, pos=[80, 140]),
+            InfoText("F11", size=settings.TEXT, pos=[180, 140]),
+            InfoText("Choose pattern:", size=settings.TEXT, pos=[80, 160]),
+            InfoText("Up/Down", size=settings.TEXT, pos=[180, 160]),
+            InfoText("Quit:", size=settings.TEXT, pos=[80, 180]),
+            InfoText("ESC", size=settings.TEXT, pos=[180, 180]),
             # Mouse controls.
-            text.InfoText("Mouse controls", 20, [80, 210]),
-            text.InfoText("Draw cells:", 15, [80, 235]),
-            text.InfoText("Left", 15, [180, 235]),
-            text.InfoText("Erase cells:", 15, [80, 255]),
-            text.InfoText("Right", 15, [180, 255]),
-            text.InfoText("Choose pattern:", 15, [80, 275]),
-            text.InfoText("Scroll", 15, [180, 275]),
-            text.InfoText("Paste pattern:", 15, [80, 295]),
-            text.InfoText("hold ctrl + left click", 15, [180, 295]),
+            InfoText("Mouse controls", size=settings.H4, pos=[80, 210]),
+            InfoText("Draw cells:", size=settings.TEXT, pos=[80, 235]),
+            InfoText("Left", size=settings.TEXT, pos=[180, 235]),
+            InfoText("Erase cells:", size=settings.TEXT, pos=[80, 255]),
+            InfoText("Right", size=settings.TEXT, pos=[180, 255]),
+            InfoText("Choose pattern:", size=settings.TEXT, pos=[80, 275]),
+            InfoText("Scroll", size=settings.TEXT, pos=[180, 275]),
+            InfoText("Paste pattern:", size=settings.TEXT, pos=[80, 295]),
+            InfoText("hold ctrl + left click", size=settings.TEXT, pos=[180, 295]),
         ]
 
         for data in content:

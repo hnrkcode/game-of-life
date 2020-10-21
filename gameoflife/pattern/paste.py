@@ -74,10 +74,10 @@ class PastePattern(Grid):
 
         return pattern_surface
 
-    def paste(self, pos, name):
+    def paste(self, pattern, pos):
         """Paste any predefined patterns on the grid."""
 
-        matrix = self.pattern[name]
+        matrix = self.pattern[pattern]
         x, y = position = calc_pos(pos)
 
         if self.is_inside_grid(position, matrix):
