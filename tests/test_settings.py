@@ -1,5 +1,5 @@
-import os
 import unittest
+from pathlib import PurePath
 
 import gameoflife
 from gameoflife import name, settings
@@ -10,33 +10,29 @@ class TestSettings(unittest.TestCase):
         self.assertEqual(settings.FPS, 30)
 
     def test_base_dir(self):
-        self.assertEqual(os.path.basename(settings.BASE_DIR), "gameoflife")
+        self.assertEqual(PurePath(settings.BASE_DIR).name, "gameoflife")
 
     def test_data_dir(self):
-        self.assertEqual(os.path.basename(settings.DATA_DIR), "data")
+        self.assertEqual(PurePath(settings.DATA_DIR).name, "data")
 
     def test_image_dir(self):
-        self.assertEqual(os.path.basename(settings.IMAGE_DIR), "images")
+        self.assertEqual(PurePath(settings.IMAGE_DIR).name, "images")
 
     def test_font_dir(self):
-        self.assertEqual(os.path.basename(settings.FONT_DIR), "fonts")
+        self.assertEqual(PurePath(settings.FONT_DIR).name, "fonts")
 
     def test_text_dir(self):
-        self.assertEqual(os.path.basename(settings.TEXT_DIR), "text")
+        self.assertEqual(PurePath(settings.TEXT_DIR).name, "text")
 
     def test_icon_file(self):
-        self.assertRegex(os.path.basename(settings.ICON_FILE), "logo.png$")
+        self.assertRegex(PurePath(settings.ICON_FILE).name, "logo.png$")
 
     def test_font_files(self):
-        self.assertRegex(
-            os.path.basename(settings.HEADER_FONT), "[a-z0-9].ttf$"
-        )
-        self.assertRegex(os.path.basename(settings.TEXT_FONT), "[a-z0-9_].ttf$")
+        self.assertRegex(PurePath(settings.HEADER_FONT).name, "[a-z0-9].ttf$")
+        self.assertRegex(PurePath(settings.TEXT_FONT).name, "[a-z0-9_].ttf$")
 
     def test_patterns_file(self):
-        self.assertRegex(
-            os.path.basename(settings.PATTERN_LIST), "patterns.txt$"
-        )
+        self.assertRegex(PurePath(settings.PATTERN_LIST).name, "patterns.txt$")
 
     def test_text_color(self):
         self.assertEqual(settings.TEXT_COLOR, (150, 150, 150))

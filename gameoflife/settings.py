@@ -1,4 +1,4 @@
-import os.path
+from pathlib import PurePath
 
 GAME_NAME = "GAME OF LIFE"
 
@@ -6,17 +6,18 @@ GAME_NAME = "GAME OF LIFE"
 FPS = 30
 
 # Paths to files in the project
-BASE_DIR = os.path.dirname(__file__)
-DATA_DIR = os.path.join(BASE_DIR, "data")
-IMAGE_DIR = os.path.join(DATA_DIR, "images")
-FONT_DIR = os.path.join(DATA_DIR, "fonts")
-TEXT_DIR = os.path.join(DATA_DIR, "text")
+BASE_DIR = PurePath(__file__).parent
+DATA_DIR = BASE_DIR / "data"
+IMAGE_DIR = DATA_DIR / "images"
+FONT_DIR = DATA_DIR / "fonts"
+TEXT_DIR = DATA_DIR / "text"
 
 # File paths to important files.
-ICON_FILE = os.path.join(IMAGE_DIR, "logo.png")
-HEADER_FONT = os.path.join(FONT_DIR, "LLPIXEL3.ttf")
-TEXT_FONT = os.path.join(FONT_DIR, "Rheiborn_Sans_Clean.ttf")
-PATTERN_LIST = os.path.join(TEXT_DIR, "patterns.txt")
+# NOTE: Need to convert the paths to strings because pygame can't handle pathlib paths yet.
+ICON_FILE = str(IMAGE_DIR / "logo.png")
+HEADER_FONT = str(FONT_DIR / "LLPIXEL3.ttf")
+TEXT_FONT = str(FONT_DIR / "Rheiborn_Sans_Clean.ttf")
+PATTERN_LIST = TEXT_DIR / "patterns.txt"
 
 # Color settings.
 TEXT_COLOR = (150, 150, 150)
