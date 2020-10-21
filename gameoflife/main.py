@@ -8,7 +8,7 @@ from gameoflife.board import Board
 from gameoflife.pattern import menu, paste
 from gameoflife.util import text
 
-from gameoflife.modal import Modal, Overlay, Pause
+from gameoflife.modal import Modal, Overlay, Pause, End
 
 class MainClass:
     def __init__(self):
@@ -20,6 +20,7 @@ class MainClass:
         self.size = (settings.WIDTH, settings.HEIGHT)
         self.screen = pygame.display.set_mode(self.size)
 
+        self.is_finished = False
         self.fullscreen = False
         self.mouse_down = False
         self.left_ctrl_held = False
@@ -73,6 +74,9 @@ class MainClass:
 
         self.pause_screen = Pause()
         self.pause_group = pygame.sprite.RenderUpdates(self.pause_screen)
+
+        self.end = End()
+        self.end_group = pygame.sprite.RenderUpdates(self.end)
 
     def format(self, information):
         """Arrange the information text on the screen."""
@@ -170,6 +174,12 @@ class MainClass:
 
         # Left click to deploy cells or right click to remove cells.
         elif event.type == locals.MOUSEBUTTONDOWN:
+
+            if self.is_finished:
+                self.is_finished = False
+                self.grid.reset()
+                self.paused = False
+
             cursor_pos = pygame.mouse.get_pos()
             mouse_button = pygame.mouse.get_pressed()
             # Paste predefined patterns.
@@ -198,6 +208,9 @@ class MainClass:
                 # Update pause text.
                 if event.type == pygame.USEREVENT and self.paused:
                     self.pause_group.update()
+                
+                if event.type == pygame.USEREVENT and not len(self.grid.cell_sprite) and self.grid.generation:
+                    self.end_group.update()
 
                 # Exit the program.
                 elif (
@@ -230,6 +243,12 @@ class MainClass:
 
             # Draw/erase cells on the grid.
             if self.mouse_down:
+
+                if self.is_finished:
+                    self.is_finished = False
+                    self.grid.reset()
+                    self.paused = False
+
                 position = pygame.mouse.get_pos()
                 button = pygame.mouse.get_pressed()
                 self.grid.change_status(position, button)
@@ -266,6 +285,12 @@ class MainClass:
             
             if self.paused:
                 self.pause_group.draw(self.screen)
+
+            # Show end screen when there are no more cells left on the board.
+            if not len(self.grid.cell_sprite) and self.grid.generation:
+                self.grid.stop()
+                self.end_group.draw(self.screen)
+                self.is_finished = True
 
             if self.active_modal:
                 self.modal_group.draw(self.screen)
