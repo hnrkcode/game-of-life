@@ -35,29 +35,47 @@ class TestSettings(unittest.TestCase):
         self.assertRegex(PurePath(settings.PATTERN_LIST).name, "patterns.txt$")
 
     def test_text_color(self):
-        self.assertEqual(settings.TEXT_COLOR, (150, 150, 150))
+        self.assertTupleEqual(settings.TEXT_COLOR, (150, 150, 150))
 
     def test_background_color(self):
-        self.assertEqual(settings.BG_COLOR, (19, 19, 19))
+        self.assertTupleEqual(settings.BG_COLOR, (19, 19, 19))
+
+    def test_modal_color(self):
+        self.assertTupleEqual(settings.MODAL_COLOR, (40, 40, 40))
+
+    def test_overlay_color(self):
+        self.assertTupleEqual(settings.OVERLAY_COLOR, (10, 10, 10))
 
     def test_dead_cell_color(self):
-        self.assertEqual(settings.DEAD, (27, 27, 27))
+        self.assertTupleEqual(settings.DEAD, (27, 27, 27))
 
     def test_alive_cell_color(self):
-        self.assertEqual(settings.ALIVE, (150, 150, 150))
+        self.assertTupleEqual(settings.ALIVE, (150, 150, 150))
 
     def test_generation_colors(self):
-        self.assertEqual(settings.GEN1, (40, 160, 255))
-        self.assertEqual(settings.GEN2, (0, 255, 206))
-        self.assertEqual(settings.GEN3, (233, 255, 131))
-        self.assertEqual(settings.GEN4, (255, 141, 61))
-        self.assertEqual(settings.GEN5, (232, 0, 25))
+        self.assertTupleEqual(settings.GEN1, (40, 160, 255))
+        self.assertTupleEqual(settings.GEN2, (0, 255, 206))
+        self.assertTupleEqual(settings.GEN3, (233, 255, 131))
+        self.assertTupleEqual(settings.GEN4, (255, 141, 61))
+        self.assertTupleEqual(settings.GEN5, (232, 0, 25))
+    
+    def test_paste_on_color(self):
+        self.assertTupleEqual(settings.PASTE_ON, (138, 226, 52))
+
+    def test_paste_off_color(self):
+        self.assertTupleEqual(settings.PASTE_OFF, (239, 41, 41))
 
     def test_active_menu_pattern_color(self):
-        self.assertEqual(settings.ACTIVE, (255, 255, 255))
+        self.assertTupleEqual(settings.ACTIVE, (255, 255, 255))
+
+    def test_width(self):
+        self.assertEqual(settings.WIDTH, 1280)
+    
+    def test_height(self):
+        self.assertEqual(settings.HEIGHT, 720)
 
     def test_window_size(self):
-        self.assertEqual((settings.WIDTH, settings.HEIGHT), (1280, 720))
+        self.assertTupleEqual(settings.WINDOW_SIZE, (settings.WIDTH, settings.HEIGHT))
 
     def test_cell_size(self):
         self.assertEqual(settings.CELL_SIZE, 10)
@@ -87,7 +105,14 @@ class TestSettings(unittest.TestCase):
         self.assertIsInstance(settings.BOARD_HEIGHT, int)
 
     def test_mouse_button_settings(self):
-        self.assertEqual(settings.LEFT_CLICK, (1, 0, 0))
-        self.assertEqual(settings.RIGHT_CLICK, (0, 0, 1))
+        self.assertTupleEqual(settings.LEFT_CLICK, (1, 0, 0))
+        self.assertTupleEqual(settings.RIGHT_CLICK, (0, 0, 1))
         self.assertEqual(settings.SCROLL_DOWN, 5)
         self.assertEqual(settings.SCROLL_UP, 4)
+
+    def test_text_sizes(self):
+        self.assertEqual(settings.H1, 100)
+        self.assertEqual(settings.H2, 35)
+        self.assertEqual(settings.H3, 25)
+        self.assertEqual(settings.H4, 20)
+        self.assertEqual(settings.TEXT, 15)
