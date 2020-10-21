@@ -114,6 +114,13 @@ class MainClass:
         pos = pygame.mouse.get_pos()
         pattern = self.grid.preview(self.name, pos)
         self.screen.blit(pattern, pos)
+    
+    def reset_game(self):
+        """Reset game to default values."""
+
+        self.grid.reset()
+        self.paused = False
+        self.is_finished = False
 
     def event_handler(self, event):
         """Handles the events triggered by the user."""
@@ -127,8 +134,7 @@ class MainClass:
                     self.paused = False
             # Press R to clear the screen.
             if event.key == locals.K_r:
-                self.grid.reset()
-                self.paused = False
+                self.reset_game()
             # Press P to stop the simulation temporarily.
             if event.key == locals.K_p:
                 # Can only pause if there are cells and the generation is more than zero.
@@ -176,9 +182,7 @@ class MainClass:
         elif event.type == locals.MOUSEBUTTONDOWN:
 
             if self.is_finished:
-                self.is_finished = False
-                self.grid.reset()
-                self.paused = False
+                self.reset_game()
 
             cursor_pos = pygame.mouse.get_pos()
             mouse_button = pygame.mouse.get_pressed()
@@ -243,12 +247,6 @@ class MainClass:
 
             # Draw/erase cells on the grid.
             if self.mouse_down:
-
-                if self.is_finished:
-                    self.is_finished = False
-                    self.grid.reset()
-                    self.paused = False
-
                 position = pygame.mouse.get_pos()
                 button = pygame.mouse.get_pressed()
                 self.grid.change_status(position, button)
