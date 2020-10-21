@@ -102,11 +102,11 @@ class MainClass:
         """Change to fullscreen mode."""
 
         if self.fullscreen:
-            self.fullscreen = False
             self.screen = pygame.display.set_mode(self.size)
         else:
-            self.fullscreen = True
             self.screen = pygame.display.set_mode(self.size, locals.FULLSCREEN)
+        
+        self.fullscreen = not self.fullscreen
 
     def preview_patterns(self):
         """Preview selected patterns and show if you can paste it."""
