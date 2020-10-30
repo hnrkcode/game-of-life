@@ -27,11 +27,11 @@ class Pause(pygame.sprite.Sprite):
         self.image.fill(self.color)
 
         letters = (
-            InfoText("P", size=settings.H1, pos=[0, 0]),
-            InfoText("A", size=settings.H1, pos=[50, 0]),
-            InfoText("U", size=settings.H1, pos=[100, 0]),
-            InfoText("S", size=settings.H1, pos=[150, 0]),
-            InfoText("E", size=settings.H1, pos=[200, 0]),
+            InfoText("P", size=settings.H1, pos=[0, 0], alpha=True),
+            InfoText("A", size=settings.H1, pos=[50, 0], alpha=True),
+            InfoText("U", size=settings.H1, pos=[100, 0], alpha=True),
+            InfoText("S", size=settings.H1, pos=[150, 0], alpha=True),
+            InfoText("E", size=settings.H1, pos=[200, 0], alpha=True),
         )
 
         text_width = sum(map(lambda letter: letter.image.get_width(), letters))

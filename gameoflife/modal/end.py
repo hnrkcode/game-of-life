@@ -27,9 +27,9 @@ class End(pygame.sprite.Sprite):
         self.image.fill(self.color)
 
         letters = (
-            InfoText("E", size=settings.H1, pos=[0, 0]),
-            InfoText("N", size=settings.H1, pos=[50, 0]),
-            InfoText("D", size=settings.H1, pos=[100, 0]),
+            InfoText("E", size=settings.H1, pos=[0, 0], alpha=True),
+            InfoText("N", size=settings.H1, pos=[50, 0], alpha=True),
+            InfoText("D", size=settings.H1, pos=[100, 0], alpha=True),
         )
 
         text_width = sum(map(lambda letter: letter.image.get_width(), letters))
