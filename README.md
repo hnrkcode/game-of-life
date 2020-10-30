@@ -17,16 +17,23 @@ Game of life is an algorithm invented by John Horton Conway in 1970. The game of
 
 ## Setup
 
-Pygame needs to be installed.
+Install dependencies with Pipenv:
 
 ```bash
-sudo apt-get install python3-pygame
+pipenv install
 ```
+
+Start the environment:
+
+```bash
+pipenv shell
+```
+
+Run the game:
+
 ```bash
 python3 run.py
 ```
-
-Mor information about installing Pygame: https://www.pygame.org/wiki/GettingStarted
 
 ## Usage
 
