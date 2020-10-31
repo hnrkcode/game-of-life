@@ -22,7 +22,7 @@ from pygame.locals import (
 
 from gameoflife import settings
 from gameoflife.board import Board
-from gameoflife.modal import End, Modal, Overlay, Pause
+from gameoflife.modal import Modal, Overlay, ScreenText
 from gameoflife.pattern import menu, paste
 from gameoflife.util.text import InfoText
 
@@ -90,11 +90,11 @@ class MainClass:
         self.modal_group = pygame.sprite.RenderUpdates(self.overlay, self.modal)
 
         # Is shown when the user has paused the game.
-        self.pause_screen = Pause()
+        self.pause_screen = ScreenText("PAUSE")
         self.pause_screen_group = pygame.sprite.RenderUpdates(self.pause_screen)
 
         # Is shown when all cells have died.
-        self.end_screen = End()
+        self.end_screen = ScreenText("GAMEOVER")
         self.end_screen_group = pygame.sprite.RenderUpdates(self.end_screen)
 
     def format_sidebar(self, information):
