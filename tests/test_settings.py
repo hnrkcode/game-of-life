@@ -2,7 +2,7 @@ import unittest
 from pathlib import PurePath
 
 import gameoflife
-from gameoflife import name, settings
+from gameoflife import settings
 
 
 class TestSettings(unittest.TestCase):
