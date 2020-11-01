@@ -120,20 +120,17 @@ class MainClass:
         self.end_screen = ScreenText("GAMEOVER")
         self.end_screen_group = pygame.sprite.RenderUpdates(self.end_screen)
 
-    def format_sidebar(self, information):
-        """Arrange the information text on the screen."""
+    def format_sidebar(self, lines):
+        """Arrange the sidebars text lines on the screen."""
 
         x, y = 30, settings.BOARD_Y_POS
 
-        for info in information:
-            if info.fontsize > settings.TEXT:
-                info.set_position((x, y))
-                y += 40
-            else:
-                info.set_position((x, y))
-                y += 20
+        for line in lines:
+            line.set_position((x, y))
+            # Add different vertical space depending on font size.
+            y = (y + 40) if line.fontsize > settings.TEXT else (y + 20)
 
-        return information
+        return lines
 
     def exit_game(self):
         """Exit the game of life simulator."""
