@@ -1,4 +1,3 @@
-import sys
 import math
 
 import pygame
@@ -38,6 +37,7 @@ class MainClass:
         self.screen = pygame.display.set_mode(settings.WINDOW_SIZE)
 
         # Initialize state variables.
+        self.is_running = True
         self.is_paused = False
         self.is_finished = False
         self.is_ctrl_held = False
@@ -138,7 +138,7 @@ class MainClass:
     def exit_game(self):
         """Exit the game of life simulator."""
 
-        sys.exit()
+        self.is_running = False
 
     def toggle_fullscreen(self):
         """Change to fullscreen mode."""
@@ -372,7 +372,7 @@ class MainClass:
         # Update pause text intervall.
         pygame.time.set_timer(pygame.USEREVENT, 200)
 
-        while True:
+        while self.is_running:
 
             # Control the frame rate.
             self.clock.tick(settings.FPS)
@@ -387,7 +387,6 @@ class MainClass:
 
 def main():
     gameoflife = MainClass()
-    # gameoflife.main()
     gameoflife.main()
 
 
