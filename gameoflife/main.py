@@ -1,4 +1,5 @@
 import sys
+import math
 
 import pygame
 from pygame.locals import (
@@ -43,19 +44,39 @@ class MainClass:
         self.is_mouse_held = False
         self.is_fullscreen = False
         self.is_modal_active = False
+        self.is_splash_screen = True
 
+        self.number = 0
         self.clock = pygame.time.Clock()
         self.grid = paste.PastePattern()
         self.pattern_name, self.paste_pattern = self.grid.select.get_current()
         self.menu = menu.ScrollMenu()
         self.menu_obj = self.menu.setup(self.grid.select)
 
-        # Header text above board.
-        self.header = InfoText(
+        # Splash screen text.
+        self.splash_header = InfoText(
             settings.GAME_NAME,
-            size=settings.H2,
-            pos=(settings.BOARD_WIDTH_SIZE / 1.6, 0),
+            size=settings.H1,
             font=settings.HEADER_FONT,
+        )
+
+        self.splash_header.set_position(
+            [
+                settings.WIDTH / 2 - (self.splash_header.image.get_width() / 2),
+                settings.HEIGHT / 3,
+            ]
+        )
+
+        self.splash_start = InfoText(
+            "Press to start",
+            size=settings.H2,
+        )
+
+        self.splash_start.set_position(
+            [
+                settings.WIDTH / 2 - (self.splash_start.image.get_width() / 2),
+                settings.HEIGHT / 1.75,
+            ]
         )
 
         # Layout the text on the left side of the board.
@@ -77,8 +98,10 @@ class MainClass:
             ]
         )
 
+        self.splash_screen_group = pygame.sprite.RenderUpdates(self.splash_header, self.splash_start)
+
         self.sidebar_text = self.format_sidebar(self.sidebar_layout)
-        self.sidebar_group = pygame.sprite.RenderUpdates(self.header, self.sidebar_text)
+        self.sidebar_group = pygame.sprite.RenderUpdates(self.sidebar_text)
 
         # Background color of the board.
         self.board = Board()
@@ -233,6 +256,116 @@ class MainClass:
 
         return not self.get_cell_count() and self.grid.generation
 
+    def splash_screen(self):
+
+        # Handel user inputs.
+        for event in pygame.event.get():
+
+            if event.type == pygame.USEREVENT:
+                self.splash_start.rect[1] = settings.HEIGHT / 1.75 + int(5 * math.sin(self.number)) + 5
+                self.number += 1
+
+            # Exit the program.
+            if event.type == QUIT or event.type == KEYDOWN and event.key == K_ESCAPE:
+                self.exit_game()
+
+            # Press F11 to toggle to fullscreen mode.
+            elif event.type == KEYDOWN and event.key == K_F11:
+                self.toggle_fullscreen()
+
+            # Press any keyboard key or mouse button to close splash screen and start game.
+            elif event.type == KEYDOWN or event.type == MOUSEBUTTONDOWN:
+                self.is_splash_screen = False
+
+        self.screen.fill(settings.BG_COLOR)
+
+        self.splash_screen_group.draw(self.screen)
+
+    def game_loop(self):
+        # Handel user inputs.
+        for event in pygame.event.get():
+            # Update pause text.
+            if event.type == pygame.USEREVENT and self.is_paused:
+                self.pause_screen_group.update()
+
+            # Update end text.
+            elif (
+                event.type == pygame.USEREVENT
+                and not self.get_cell_count()
+                and self.grid.generation
+            ):
+                self.end_screen_group.update()
+
+            # Exit the program.
+            elif event.type == QUIT or event.type == KEYDOWN and event.key == K_ESCAPE:
+                self.exit_game()
+
+            # Press F11 to toggle to fullscreen mode.
+            elif event.type == KEYDOWN and event.key == K_F11:
+                self.toggle_fullscreen()
+
+            # Toggle modal.
+            elif event.type == KEYDOWN and event.key == K_h:
+                self.toggle_modal()
+
+            # User can only interact with the board when the modal isn't active.
+            if not self.is_modal_active:
+                self.event_handler(event)
+
+        # Draw/erase cells on the grid.
+        if self.is_mouse_held:
+            position = pygame.mouse.get_pos()
+            button = pygame.mouse.get_pressed()
+            self.grid.change_status(position, button)
+
+        # Update the grid.
+        if self.grid.run:
+            self.grid.update()
+
+        # Update runtime information.
+        self.sidebar_text[1].update(f"Generation: {self.grid.generation}")
+        self.sidebar_text[2].update(f"Cells: {self.get_cell_count()}")
+        self.sidebar_text[3].update(f"Total deaths: {self.grid.deaths}")
+        self.sidebar_text[5].update(f"FPS: {self.clock.get_fps():.1f}")
+
+        # Update pattern scroll menu.
+        self.menu.update(
+            display=self.sidebar_text,
+            menu=self.menu_obj,
+            active=self.pattern_name,
+            start=8,
+            end=19,
+        )
+
+        # Draw everything to the screen.
+        self.screen.fill(settings.BG_COLOR)
+        self.sidebar_group.draw(self.screen)
+        self.board_bg_group.draw(self.screen)
+
+        # Preview selected pattern.
+        if self.is_ctrl_held:
+            self.preview_patterns()
+
+        for key in self.grid.cell.keys():
+            if self.grid.cell[key] == 1:
+                pygame.draw.rect(
+                    self.screen,
+                    self.grid.cell_sprite[key].color,
+                    self.grid.cell_sprite[key],
+                )
+
+        if self.is_paused:
+            self.pause_screen_group.draw(self.screen)
+
+        # Show end screen when there are no more cells left on the board.
+        if self.has_finished():
+            self.grid.stop()
+            self.end_screen_group.draw(self.screen)
+            self.is_finished = True
+
+        if self.is_modal_active:
+            self.modal_group.draw(self.screen)
+
     def main(self):
         """Main method of the program."""
 
@@ -244,99 +377,17 @@ class MainClass:
             # Control the frame rate.
             self.clock.tick(settings.FPS)
 
-            # Handel user inputs.
-            for event in pygame.event.get():
-                # Update pause text.
-                if event.type == pygame.USEREVENT and self.is_paused:
-                    self.pause_screen_group.update()
-
-                # Update end text.
-                elif (
-                    event.type == pygame.USEREVENT
-                    and not self.get_cell_count()
-                    and self.grid.generation
-                ):
-                    self.end_screen_group.update()
-
-                # Exit the program.
-                elif (
-                    event.type == QUIT
-                    or event.type == KEYDOWN
-                    and event.key == K_ESCAPE
-                ):
-                    self.exit_game()
-
-                # Press F11 to toggle to fullscreen mode.
-                elif event.type == KEYDOWN and event.key == K_F11:
-                    self.toggle_fullscreen()
-
-                # Toggle modal.
-                elif event.type == KEYDOWN and event.key == K_h:
-                    self.toggle_modal()
-
-                # User can only interact with the board when the modal isn't active.
-                if not self.is_modal_active:
-                    self.event_handler(event)
-
-            # Draw/erase cells on the grid.
-            if self.is_mouse_held:
-                position = pygame.mouse.get_pos()
-                button = pygame.mouse.get_pressed()
-                self.grid.change_status(position, button)
-
-            # Update the grid.
-            if self.grid.run:
-                self.grid.update()
-
-            # Update runtime information.
-            self.sidebar_text[1].update(f"Generation: {self.grid.generation}")
-            self.sidebar_text[2].update(f"Cells: {self.get_cell_count()}")
-            self.sidebar_text[3].update(f"Total deaths: {self.grid.deaths}")
-            self.sidebar_text[5].update(f"FPS: {self.clock.get_fps():.1f}")
-
-            # Update pattern scroll menu.
-            self.menu.update(
-                display=self.sidebar_text,
-                menu=self.menu_obj,
-                active=self.pattern_name,
-                start=8,
-                end=19,
-            )
-
-            # Draw everything to the screen.
-            self.screen.fill(settings.BG_COLOR)
-            self.sidebar_group.draw(self.screen)
-            self.board_bg_group.draw(self.screen)
-
-            # Preview selected pattern.
-            if self.is_ctrl_held:
-                self.preview_patterns()
-
-            for key in self.grid.cell.keys():
-                if self.grid.cell[key] == 1:
-                    pygame.draw.rect(
-                        self.screen,
-                        self.grid.cell_sprite[key].color,
-                        self.grid.cell_sprite[key],
-                    )
-
-            if self.is_paused:
-                self.pause_screen_group.draw(self.screen)
-
-            # Show end screen when there are no more cells left on the board.
-            if self.has_finished():
-                self.grid.stop()
-                self.end_screen_group.draw(self.screen)
-                self.is_finished = True
-
-            if self.is_modal_active:
-                self.modal_group.draw(self.screen)
+            if self.is_splash_screen:
+                self.splash_screen()
+            else:
+                self.game_loop()
 
             pygame.display.update()
 
 
 def main():
     gameoflife = MainClass()
+    # gameoflife.main()
     gameoflife.main()
 
 

@@ -1,9 +1,4 @@
-from gameoflife.main import MainClass
-
-def main():
-    gameoflife = MainClass()
-    gameoflife.main()
-
+import gameoflife
 
 if __name__ == "__main__":
-    main()
+    gameoflife.run()
