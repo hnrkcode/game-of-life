@@ -1,3 +1,4 @@
+import os
 import math
 
 import pygame
@@ -29,6 +30,9 @@ from gameoflife.util.text import InfoText
 
 class MainClass:
     def __init__(self):
+
+        # Center the window on the screen.
+        os.environ["SDL_VIDEO_CENTERED"] = "1"
 
         # Initialize display screen.
         pygame.init()
