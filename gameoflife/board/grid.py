@@ -87,20 +87,6 @@ class Grid:
 
         self.generation += 1
 
-    def change_status(self, pos, button):
-        """Point out cells on the screen with the mouse"""
-
-        x, y = key = calc_pos(pos)
-
-        # Prevent crashes if user clicks outside the grid.
-        if MIN_X <= x <= MAX_X and MIN_Y <= y <= MAX_Y:
-            if button == LEFT_CLICK and self.cell[key] == 0:
-                self.cell[key] = 1
-                self.cell_sprite[key] = Cell(key)
-            elif button == RIGHT_CLICK and self.cell[key] == 1:
-                self.cell[key] = 0
-                del self.cell_sprite[key]
-
     def generate(self):
         """Generate list that represent the cells in the grid."""
 

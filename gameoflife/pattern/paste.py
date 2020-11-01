@@ -49,11 +49,15 @@ class PastePattern(Grid):
             return settings.PASTE_OFF
         return settings.PASTE_ON
 
-    def preview(self, name, pos):
+    def preview(self, pos, name=None):
         """Show preview of selected pattern."""
 
+        if not name:
+            pattern_matrix = [[1]]
+        else:
+            pattern_matrix = self.pattern[name]
+
         size = settings.CELL_SIZE
-        pattern_matrix = self.pattern[name]
         w, h = len(pattern_matrix[0]) * size, len(pattern_matrix) * size
         pattern_surface = pygame.Surface((w, h))
         pattern_surface.set_colorkey((0, 0, 0))
@@ -74,25 +78,35 @@ class PastePattern(Grid):
 
         return pattern_surface
 
-    def paste(self, pattern, pos):
+    def paste(self, pos, button, name=None):
         """Paste any predefined patterns on the grid."""
+    
+        if not name:
+            matrix = [[1]]
+        else:
+            matrix = self.pattern[name]
 
-        matrix = self.pattern[pattern]
         x, y = position = calc_pos(pos)
 
         if self.is_inside_grid(position, matrix):
             for row in range(len(matrix)):
                 for col in range(len(matrix[row])):
-                    if matrix[row][col]:
+
+                    # Draw cells.
+                    if button == settings.LEFT_CLICK and matrix[row][col]:
                         self.cell[(x, y)] = 1
                         self.cell_sprite[(x, y)] = Cell((x, y))
-                    else:
+
+                    # Erase cells.
+                    if button == settings.RIGHT_CLICK or not matrix[row][col]:
                         self.cell[(x, y)] = 0
                         # Delete cell sprite if there is one.
                         try:
                             del self.cell_sprite[(x, y)]
                         except KeyError:
                             pass
+
                     x += settings.CELL_SIZE
+
                 x = position[0]
                 y += settings.CELL_SIZE

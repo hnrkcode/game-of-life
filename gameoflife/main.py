@@ -165,7 +165,12 @@ class MainClass:
         """Preview selected patterns and show if you can paste it."""
 
         pos = pygame.mouse.get_pos()
-        pattern = self.grid.preview(self.pattern_name, pos)
+
+        if self.is_ctrl_held:
+            pattern = self.grid.preview(pos, self.pattern_name)
+        else:
+            pattern = self.grid.preview(pos)
+
         self.screen.blit(pattern, pos)
 
     def reset_game(self):
@@ -236,14 +241,7 @@ class MainClass:
             if self.is_finished:
                 self.reset_game()
 
-            cursor_pos = pygame.mouse.get_pos()
-            mouse_button = pygame.mouse.get_pressed()
-            # Paste predefined patterns.
-            if self.is_ctrl_held and mouse_button == settings.LEFT_CLICK:
-                self.paste_pattern(pattern=self.pattern_name, pos=cursor_pos)
-            else:
-                # Hold mouse button to draw or erase without clicking.
-                self.is_mouse_held = True
+            self.is_mouse_held = True
 
         elif event.type == MOUSEBUTTONUP:
             self.is_mouse_held = False
@@ -311,9 +309,13 @@ class MainClass:
 
         # Draw/erase cells on the grid.
         if self.is_mouse_held:
-            position = pygame.mouse.get_pos()
-            button = pygame.mouse.get_pressed()
-            self.grid.change_status(position, button)
+            cursor_pos = pygame.mouse.get_pos()
+            mouse_button = pygame.mouse.get_pressed()
+
+            if self.is_ctrl_held:
+                self.paste_pattern(name=self.pattern_name, pos=cursor_pos, button=mouse_button)
+            else:
+                self.paste_pattern(pos=cursor_pos, button=mouse_button)
 
         # Update the grid.
         if self.grid.run:
@@ -339,9 +341,8 @@ class MainClass:
         self.sidebar_group.draw(self.screen)
         self.board_bg_group.draw(self.screen)
 
-        # Preview selected pattern.
-        if self.is_ctrl_held:
-            self.preview_patterns()
+        # Preview of cell or selected pattern.
+        self.preview_patterns()
 
         for key in self.grid.cell.keys():
             if self.grid.cell[key] == 1:
