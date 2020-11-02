@@ -35,7 +35,8 @@ def main():
     os.environ["SDL_VIDEO_CENTERED"] = "1"
 
     # Initialize pygame.
-    pygame.init()
+    pygame.font.init()
+    pygame.display.init()
     pygame.display.set_caption(settings.GAME_NAME)
     pygame.display.set_icon(pygame.image.load(settings.ICON_FILE))
     screen = pygame.display.set_mode(settings.WINDOW_SIZE)
