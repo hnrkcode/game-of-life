@@ -10,7 +10,7 @@ class TestSettings(unittest.TestCase):
         self.assertEqual(settings.FPS, 30)
 
     def test_base_dir(self):
-        self.assertEqual(PurePath(settings.BASE_DIR).name, "gameoflife")
+        self.assertEqual(PurePath(settings.BASE_DIR).name, PurePath(__file__).parent.parent.name)
 
     def test_data_dir(self):
         self.assertEqual(PurePath(settings.DATA_DIR).name, "data")

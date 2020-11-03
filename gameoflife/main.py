@@ -1,5 +1,5 @@
-import os
 import math
+import os
 
 import pygame
 from pygame.locals import (
@@ -24,7 +24,8 @@ from pygame.locals import (
 from gameoflife import settings
 from gameoflife.board import Board
 from gameoflife.modal import Modal, Overlay, ScreenText
-from gameoflife.pattern import menu, paste
+from gameoflife.pattern.menu import ScrollMenu
+from gameoflife.pattern.paste import PastePattern
 from gameoflife.util.text import InfoText
 
 
@@ -52,9 +53,9 @@ def main():
     is_splash_screen = True
 
     # Initialize menu and board variables.
-    grid = paste.PastePattern()
+    grid = PastePattern()
     pattern_name, paste_pattern = grid.select.get_current()
-    scroll_menu = menu.ScrollMenu()
+    scroll_menu = ScrollMenu()
     menu_obj = scroll_menu.setup(grid.select)
 
     # Initialize splash screen.

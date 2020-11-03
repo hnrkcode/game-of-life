@@ -6,7 +6,7 @@ GAME_NAME = "GAME OF LIFE"
 FPS = 30
 
 # Paths to files in the project
-BASE_DIR = PurePath(__file__).parent
+BASE_DIR = PurePath(__file__).parent.parent
 DATA_DIR = BASE_DIR / "data"
 IMAGE_DIR = DATA_DIR / "images"
 FONT_DIR = DATA_DIR / "fonts"

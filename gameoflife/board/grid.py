@@ -17,6 +17,34 @@ from gameoflife.settings import (
 from .cell import Cell
 
 
+def is_inside_grid(pos, matrix):
+    """Make sure the pattern is pasted inside the grids boundary."""
+
+    x, y = pos
+    w, h = calc_size(matrix)
+
+    left = MIN_X
+    up = MIN_Y
+
+    right = MAX_X - w + CELL_SIZE
+    down = MAX_Y - h + CELL_SIZE
+
+    # True if inside the girds boundary.
+    if left <= x <= right and up <= y <= down:
+        return True
+
+    return False
+
+
+def calc_size(matrix):
+    """Calculate the patterns size."""
+
+    w, h = len(matrix[0]), len(matrix)
+    width, height = w * CELL_SIZE, h * CELL_SIZE
+
+    return width, height
+
+
 def calc_pos(pos):
     """Calculate the key for the current mouse position."""
 
