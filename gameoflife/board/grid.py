@@ -67,7 +67,7 @@ def count_neighbors(cell, pos):
     """Returns number of alive neighbors."""
 
     x, y = pos
-    neighbors = 0
+    neighbors = {"alive": 0, "dead": []}
 
     # Calculate positions of all neighbors.
     nlist = list(
@@ -96,10 +96,11 @@ def count_neighbors(cell, pos):
         new_nlist.append((tmpx, tmpy))
     nlist = new_nlist
 
-    # Count live neighbors
-    for _x, _y in nlist:
-        if cell[(_x, _y)] == 1:
-            neighbors += 1
+    for key in nlist:
+        if cell[key] == 1:
+            neighbors["alive"] += 1
+        else:
+            neighbors["dead"].append(key)
 
     return neighbors
 
@@ -143,9 +144,34 @@ class Grid:
         self.deaths += 1
 
     def update(self):
-        """Update the cells on the grid for the next generation."""
 
-        births, deaths = self.life_algorithm()
+        dead_neighbors = set()
+        births, deaths = [], []
+
+        for key, _ in self.cell_sprite.items():
+            neighbors = count_neighbors(self.cell, key)
+
+            # Survives to next generation.
+            if neighbors["alive"] == 2 or neighbors["alive"] == 3:
+                self.cell_sprite[key].next_gen()
+                births.append(key)
+
+            # Doesn't survive the current generation.
+            else:
+                deaths.append(key)
+
+            # Cache dead neighboring cells.
+            for dead_cell in neighbors["dead"]:
+                dead_neighbors.add(dead_cell)
+
+        # Check cached dead cells to see if they have enough live cells to be born next generation.
+        for key in dead_neighbors:
+            neighbors = count_neighbors(self.cell, key)
+
+            # New cells that gets born next generation.
+            if neighbors["alive"] == 3:
+                self.cell_sprite[key] = Cell(key)
+                births.append(key)
 
         if births:
             for cell in births:
@@ -154,36 +180,6 @@ class Grid:
             for cell in deaths:
                 self.cell[cell] = 0
                 self.update_deaths()
+                del self.cell_sprite[cell]
 
         self.generation += 1
-
-    def life_algorithm(self):
-        """Conway's game of life algorithm.
-
-        1. Living cells with fewer than two live neighbors dies.
-        2. Living cells with two or three live neighbors survives.
-        3. Living cells with more than three neighbors dies.
-        4. Dead cells with three living neighbor cells becomes a living cell.
-        """
-
-        birth, death = [], []
-
-        for key, _ in self.cell.items():
-            neighbors = count_neighbors(self.cell, key)
-
-            if self.cell[key] == 1:
-                # Dies if under poplulated or overpopulated.
-                if neighbors < 2 or neighbors > 3:
-                    death.append(key)
-                    del self.cell_sprite[key]
-                # Cells that survives.
-                if neighbors == 2 or neighbors == 3:
-                    self.cell_sprite[key].next_gen()
-
-            if self.cell[key] == 0:
-                # A new cell are born.
-                if neighbors == 3:
-                    birth.append(key)
-                    self.cell_sprite[key] = Cell(key)
-
-        return birth, death
