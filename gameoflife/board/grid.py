@@ -38,11 +38,77 @@ def calc_pos(pos):
         return key
 
 
+def init_cells():
+    """
+    Generate dict with cells in the grid.
+
+    It uses coordinates in a tuple like: (x, y) as keys
+    to individual cells.
+    """
+
+    grid = {}
+
+    x = BOARD_X_POS
+    y = BOARD_Y_POS
+
+    for w in range(BOARD_WIDTH):
+        for h in range(BOARD_HEIGHT):
+            # Positions are the keys to the values.
+            key = (x, y)
+            grid[key] = 0
+            y += CELL_SIZE
+        y = BOARD_Y_POS
+        x += CELL_SIZE
+
+    return grid
+
+
+def count_neighbors(cell, pos):
+    """Returns number of alive neighbors."""
+
+    x, y = pos
+    neighbors = 0
+
+    # Calculate positions of all neighbors.
+    nlist = list(
+        itertools.product(
+            range(x - CELL_SIZE, x + CELL_SIZE * 2, CELL_SIZE),
+            range(y - CELL_SIZE, y + CELL_SIZE * 2, CELL_SIZE),
+        )
+    )
+
+    # Remove the cell that we checked neighbors for from the list.
+    nlist.remove((x, y))
+
+    # Fix calculated positions that are outside the border.
+    new_nlist = []
+    for _x, _y in nlist:
+        tmpx, tmpy = _x, _y
+        if _x < MIN_X or _x > MAX_X or _y < MIN_Y or _y > MAX_Y:
+            if _x < MIN_X:
+                tmpx = MAX_X
+            elif _x > MAX_X:
+                tmpx = MIN_X
+            if _y < MIN_Y:
+                tmpy = MAX_Y
+            elif _y > MAX_Y:
+                tmpy = MIN_Y
+        new_nlist.append((tmpx, tmpy))
+    nlist = new_nlist
+
+    # Count live neighbors
+    for _x, _y in nlist:
+        if cell[(_x, _y)] == 1:
+            neighbors += 1
+
+    return neighbors
+
+
 class Grid:
     """The 2D grid where the magic happens."""
 
     def __init__(self):
-        self.cell = self.generate()
+        self.cell = init_cells()
         self.cell_sprite = {}
         self.run = False
         self.deaths = 0
@@ -62,7 +128,11 @@ class Grid:
         """Reset the grid."""
 
         self.stop()
-        self.cell = self.generate()
+
+        # Remove all live cells from the generated gird.
+        for key, _ in self.cell_sprite.items():
+            self.cell[key] = 0
+
         self.cell_sprite = {}
         self.deaths = 0
         self.generation = 0
@@ -87,25 +157,6 @@ class Grid:
 
         self.generation += 1
 
-    def generate(self):
-        """Generate list that represent the cells in the grid."""
-
-        grid = {}
-
-        x = BOARD_X_POS
-        y = BOARD_Y_POS
-
-        for w in range(BOARD_WIDTH):
-            for h in range(BOARD_HEIGHT):
-                # Positions are the keys to the values.
-                key = (x, y)
-                grid[key] = 0
-                y += CELL_SIZE
-            y = BOARD_Y_POS
-            x += CELL_SIZE
-
-        return grid
-
     def life_algorithm(self):
         """Conway's game of life algorithm.
 
@@ -117,8 +168,8 @@ class Grid:
 
         birth, death = [], []
 
-        for key, value in self.cell.items():
-            neighbors = self.count_neighbors(key)
+        for key, _ in self.cell.items():
+            neighbors = count_neighbors(self.cell, key)
 
             if self.cell[key] == 1:
                 # Dies if under poplulated or overpopulated.
@@ -136,43 +187,3 @@ class Grid:
                     self.cell_sprite[key] = Cell(key)
 
         return birth, death
-
-    def count_neighbors(self, pos):
-        """Returns number of alive neighbors."""
-
-        x, y = pos
-        neighbors = 0
-
-        # Calculate positions of all neighbors.
-        nlist = list(
-            itertools.product(
-                range(x - CELL_SIZE, x + CELL_SIZE * 2, CELL_SIZE),
-                range(y - CELL_SIZE, y + CELL_SIZE * 2, CELL_SIZE),
-            )
-        )
-
-        # Remove the cell that we checked neighbors for from the list.
-        nlist.remove((x, y))
-
-        # Fix calculated positions that are outside the border.
-        new_nlist = []
-        for _x, _y in nlist:
-            tmpx, tmpy = _x, _y
-            if _x < MIN_X or _x > MAX_X or _y < MIN_Y or _y > MAX_Y:
-                if _x < MIN_X:
-                    tmpx = MAX_X
-                elif _x > MAX_X:
-                    tmpx = MIN_X
-                if _y < MIN_Y:
-                    tmpy = MAX_Y
-                elif _y > MAX_Y:
-                    tmpy = MIN_Y
-            new_nlist.append((tmpx, tmpy))
-        nlist = new_nlist
-
-        # Count live neighbors
-        for _x, _y in nlist:
-            if self.cell[(_x, _y)] == 1:
-                neighbors += 1
-
-        return neighbors
