@@ -73,12 +73,7 @@ class PastePattern(Grid):
 
                     # Erase cells.
                     if button == settings.RIGHT_CLICK or not matrix[row][col]:
-                        self.cell[(x, y)] = 0
-                        # Delete cell sprite if there is one.
-                        try:
-                            del self.cell_sprite[(x, y)]
-                        except KeyError:
-                            pass
+                        self.delete_cell((x, y))
 
                     x += settings.CELL_SIZE
 

@@ -1,4 +1,5 @@
 import itertools
+from collections import Counter
 
 from gameoflife.settings import (
     BOARD_HEIGHT,
@@ -66,31 +67,6 @@ def calc_pos(pos):
         return key
 
 
-def init_cells():
-    """
-    Generate dict with cells in the grid.
-
-    It uses coordinates in a tuple like: (x, y) as keys
-    to individual cells.
-    """
-
-    grid = {}
-
-    x = BOARD_X_POS
-    y = BOARD_Y_POS
-
-    for w in range(BOARD_WIDTH):
-        for h in range(BOARD_HEIGHT):
-            # Positions are the keys to the values.
-            key = (x, y)
-            grid[key] = 0
-            y += CELL_SIZE
-        y = BOARD_Y_POS
-        x += CELL_SIZE
-
-    return grid
-
-
 def count_neighbors(cell, pos):
     """Returns number of alive neighbors."""
 
@@ -137,8 +113,8 @@ class Grid:
     """The 2D grid where the magic happens."""
 
     def __init__(self):
-        self.cell = init_cells()
-        self.cell_sprite = {}
+        self.cell = Counter()
+        self.cell_sprite = Counter()
         self.run = False
         self.deaths = 0
         self.generation = 0
@@ -157,14 +133,16 @@ class Grid:
         """Reset the grid."""
 
         self.stop()
-
-        # Remove all live cells from the generated gird.
-        for key, _ in self.cell_sprite.items():
-            self.cell[key] = 0
-
-        self.cell_sprite = {}
+        self.cell = Counter()
+        self.cell_sprite = Counter()
         self.deaths = 0
         self.generation = 0
+    
+    def delete_cell(self, key):
+        """Remove cell from memory."""
+
+        del self.cell[key]
+        del self.cell_sprite[key]
 
     def update_deaths(self):
         """Keeps track of how many cells that has died."""
@@ -206,8 +184,7 @@ class Grid:
                 self.cell[cell] = 1
         if deaths:
             for cell in deaths:
-                self.cell[cell] = 0
                 self.update_deaths()
-                del self.cell_sprite[cell]
+                self.delete_cell(cell)
 
         self.generation += 1
