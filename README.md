@@ -20,7 +20,7 @@ Game of life is an algorithm invented by John Horton Conway in 1970. The game of
 Install dependencies with Pipenv:
 
 ```bash
-pipenv install
+pipenv install --dev
 ```
 
 Start the environment:
@@ -55,4 +55,11 @@ Run all tests.
 
 ```bash
 python3 -m unittest --verbose
+```
+
+Test coverage.
+
+```bash
+coverage run --source="./gameoflife" -m unittest
+coverage report
 ```
