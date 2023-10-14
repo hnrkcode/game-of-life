@@ -1,8 +1,13 @@
+from gameoflife.pattern.blueprint import get_patterns
+
+
 def test_blueprint_length(patterns):
     assert len(patterns.items()) == 34
 
 
-def test_blueprint_names(patterns):
+def test_blueprint_names():
+    patterns = get_patterns()
+
     cellular_automata_patterns = [
         "1. Still life: Block",
         "2. Still life: Behive",
