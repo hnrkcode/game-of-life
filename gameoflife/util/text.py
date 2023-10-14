@@ -28,4 +28,5 @@ class InfoText(pygame.sprite.DirtySprite):
         self.rect = pos
 
     def update(self, text):
-        self.image = self._font.render(text, 1, self.color)
+        self.text = text
+        self.image = self._font.render(self.text, 1, self.color)
