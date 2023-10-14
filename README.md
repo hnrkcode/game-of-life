@@ -17,16 +17,27 @@ Game of life is an algorithm invented by John Horton Conway in 1970. The game of
 
 ## Setup
 
-Install dependencies with Pipenv:
+Pipenv makes it easier to keep track of which top-level dependencies have been 
+installed and which are only dev dependencies. Commands inside pipenv can be run
+with `pipenv run` before the commands.
 
 ```bash
+python -m venv venv
+source venv/bin/activate
+pip install pipenv
 pipenv install --dev
+```
+
+Create requirements.txt file from pipenv:
+
+```bash
+pipenv run pip freeze > requirements.txt
 ```
 
 Run the game:
 
 ```bash
-pipenv run python run.py
+python run.py
 ```
 
 ## Usage
@@ -48,5 +59,5 @@ pipenv run python run.py
 Run all tests.
 
 ```bash
-pipenv run pytest -v tests/ --cov=gameoflife/
+pytest -v tests/ --cov=gameoflife/
 ```
