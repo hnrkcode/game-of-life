@@ -23,16 +23,10 @@ Install dependencies with Pipenv:
 pipenv install --dev
 ```
 
-Start the environment:
-
-```bash
-pipenv shell
-```
-
 Run the game:
 
 ```bash
-python3 run.py
+pipenv run python run.py
 ```
 
 ## Usage
@@ -54,12 +48,5 @@ python3 run.py
 Run all tests.
 
 ```bash
-python3 -m unittest --verbose
-```
-
-Test coverage.
-
-```bash
-coverage run --source="./gameoflife" -m unittest
-coverage report
+pipenv run pytest -v tests/ --cov=gameoflife/
 ```

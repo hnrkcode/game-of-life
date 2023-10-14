@@ -1,10 +1,8 @@
-import unittest
 from collections import Counter
 
 from gameoflife import settings
 from gameoflife.board.cell import Cell
 from gameoflife.board.grid import (
-    Grid,
     calc_pos,
     calc_size,
     count_neighbors,
@@ -12,167 +10,165 @@ from gameoflife.board.grid import (
 )
 
 
-class TestCalcSize(unittest.TestCase):
-    def test_pattern_size(self):
-        pattern = [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
-        width, height = (
-            len(pattern[0]) * settings.CELL_SIZE,
-            len(pattern) * settings.CELL_SIZE,
-        )
-        self.assertTupleEqual(calc_size(pattern), (width, height))
+def test_pattern_size():
+    pattern = [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
+    width, height = (
+        len(pattern[0]) * settings.CELL_SIZE,
+        len(pattern) * settings.CELL_SIZE,
+    )
+    assert calc_size(pattern) == (width, height)
 
 
-class TestIsInsideGrid(unittest.TestCase):
-    def setUp(self):
-        self.pattern = [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
+def test_pattern_inside_grids_boundary():
+    pattern = [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
 
-        # Setup where it should work to paste the pattern based on it's size.
-        w, h = calc_size(self.pattern)
-        self.pos_topleft_corner = (settings.MIN_X, settings.MIN_Y)
-        self.pos_topright_corner = (
-            settings.MAX_X - w + settings.CELL_SIZE,
-            settings.MIN_Y,
-        )
-        self.pos_bottomleft_corner = (
-            settings.MIN_X,
-            settings.MAX_Y - h + settings.CELL_SIZE,
-        )
-        self.pos_bottomright_corner = (settings.MAX_X - w, settings.MAX_Y - h)
+    # Setup where it should work to paste the pattern based on it's size.
+    w, h = calc_size(pattern)
+    pos_topleft_corner = (settings.MIN_X, settings.MIN_Y)
+    pos_topright_corner = (
+        settings.MAX_X - w + settings.CELL_SIZE,
+        settings.MIN_Y,
+    )
+    pos_bottomleft_corner = (
+        settings.MIN_X,
+        settings.MAX_Y - h + settings.CELL_SIZE,
+    )
+    pos_bottomright_corner = (settings.MAX_X - w, settings.MAX_Y - h)
 
-    def test_pattern_inside_grids_boundary(self):
-        self.assertTrue(is_inside_grid(self.pos_topleft_corner, self.pattern))
-        self.assertTrue(is_inside_grid(self.pos_topright_corner, self.pattern))
-        self.assertTrue(is_inside_grid(self.pos_bottomleft_corner, self.pattern))
-        self.assertTrue(is_inside_grid(self.pos_bottomright_corner, self.pattern))
-
-    def test_pattern_outside_grids_boundary(self):
-        self.assertFalse(is_inside_grid((0, 0), self.pattern))
+    assert is_inside_grid(pos_topleft_corner, pattern) == True
+    assert is_inside_grid(pos_topright_corner, pattern) == True
+    assert is_inside_grid(pos_bottomleft_corner, pattern) == True
+    assert is_inside_grid(pos_bottomright_corner, pattern) == True
 
 
-class TestCalcPos(unittest.TestCase):
-    def test_calculate_position(self):
-        self.assertTupleEqual(calc_pos((123, 456)), (120, 450))
+def test_pattern_outside_grids_boundary():
+    pattern = [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
+    assert is_inside_grid((0, 0), pattern) == False
 
 
-class TestCountNeighbors(unittest.TestCase):
-    def test_count_neighbors(self):
-
-        cell = Counter({(560, 280): 1, (570, 280): 1})
-        pos = (560, 280)
-
-        result = count_neighbors(cell, pos)
-
-        self.assertEqual(result["alive"], 1)
-        self.assertListEqual(
-            result["dead"],
-            [
-                (550, 270),
-                (550, 280),
-                (550, 290),
-                (560, 270),
-                (560, 290),
-                (570, 270),
-                (570, 290),
-            ],
-        )
+def test_calculate_position():
+    assert calc_pos((123, 456)), (120, 450) == True
 
 
-class TestGrid(unittest.TestCase):
-    def setUp(self):
-        self.grid = Grid()
+def test_count_neighbors():
+    cell = Counter({(560, 280): 1, (570, 280): 1})
+    pos = (560, 280)
 
-    def test_init_cell_value(self):
-        self.assertEqual(self.grid.cell, Counter())
+    result = count_neighbors(cell, pos)
 
-    def test_init_cell_sprite_value(self):
-        self.assertEqual(self.grid.cell_sprite, Counter())
+    assert result["alive"] == 1
+    assert result["dead"] == [
+        (550, 270),
+        (550, 280),
+        (550, 290),
+        (560, 270),
+        (560, 290),
+        (570, 270),
+        (570, 290),
+    ]
 
-    def test_init_run_value(self):
-        self.assertFalse(self.grid.run)
 
-    def test_init_deaths_value(self):
-        self.assertEqual(self.grid.deaths, 0)
+def test_init_cell_value(grid):
+    assert grid.cell == Counter()
 
-    def test_init_generation_value(self):
-        self.assertEqual(self.grid.generation, 0)
 
-    def test_start(self):
-        self.assertFalse(self.grid.run)
-        self.grid.start()
-        self.assertTrue(self.grid.run)
+def test_init_cell_sprite_value(grid):
+    assert grid.cell_sprite == Counter()
 
-    def test_stop(self):
-        self.assertFalse(self.grid.run)
-        self.grid.start()
-        self.assertTrue(self.grid.run)
-        self.grid.stop()
-        self.assertFalse(self.grid.run)
 
-    def test_reset(self):
-        # Initialize with some random values.
-        self.grid.start()
-        self.grid.deaths = 1234
-        self.grid.generation = 4567
+def test_init_run_value(grid):
+    assert grid.run == False
 
-        for i in range(10):
-            self.grid.cell[(i, i)] = 0
-            self.grid.cell_sprite[(i, i)] = 0
 
-        # Reset and test if everything now is set to default values.
-        self.grid.reset()
+def test_init_deaths_value(grid):
+    assert grid.deaths == 0
 
-        self.assertFalse(self.grid.run)
-        self.assertEqual(self.grid.deaths, 0)
-        self.assertEqual(self.grid.generation, 0)
-        self.assertEqual(self.grid.cell, Counter())
-        self.assertEqual(self.grid.cell_sprite, Counter())
 
-    def test_delete_cell(self):
-        limit = 10
-        key = (5, 5)
+def test_init_generation_value(grid):
+    assert grid.generation == 0
 
-        for i in range(limit):
-            self.grid.cell[(i, i)] = 1
-            self.grid.cell_sprite[(i, i)] = 1
 
-        # Before delete.
-        self.assertEqual(self.grid.cell[key], 1)
-        self.assertEqual(self.grid.cell_sprite[key], 1)
-        self.assertEqual(len(self.grid.cell), limit)
+def test_start(grid):
+    assert grid.run == False
+    grid.start()
+    assert grid.run == True
 
-        self.grid.delete_cell(key)
 
-        # After delete.
-        self.assertEqual(self.grid.cell[key], 0)
-        self.assertEqual(self.grid.cell_sprite[key], 0)
-        self.assertEqual(len(self.grid.cell), limit - 1)
+def test_stop(grid):
+    assert grid.run == False
+    grid.start()
+    assert grid.run == True
+    grid.stop()
+    assert grid.run == False
 
-    def test_update_deaths(self):
-        start = 1
-        end = 5
 
-        self.assertEqual(self.grid.deaths, 0)
+def test_reset(grid):
+    # Initialize with some random values.
+    grid.start()
+    grid.deaths = 1234
+    grid.generation = 4567
 
-        for i in range(start, end + 1):
-            self.grid.update_deaths()
-            self.assertEqual(self.grid.deaths, i)
+    for i in range(10):
+        grid.cell[(i, i)] = 0
+        grid.cell_sprite[(i, i)] = 0
 
-        self.assertEqual(self.grid.deaths, 5)
+    # Reset and test if everything now is set to default values.
+    grid.reset()
 
-    def test_update(self):
+    assert grid.run == False
+    assert grid.deaths == 0
+    assert grid.generation == 0
+    assert grid.cell == Counter()
+    assert grid.cell_sprite == Counter()
 
-        self.grid.cell = Counter({(560, 280): 1, (570, 280): 1})
-        self.grid.cell_sprite = Counter(
-            {(560, 280): Cell((560, 280)), (570, 280): Cell((570, 280))}
-        )
-        self.grid.deaths = 0
-        self.grid.generation = 0
 
-        self.grid.update()
+def test_delete_cell(grid):
+    limit = 10
+    key = (5, 5)
 
-        # Values after one generation.
-        self.assertFalse(self.grid.run)
-        self.assertEqual(self.grid.deaths, 2)
-        self.assertEqual(self.grid.generation, 1)
-        self.assertEqual(self.grid.cell, Counter())
-        self.assertEqual(self.grid.cell_sprite, Counter())
+    for i in range(limit):
+        grid.cell[(i, i)] = 1
+        grid.cell_sprite[(i, i)] = 1
+
+    # Before delete.
+    assert grid.cell[key] == 1
+    assert grid.cell_sprite[key] == 1
+    assert len(grid.cell) == limit
+
+    grid.delete_cell(key)
+
+    # After delete.
+    assert grid.cell[key] == 0
+    assert grid.cell_sprite[key] == 0
+    assert len(grid.cell) == limit - 1
+
+
+def test_update_deaths(grid):
+    start = 1
+    end = 5
+
+    assert grid.deaths == 0
+
+    for i in range(start, end + 1):
+        grid.update_deaths()
+        assert grid.deaths == i
+
+    assert grid.deaths == 5
+
+
+def test_update(grid):
+    grid.cell = Counter({(560, 280): 1, (570, 280): 1})
+    grid.cell_sprite = Counter(
+        {(560, 280): Cell((560, 280)), (570, 280): Cell((570, 280))}
+    )
+    grid.deaths = 0
+    grid.generation = 0
+
+    grid.update()
+
+    # Values after one generation.
+    assert grid.run == False
+    assert grid.deaths == 2
+    assert grid.generation == 1
+    assert grid.cell == Counter()
+    assert grid.cell_sprite == Counter()
