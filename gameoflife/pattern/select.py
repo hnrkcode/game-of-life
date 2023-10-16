@@ -11,6 +11,7 @@ class PatternSelector:
     """Keeps stored pattern in a circular doubly linked list."""
 
     def __init__(self, data=None):
+        self.counter = 0
         self.head = None
         self.tail = None
         if data:
@@ -22,12 +23,15 @@ class PatternSelector:
 
         # Store the data in a new node.
         new_node = Node(data)
+        
+        # Keep track of how many nodes are stored in the list.
+        self.counter += 1
 
         # If the linked list is empty.
         if not self.head:
             self.head = new_node
             self.tail = new_node
-            return True
+            return self.counter
 
         self.tail.next = new_node
         new_node.next = self.head
@@ -35,7 +39,7 @@ class PatternSelector:
         self.tail = new_node
         self.head.prev = self.tail
 
-        return True
+        return self.counter
 
     def next(self):
         """Go to the next node."""
@@ -60,8 +64,11 @@ class PatternSelector:
 
         name = self.current
 
-        for n in range(num):
+        for _ in range(num):
             name = name.next
+
+        if name is None:
+            raise ValueError
 
         return name.data[0]
 
@@ -70,7 +77,10 @@ class PatternSelector:
 
         name = self.current
 
-        for n in range(num):
+        for _ in range(num):
             name = name.prev
+
+        if name is None:
+            raise ValueError
 
         return name.data[0]
