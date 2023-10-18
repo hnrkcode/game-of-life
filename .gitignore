@@ -6,3 +6,4 @@ venv
 .venv
 .pytest_cache
 .pdm-python
+.ruff_cache
