@@ -130,14 +130,12 @@ def main():
     pygame.time.set_timer(pygame.USEREVENT, 200)
 
     while True:
-
         # Control the frame rate.
         clock.tick(settings.FPS)
         screen.fill(settings.BG_COLOR)
 
         # Handel user inputs.
         for event in pygame.event.get():
-
             # Exit the program.
             if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
                 return
@@ -148,7 +146,6 @@ def main():
 
             # Events captured only while splash screen is running.
             if is_splash_screen:
-
                 if event.type == pygame.USEREVENT:
                     splash_start.rect[1] = (
                         settings.HEIGHT / 1.75 + int(5 * math.sin(splash_start_num)) + 5
@@ -165,7 +162,6 @@ def main():
 
             # Events captured only after splash screen is closed.
             else:
-
                 # Update pause text.
                 if event.type == pygame.USEREVENT and is_paused:
                     pause_screen_group.update()
@@ -185,7 +181,6 @@ def main():
                 # User can only interact with the board when the modal isn't active.
                 if not is_modal_active:
                     if event.type == KEYDOWN:
-
                         # Press Enter to start the simulation if there are any cells on the board.
                         if event.key == K_RETURN and get_cell_count(grid):
                             grid.start()
@@ -198,7 +193,6 @@ def main():
 
                         # Press P to stop the simulation temporarily.
                         if event.key == K_p:
-
                             # Can only pause if there are cells and the generation is more than zero.
                             if is_pausable(grid):
                                 if is_paused:
@@ -246,7 +240,6 @@ def main():
 
                     # Left click to deploy cells or right click to remove cells.
                     elif event.type == MOUSEBUTTONDOWN:
-
                         if is_finished:
                             grid.reset()
                             is_paused, is_finished = False, False

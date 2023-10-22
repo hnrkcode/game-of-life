@@ -23,7 +23,7 @@ class PatternSelector:
 
         # Store the data in a new node.
         new_node = Node(data)
-        
+
         # Keep track of how many nodes are stored in the list.
         self.counter += 1
 

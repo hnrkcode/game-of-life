@@ -11,7 +11,6 @@ def get_patterns():
     patterns = {}
 
     with open(PATTERN_LIST, "r") as patterns_file:
-
         name = None
         layout = []
 

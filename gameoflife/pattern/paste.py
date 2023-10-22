@@ -46,15 +46,13 @@ class PastePattern(Grid):
                     xy_coords = [col * size, row * size]
                     wh_size = [size] * 2
                     pattern_rect = pygame.Rect(xy_coords, wh_size)
-                    pygame.draw.rect(
-                        pattern_surface, pattern_color, pattern_rect
-                    )
+                    pygame.draw.rect(pattern_surface, pattern_color, pattern_rect)
 
         return pattern_surface
 
     def paste(self, pos, button, name=None):
         """Paste any predefined patterns on the grid."""
-    
+
         if not name:
             matrix = [[1]]
         else:
@@ -65,7 +63,6 @@ class PastePattern(Grid):
         if is_inside_grid(position, matrix):
             for row in range(len(matrix)):
                 for col in range(len(matrix[row])):
-
                     # Draw cells.
                     if button == settings.LEFT_CLICK and matrix[row][col]:
                         self.cell[(x, y)] = 1

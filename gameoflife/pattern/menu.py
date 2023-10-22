@@ -21,9 +21,7 @@ class ScrollMenu:
 
         return int(150 / n), int(150 / n), int(150 / n)
 
-    def format(
-        self, header_text, active, adjacent, header_size=25, item_size=15
-    ):
+    def format(self, header_text, active, adjacent, header_size=25, item_size=15):
         """Return list with formated menu objects."""
 
         next, prev = [], []
@@ -32,7 +30,6 @@ class ScrollMenu:
 
         for i in range(self.num):
             for j in range(2):
-
                 item_name = adjacent[j][i]
                 color = self.text_color(i + 1)
 
@@ -55,7 +52,6 @@ class ScrollMenu:
         mid = end - math.ceil((end - start) / 2)
 
         for i in range(start, end):
-
             if start <= i < mid:
                 display[i].update(menu[0][next])
                 next -= 1

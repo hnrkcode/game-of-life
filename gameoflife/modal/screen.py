@@ -39,11 +39,9 @@ class ScreenText(pygame.sprite.Sprite):
         return letters
 
     def update(self):
-
         self.image.fill(self.color)
 
         for letter in self.text:
-
             # Creates a wave effect for the letters horizontal position.
             movement = int(10 * math.sin(self.y)) + 10
             self.y += 1

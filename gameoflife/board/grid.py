@@ -137,7 +137,7 @@ class Grid:
         self.cell_sprite = Counter()
         self.deaths = 0
         self.generation = 0
-    
+
     def delete_cell(self, key):
         """Remove cell from memory."""
 
@@ -150,7 +150,6 @@ class Grid:
         self.deaths += 1
 
     def update(self):
-
         dead_neighbors = set()
         births, deaths = [], []
 
