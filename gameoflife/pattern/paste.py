@@ -1,7 +1,8 @@
 import pygame
+
 from gameoflife import settings
 from gameoflife.board.cell import Cell
-from gameoflife.board.grid import Grid, calc_pos, calc_size, is_inside_grid
+from gameoflife.board.grid import Grid, calc_pos, is_inside_grid
 
 from .blueprint import get_patterns
 from .select import PatternSelector

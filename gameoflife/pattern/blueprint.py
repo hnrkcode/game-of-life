@@ -1,6 +1,3 @@
-import os.path
-import string
-
 from gameoflife.settings import PATTERN_LIST
 
 

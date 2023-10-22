@@ -2,17 +2,11 @@ import itertools
 from collections import Counter
 
 from gameoflife.settings import (
-    BOARD_HEIGHT,
-    BOARD_WIDTH,
-    BOARD_X_POS,
-    BOARD_Y_POS,
     CELL_SIZE,
-    LEFT_CLICK,
     MAX_X,
     MAX_Y,
     MIN_X,
     MIN_Y,
-    RIGHT_CLICK,
 )
 
 from .cell import Cell

@@ -1,4 +1,5 @@
 import math
+
 import pygame
 
 from gameoflife import settings
