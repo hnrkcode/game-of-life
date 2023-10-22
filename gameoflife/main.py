@@ -142,7 +142,7 @@ def main():
 
             # Press F11 to toggle to fullscreen mode.
             elif event.type == KEYDOWN and event.key == K_F11:
-                is_fullscreen = toggle_fullscreen(screen, is_fullscreen)
+                is_fullscreen, screen = toggle_fullscreen(is_fullscreen)
 
             # Events captured only while splash screen is running.
             if is_splash_screen:
@@ -364,7 +364,7 @@ def preview_patterns(is_ctrl_held, grid, pattern_name):
     return pattern, pos
 
 
-def toggle_fullscreen(screen, is_fullscreen):
+def toggle_fullscreen(is_fullscreen):
     """Change to fullscreen mode."""
 
     if is_fullscreen:
@@ -372,7 +372,7 @@ def toggle_fullscreen(screen, is_fullscreen):
     else:
         screen = pygame.display.set_mode(settings.WINDOW_SIZE, FULLSCREEN)
 
-    return not is_fullscreen
+    return (not is_fullscreen, screen)
 
 
 def toggle_modal(grid, modal, paused):
