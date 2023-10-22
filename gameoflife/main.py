@@ -97,9 +97,7 @@ def main():
             InfoText(f"Grid: {settings.TOTAL_CELLS}", size=settings.TEXT),
             InfoText(f"FPS: {clock.get_fps():.1f}", size=settings.TEXT),
             InfoText(None, size=settings.TEXT),
-        ]
-        + scroll_menu.format("PATTERNS", pattern_name, menu_obj)
-        + [
+            *scroll_menu.format("PATTERNS", pattern_name, menu_obj),
             InfoText(None, size=settings.TEXT),
             InfoText("HELP", size=settings.H3),
             InfoText("Press (H) for help", size=settings.TEXT),
