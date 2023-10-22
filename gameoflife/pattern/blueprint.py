@@ -6,7 +6,7 @@ def get_patterns():
     count = 1
     patterns = {}
 
-    with open(PATTERN_LIST, "r") as patterns_file:
+    with open(PATTERN_LIST) as patterns_file:
         name = None
         layout = []
 

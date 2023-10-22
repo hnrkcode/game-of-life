@@ -22,7 +22,7 @@ lint = "ruff check ./gameoflife/"
 format = "black gameoflife/ tests/"
 
 [tool.ruff]
-select = ["E", "W", "F", "B", "I", "N", "D", "RUF"]
+select = ["E", "W", "F", "B", "I", "N", "D", "UP", "RUF"]
 ignore = [
     "E501",
     "D100",
