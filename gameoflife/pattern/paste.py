@@ -26,7 +26,6 @@ class PastePattern(Grid):
 
     def preview(self, pos, name=None):
         """Show preview of selected pattern."""
-
         if not name:
             pattern_matrix = [[1]]
         else:
@@ -53,7 +52,6 @@ class PastePattern(Grid):
 
     def paste(self, pos, button, name=None):
         """Paste any predefined patterns on the grid."""
-
         if not name:
             matrix = [[1]]
         else:

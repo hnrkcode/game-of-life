@@ -10,7 +10,6 @@ class ScrollMenu:
 
     def setup(self, patterns):
         """Return adjacent patterns."""
-
         prev = [patterns.before_current(i) for i in range(1, self.num + 1)]
         next = [patterns.after_current(i) for i in range(1, self.num + 1)]
 
@@ -18,12 +17,10 @@ class ScrollMenu:
 
     def text_color(self, n):
         """Return color for none active menu object."""
-
         return int(150 / n), int(150 / n), int(150 / n)
 
     def format(self, header_text, active, adjacent, header_size=25, item_size=15):
         """Return list with formated menu objects."""
-
         next, prev = [], []
         menu_header = [InfoText(header_text, header_size)]
         active_pattern = [InfoText(active, item_size, color=settings.ACTIVE)]
@@ -46,7 +43,6 @@ class ScrollMenu:
 
     def update(self, display, menu, active, start, end):
         """Update menu before redraw it on the screen."""
-
         next = self.num - 1
         prev = 0
         mid = end - math.ceil((end - start) / 2)

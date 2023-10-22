@@ -15,7 +15,6 @@ class Cell(pygame.sprite.Sprite):
 
     def next_gen(self):
         """Update the generations the cell has existed and colorize it."""
-
         self.generation += 1
         if 1 < self.generation <= 5:
             self.color = settings.GEN1

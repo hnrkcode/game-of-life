@@ -30,8 +30,6 @@ from gameoflife.util.text import InfoText
 
 
 def main():
-    """Main function that contains the game loop."""
-
     # Center the window on the screen.
     os.environ["SDL_VIDEO_CENTERED"] = "1"
 
@@ -88,21 +86,19 @@ def main():
     splash_screen_group = pygame.sprite.RenderUpdates(splash_header, splash_start)
 
     # Layout the text on the left side of the board.
-    sidebar_layout = (
-        [
-            InfoText("INFORMATION", size=settings.H3),
-            InfoText(f"Generation: {grid.generation}", size=settings.TEXT),
-            InfoText(f"Cells: {get_cell_count(grid)}", size=settings.TEXT),
-            InfoText(f"Total deaths: {grid.deaths}", size=settings.TEXT),
-            InfoText(f"Grid: {settings.TOTAL_CELLS}", size=settings.TEXT),
-            InfoText(f"FPS: {clock.get_fps():.1f}", size=settings.TEXT),
-            InfoText(None, size=settings.TEXT),
-            *scroll_menu.format("PATTERNS", pattern_name, menu_obj),
-            InfoText(None, size=settings.TEXT),
-            InfoText("HELP", size=settings.H3),
-            InfoText("Press (H) for help", size=settings.TEXT),
-        ]
-    )
+    sidebar_layout = [
+        InfoText("INFORMATION", size=settings.H3),
+        InfoText(f"Generation: {grid.generation}", size=settings.TEXT),
+        InfoText(f"Cells: {get_cell_count(grid)}", size=settings.TEXT),
+        InfoText(f"Total deaths: {grid.deaths}", size=settings.TEXT),
+        InfoText(f"Grid: {settings.TOTAL_CELLS}", size=settings.TEXT),
+        InfoText(f"FPS: {clock.get_fps():.1f}", size=settings.TEXT),
+        InfoText(None, size=settings.TEXT),
+        *scroll_menu.format("PATTERNS", pattern_name, menu_obj),
+        InfoText(None, size=settings.TEXT),
+        InfoText("HELP", size=settings.H3),
+        InfoText("Press (H) for help", size=settings.TEXT),
+    ]
 
     sidebar_text = format_sidebar(sidebar_layout)
     sidebar_group = pygame.sprite.RenderUpdates(sidebar_text)
@@ -313,7 +309,6 @@ def main():
 
 def format_sidebar(lines):
     """Arrange the sidebars text lines on the screen."""
-
     x, y = 30, settings.BOARD_Y_POS
 
     for line in lines:
@@ -326,13 +321,11 @@ def format_sidebar(lines):
 
 def get_cell_count(grid):
     """Return number alive cells on the grid."""
-
     return len(grid.cell_sprite)
 
 
 def has_finished(grid):
-    """Returns true when atleast one generation has passed and all cells are dead."""
-
+    """Return true when atleast one generation has passed and all cells are dead."""
     if not get_cell_count(grid) and grid.generation > 0:
         return True
 
@@ -341,7 +334,6 @@ def has_finished(grid):
 
 def is_pausable(grid):
     """Check if the game can be paused."""
-
     # Can only pause when there are alive cells and
     if get_cell_count(grid) and grid.generation > 0:
         return True
@@ -351,7 +343,6 @@ def is_pausable(grid):
 
 def preview_patterns(is_ctrl_held, grid, pattern_name):
     """Preview selected patterns and show if you can paste it."""
-
     pos = pygame.mouse.get_pos()
 
     if is_ctrl_held:
@@ -364,7 +355,6 @@ def preview_patterns(is_ctrl_held, grid, pattern_name):
 
 def toggle_fullscreen(is_fullscreen):
     """Change to fullscreen mode."""
-
     if is_fullscreen:
         screen = pygame.display.set_mode(settings.WINDOW_SIZE)
     else:
@@ -375,7 +365,6 @@ def toggle_fullscreen(is_fullscreen):
 
 def toggle_modal(grid, modal, paused):
     """Open or close the modal."""
-
     modal = not modal
 
     # Pause everything when modal is activated and

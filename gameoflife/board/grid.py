@@ -14,7 +14,6 @@ from .cell import Cell
 
 def is_inside_grid(pos, matrix):
     """Make sure the pattern is pasted inside the grids boundary."""
-
     x, y = pos
     w, h = calc_size(matrix)
 
@@ -33,7 +32,6 @@ def is_inside_grid(pos, matrix):
 
 def calc_size(matrix):
     """Calculate the patterns size."""
-
     w, h = len(matrix[0]), len(matrix)
     width, height = w * CELL_SIZE, h * CELL_SIZE
 
@@ -42,7 +40,6 @@ def calc_size(matrix):
 
 def calc_pos(pos):
     """Calculate the key for the current mouse position."""
-
     x, y = pos
 
     # Calculate the acceptable interval the exact coordinate has.
@@ -62,8 +59,7 @@ def calc_pos(pos):
 
 
 def count_neighbors(cell, pos):
-    """Returns number of alive neighbors."""
-
+    """Return number of alive neighbors."""
     x, y = pos
     neighbors = {"alive": 0, "dead": []}
 
@@ -115,17 +111,14 @@ class Grid:
 
     def start(self):
         """Start the algorithm."""
-
         self.run = True
 
     def stop(self):
         """Stop the algorithm."""
-
         self.run = False
 
     def reset(self):
         """Reset the grid."""
-
         self.stop()
         self.cell = Counter()
         self.cell_sprite = Counter()
@@ -134,13 +127,11 @@ class Grid:
 
     def delete_cell(self, key):
         """Remove cell from memory."""
-
         del self.cell[key]
         del self.cell_sprite[key]
 
     def update_deaths(self):
-        """Keeps track of how many cells that has died."""
-
+        """Keep track of how many cells that has died."""
         self.deaths += 1
 
     def update(self):

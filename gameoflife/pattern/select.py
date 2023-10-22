@@ -20,7 +20,6 @@ class PatternSelector:
 
     def append(self, data):
         """Add data to the circular doubly linked list."""
-
         # Store the data in a new node.
         new_node = Node(data)
 
@@ -61,7 +60,6 @@ class PatternSelector:
 
     def before_current(self, num):
         """Return pattern name n times before active pattern."""
-
         name = self.current
 
         for _ in range(num):
@@ -74,7 +72,6 @@ class PatternSelector:
 
     def after_current(self, num):
         """Return pattern name n times after active pattern."""
-
         name = self.current
 
         for _ in range(num):

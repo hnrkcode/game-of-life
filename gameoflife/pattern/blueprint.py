@@ -3,7 +3,6 @@ from gameoflife.settings import PATTERN_LIST
 
 def get_patterns():
     """Read patterns from text file."""
-
     count = 1
     patterns = {}
 
