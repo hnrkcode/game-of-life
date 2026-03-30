@@ -158,9 +158,7 @@ def test_update_deaths(grid):
 
 def test_update(grid):
     grid.cell = Counter({(560, 280): 1, (570, 280): 1})
-    grid.cell_sprite = Counter(
-        {(560, 280): Cell((560, 280)), (570, 280): Cell((570, 280))}
-    )
+    grid.cell_sprite = Counter({(560, 280): Cell((560, 280)), (570, 280): Cell((570, 280))})
     grid.deaths = 0
     grid.generation = 0
 

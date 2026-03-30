@@ -11,9 +11,7 @@ class ScreenText(pygame.sprite.Sprite):
         super().__init__()
         self.text = self.set_text(text)
         self.color = settings.OVERLAY_COLOR
-        self.image = pygame.Surface(
-            [settings.BOARD_WIDTH_SIZE, settings.BOARD_HEIGHT_SIZE]
-        )
+        self.image = pygame.Surface([settings.BOARD_WIDTH_SIZE, settings.BOARD_HEIGHT_SIZE])
         self.image.set_alpha(150)
         self.image.fill(self.color)
         self.rect = self.image.get_rect()

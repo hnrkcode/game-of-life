@@ -1,46 +1,49 @@
 # Game of life
 
-> Python implementation of Conway's game of life algorithm
+[![Python](https://img.shields.io/badge/python-3.11%2B-blue?logo=python&logoColor=white)](https://www.python.org/downloads/)
+[![made-with-pygame](https://img.shields.io/badge/Made%20with-Pygame-c1fb25.svg?logo=pygame)](https://github.com/pygame/pygame)
+[![Package manager: uv](https://img.shields.io/badge/package%20manager-uv-de5fea?logo=astral&logoColor=de5fea)](https://github.com/astral-sh/uv)
+[![code style: ruff](https://img.shields.io/badge/code%20style-ruff-d7ff64?logo=ruff&logoColor=d7ff64)](https://github.com/astral-sh/ruff)
+[![type checked: ty](https://custom-icon-badges.demolab.com/badge/type%20checked-ty-47eae2.svg?logo=ty-astral-logo&labelColor=gray&color=47eae2&logoColor=47eae2)](https://github.com/astral-sh/ty)
+[![License: MIT](https://img.shields.io/badge/License-MIT-40a43b.svg?logo=opensourceinitiative&logoColor=40a43b)](https://opensource.org/licenses/MIT)
 
-[![made-with-pygame](https://img.shields.io/badge/Made%20with-Pygame-green.svg)](https://www.pygame.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Generic badge](https://img.shields.io/badge/code_style-black-black.svg)](https://github.com/psf/black)
+Python implementation of Conway's game of life algorithm
 
 ![Demonstration of game of life](/data/demo.gif)
 
 Game of life is an algorithm invented by John Horton Conway in 1970. The game of life is set on a 2-dimensional grid made up by many small cells. Each cells is in one of two states, alive or dead. A cells state is decided by the algorithm, which has four simple rules:
 
-> 1. A cell dies if it has less than two living neighbors.
-> 2. A cell survives until the next generation if it has two or three neighbors.
-> 3. A cell with more than three neighbors dies.
-> 4. A dead cell with exactly three neighbors turns into a living cell.
+1. A cell dies if it has less than two living neighbors.
+2. A cell survives until the next generation if it has two or three neighbors.
+3. A cell with more than three neighbors dies.
+4. A dead cell with exactly three neighbors turns into a living cell.
 
 ## Setup
 
-Pipenv makes it easier to keep track of which top-level dependencies have been 
-installed and which are only dev dependencies. Commands inside pipenv can be run
-with `pipenv run` before the commands.
+This project uses [uv](https://github.com/astral-sh/uv) for fast Python dependency management. All dependencies are defined in `pyproject.toml`.
 
-```bash
-python -m venv venv
-source venv/bin/activate
-pip install pipenv
-pipenv install --dev
-```
+1. Create and activate a virtual environment (if not already active):
 
-Create requirements.txt file from pipenv:
+    ```bash
+    uv venv
+    source .venv/bin/activate
+    ```
 
-```bash
-pipenv run pip freeze > requirements.txt
-```
+    (The `.venv` folder is created by default.)
 
-Run the game:
+3. Install all dependencies (including dev dependencies):
 
-```bash
-python run.py
-```
+    ```bash
+    uv sync --all-groups
+    ```
 
-## Usage
+4. Run the game:
+
+    ```bash
+    make start
+    ```
+
+## Controls
 
 | key | description |
 |:-----|-------|
@@ -54,10 +57,18 @@ python run.py
 | `UP`, `DOWN` or `SCROLL WHEEL` | Choose pattern from predefined patterns |
 | Hold `CTRL` + click `LEFT MOUSE BUTTON` | Paste chosen pattern onto the grid |
 
-## Tests
+## Commands
 
-Run all tests.
+The following commands are available for development tasks:
 
-```bash
-pytest -v tests/ --cov=gameoflife/
-```
+| Command         | Description                      |
+|-----------------|----------------------------------|
+| `make start`    | Run the game                     |
+| `make test`     | Run all pytests with coverage    |
+| `make lint`     | Lint code with Ruff              |
+| `make format`   | Format code with Ruff            |
+| `make typecheck`| Type check code with Ty          |
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

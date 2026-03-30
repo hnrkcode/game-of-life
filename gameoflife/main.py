@@ -141,9 +141,7 @@ def main():
             # Events captured only while splash screen is running.
             if is_splash_screen:
                 if event.type == pygame.USEREVENT:
-                    splash_start.rect[1] = (
-                        settings.HEIGHT / 1.75 + int(5 * math.sin(splash_start_num)) + 5
-                    )
+                    splash_start.rect[1] = settings.HEIGHT / 1.75 + int(5 * math.sin(splash_start_num)) + 5
                     splash_start_num += 1
 
                 # Press any keyboard key or mouse button to close splash screen and start game.
@@ -161,11 +159,7 @@ def main():
                     pause_screen_group.update()
 
                 # Update end text.
-                elif (
-                    event.type == pygame.USEREVENT
-                    and not get_cell_count(grid)
-                    and grid.generation
-                ):
+                elif event.type == pygame.USEREVENT and not get_cell_count(grid) and grid.generation:
                     end_screen_group.update()
 
                 # Toggle modal.
@@ -210,24 +204,16 @@ def main():
                         if event.key == K_LCTRL or event.key == K_RCTRL:
                             is_ctrl_held = True
 
-                    elif event.type == KEYUP and (
-                        event.key == K_LCTRL or event.key == K_RCTRL
-                    ):
+                    elif event.type == KEYUP and (event.key == K_LCTRL or event.key == K_RCTRL):
                         is_ctrl_held = False
 
                     # Scroll through patterns.
-                    elif (
-                        event.type == MOUSEBUTTONDOWN
-                        and event.button == settings.SCROLL_DOWN
-                    ):
+                    elif event.type == MOUSEBUTTONDOWN and event.button == settings.SCROLL_DOWN:
                         grid.select.next()
                         pattern_name, paste_pattern = grid.select.get_current()
                         menu_obj = scroll_menu.setup(grid.select)
 
-                    elif (
-                        event.type == MOUSEBUTTONDOWN
-                        and event.button == settings.SCROLL_UP
-                    ):
+                    elif event.type == MOUSEBUTTONDOWN and event.button == settings.SCROLL_UP:
                         grid.select.previous()
                         pattern_name, paste_pattern = grid.select.get_current()
                         menu_obj = scroll_menu.setup(grid.select)

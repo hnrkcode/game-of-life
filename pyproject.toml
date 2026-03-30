@@ -5,32 +5,73 @@ description = "Conway's game of life written in pygame"
 authors = [
     { name = "Henrik Petersson", email = "44243358+hnrkcode@users.noreply.github.com" },
 ]
-dependencies = ["pygame>=2.5.2"]
+dependencies = ["pygame>=2.6.1"]
 requires-python = ">=3.11"
 readme = "README.md"
 license = { text = "MIT" }
 
-[tool.pdm.dev-dependencies]
-test = ["pytest>=7.4.2", "pytest-cov>=4.1.0"]
-lint = ["ruff>=0.1.0", "black>=23.10.0"]
-
-[tool.pdm.scripts]
-start = "python run.py"
-test = "pytest -v tests/ --cov=gameoflife/"
-export = { shell = "pdm export --prod -f requirements > requirements.txt" }
-lint = "ruff check ./gameoflife/"
-format = "black gameoflife/ tests/"
+[dependency-groups]
+test = ["pytest>=9.0.2", "pytest-cov>=7.1.0"]
+lint = ["ruff>=0.15.8", "ty>=0.0.26"]
 
 [tool.ruff]
-select = ["E", "W", "F", "B", "I", "N", "D", "UP", "RUF"]
+line-length = 150
+exclude = ["migrations"]
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["ALL"]
+fixable = ["I001", "W292", "W293", "RUF022"]
 ignore = [
-    "E501",
-    "D100",
-    "D101",
-    "D102",
-    "D103",
-    "D104",
-    "D107",
-    "D203",
-    "D213",
+    "D",
+    "TD",
+    "B010",
+    "ISC001",
+    "T201",
+    "COM812",
+    "C901",
+    "PLR0912",
+    "PLR0915",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = [
+    "S101",
+    "PLR2004",
+    "ANN",
+    "I001",
+    "SIM",
+    "PT",
+    "E",
+    "N",
+    "B",
+    "RET",
+    "W",
+]
+"run.py" = ["W292"]
+"gameoflife/**" = [
+    "ANN",
+    "FBT",
+    "PLR",
+    "INP",
+    "SIM",
+    "A",
+    "RET",
+    "PTH",
+    "C",
+    "PERF",
+]
+
+[tool.ty.rules]
+
+[tool.ty.src]
+exclude = [
+    "gameoflife/pattern/select.py",
+    "gameoflife/pattern/paste.py",
+    "gameoflife/modal/screen.py",
+    "gameoflife/modal/overlay.py",
+    "gameoflife/modal/modal.py",
+    "gameoflife/main.py",
+    "gameoflife/board/grid.py",
+    "gameoflife/board/board.py",
 ]
