@@ -41,8 +41,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v7
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
-      - run: uv run pytest -v tests/ --cov=gameoflife/
-      - run: uv cache prune --ci
+
+      - name: Install the project
+        run: uv sync --locked --all-groups
+
+      - name: Run tests with coverage
+        run: uv run pytest -v tests/ --cov=gameoflife/
+
+      - name: Prune UV cache
+        run: uv cache prune --ci
