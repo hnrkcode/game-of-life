@@ -7,7 +7,7 @@ from gameoflife.util.text import InfoText
 
 
 class ScreenText(pygame.sprite.Sprite):
-    def __init__(self, text):
+    def __init__(self, text: str) -> None:
         super().__init__()
         self.text = self.set_text(text)
         self.color = settings.OVERLAY_COLOR
@@ -15,12 +15,12 @@ class ScreenText(pygame.sprite.Sprite):
         self.image.set_alpha(150)
         self.image.fill(self.color)
         self.rect = self.image.get_rect()
-        self.rect.topleft = [settings.BOARD_X_POS, settings.BOARD_Y_POS]
+        self.rect.topleft = settings.BOARD_X_POS, settings.BOARD_Y_POS
 
         # Determines how much the letter is being moved.
         self.y = 0
 
-    def set_text(self, text):
+    def set_text(self, text: str) -> list[InfoText]:
         x, y = 0, 0
         letters = []
 
@@ -37,7 +37,7 @@ class ScreenText(pygame.sprite.Sprite):
 
         return letters
 
-    def update(self):
+    def update(self) -> None:
         self.image.fill(self.color)
 
         for letter in self.text:

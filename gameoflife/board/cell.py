@@ -4,7 +4,7 @@ from gameoflife import settings
 
 
 class Cell(pygame.sprite.Sprite):
-    def __init__(self, pos):
+    def __init__(self, pos: tuple[int, int]) -> None:
         super().__init__()
         self.color = settings.ALIVE
         self.image = pygame.Surface([settings.CELL_SIZE, settings.CELL_SIZE])
@@ -13,7 +13,7 @@ class Cell(pygame.sprite.Sprite):
         self.rect.topleft = pos
         self.generation = 0
 
-    def next_gen(self):
+    def next_gen(self) -> None:
         """Update the generations the cell has existed and colorize it."""
         self.generation += 1
         if 1 < self.generation <= 5:

@@ -29,7 +29,7 @@ from gameoflife.pattern.paste import PastePattern
 from gameoflife.util.text import InfoText
 
 
-def main():
+def main() -> None:
     # Center the window on the screen.
     os.environ["SDL_VIDEO_CENTERED"] = "1"
 
@@ -51,7 +51,7 @@ def main():
     is_splash_screen = True
 
     # Initialize menu and board variables.
-    grid = PastePattern()
+    grid: PastePattern = PastePattern()
     pattern_name, paste_pattern = grid.select.get_current()
     scroll_menu = ScrollMenu()
     menu_obj = scroll_menu.setup(grid.select)
@@ -141,7 +141,7 @@ def main():
             # Events captured only while splash screen is running.
             if is_splash_screen:
                 if event.type == pygame.USEREVENT:
-                    splash_start.rect[1] = settings.HEIGHT / 1.75 + int(5 * math.sin(splash_start_num)) + 5
+                    splash_start.rect[1] = int(settings.HEIGHT / 1.75 + 5 * math.sin(splash_start_num) + 5)
                     splash_start_num += 1
 
                 # Press any keyboard key or mouse button to close splash screen and start game.
@@ -293,7 +293,7 @@ def main():
         pygame.display.update()
 
 
-def format_sidebar(lines):
+def format_sidebar(lines: list[InfoText]) -> list[InfoText]:
     """Arrange the sidebars text lines on the screen."""
     x, y = 30, settings.BOARD_Y_POS
 
@@ -305,12 +305,12 @@ def format_sidebar(lines):
     return lines
 
 
-def get_cell_count(grid):
+def get_cell_count(grid: PastePattern) -> int:
     """Return number alive cells on the grid."""
     return len(grid.cell_sprite)
 
 
-def has_finished(grid):
+def has_finished(grid: PastePattern) -> bool:
     """Return true when atleast one generation has passed and all cells are dead."""
     if not get_cell_count(grid) and grid.generation > 0:
         return True
@@ -318,7 +318,7 @@ def has_finished(grid):
     return False
 
 
-def is_pausable(grid):
+def is_pausable(grid: PastePattern) -> bool:
     """Check if the game can be paused."""
     # Can only pause when there are alive cells and
     if get_cell_count(grid) and grid.generation > 0:
@@ -327,7 +327,7 @@ def is_pausable(grid):
     return False
 
 
-def preview_patterns(is_ctrl_held, grid, pattern_name):
+def preview_patterns(is_ctrl_held: bool, grid: PastePattern, pattern_name: str) -> tuple[pygame.Surface, tuple[int, int]]:
     """Preview selected patterns and show if you can paste it."""
     pos = pygame.mouse.get_pos()
 
@@ -339,7 +339,7 @@ def preview_patterns(is_ctrl_held, grid, pattern_name):
     return pattern, pos
 
 
-def toggle_fullscreen(is_fullscreen):
+def toggle_fullscreen(is_fullscreen: bool) -> tuple[bool, pygame.Surface]:
     """Change to fullscreen mode."""
     if is_fullscreen:
         screen = pygame.display.set_mode(settings.WINDOW_SIZE)
@@ -349,7 +349,7 @@ def toggle_fullscreen(is_fullscreen):
     return (not is_fullscreen, screen)
 
 
-def toggle_modal(grid, modal, paused):
+def toggle_modal(grid: PastePattern, modal: bool, paused: bool) -> bool:
     """Open or close the modal."""
     modal = not modal
 

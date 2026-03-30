@@ -1,25 +1,33 @@
 import math
 
 from gameoflife import settings
+from gameoflife.pattern.select import PatternSelector
 from gameoflife.util.text import InfoText
 
 
 class ScrollMenu:
-    def __init__(self):
+    def __init__(self) -> None:
         self.num = 5
 
-    def setup(self, patterns):
+    def setup(self, patterns: PatternSelector) -> tuple[list[str], list[str]]:
         """Return adjacent patterns."""
         prev = [patterns.before_current(i) for i in range(1, self.num + 1)]
         next = [patterns.after_current(i) for i in range(1, self.num + 1)]
 
         return next, prev
 
-    def text_color(self, n):
+    def text_color(self, n: int) -> tuple[int, int, int]:
         """Return color for none active menu object."""
         return int(150 / n), int(150 / n), int(150 / n)
 
-    def format(self, header_text, active, adjacent, header_size=25, item_size=15):
+    def format(
+        self,
+        header_text: str,
+        active: str,
+        adjacent: tuple[list[str], list[str]],
+        header_size: int = 25,
+        item_size: int = 15,
+    ) -> list[InfoText]:
         """Return list with formated menu objects."""
         next, prev = [], []
         menu_header = [InfoText(header_text, header_size)]
@@ -41,7 +49,7 @@ class ScrollMenu:
 
         return menu
 
-    def update(self, display, menu, active, start, end):
+    def update(self, display: list[InfoText], menu: tuple[list[str], list[str]], active: str, start: int, end: int) -> None:
         """Update menu before redraw it on the screen."""
         next = self.num - 1
         prev = 0

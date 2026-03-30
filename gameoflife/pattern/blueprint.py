@@ -1,8 +1,8 @@
 from gameoflife.settings import PATTERN_LIST
 
 
-def get_patterns():
-    patterns = {}
+def get_patterns() -> dict[str, list[list[int]]]:
+    patterns: dict[str, list[list[int]]] = {}
     with open(PATTERN_LIST) as patterns_file:
         name, layout = None, []
         for line in patterns_file:

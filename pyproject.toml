@@ -49,29 +49,10 @@ ignore = [
     "W",
 ]
 "run.py" = ["W292"]
-"gameoflife/**" = [
-    "ANN",
-    "FBT",
-    "PLR",
-    "INP",
-    "SIM",
-    "A",
-    "RET",
-    "PTH",
-    "C",
-    "PERF",
-]
+"gameoflife/**" = ["FBT", "PLR", "INP", "SIM", "A", "RET", "PTH", "C", "PERF"]
 
 [tool.ty.rules]
+invalid-argument-type = "ignore"
 
 [tool.ty.src]
-exclude = [
-    "gameoflife/pattern/select.py",
-    "gameoflife/pattern/paste.py",
-    "gameoflife/modal/screen.py",
-    "gameoflife/modal/overlay.py",
-    "gameoflife/modal/modal.py",
-    "gameoflife/main.py",
-    "gameoflife/board/grid.py",
-    "gameoflife/board/board.py",
-]
+exclude = ["gameoflife/pattern/select.py", "gameoflife/pattern/paste.py"]

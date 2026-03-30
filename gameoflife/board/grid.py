@@ -1,5 +1,6 @@
 import itertools
 from collections import Counter
+from typing import TypedDict
 
 from gameoflife.settings import (
     CELL_SIZE,
@@ -12,7 +13,12 @@ from gameoflife.settings import (
 from .cell import Cell
 
 
-def is_inside_grid(pos, matrix):
+class Neighbors(TypedDict):
+    alive: int
+    dead: list[tuple[int, int]]
+
+
+def is_inside_grid(pos: tuple[int, int], matrix: list[list[int]]) -> bool:
     """Make sure the pattern is pasted inside the grids boundary."""
     x, y = pos
     w, h = calc_size(matrix)
@@ -30,7 +36,7 @@ def is_inside_grid(pos, matrix):
     return False
 
 
-def calc_size(matrix):
+def calc_size(matrix: list[list[int]]) -> tuple[int, int]:
     """Calculate the patterns size."""
     w, h = len(matrix[0]), len(matrix)
     width, height = w * CELL_SIZE, h * CELL_SIZE
@@ -38,7 +44,7 @@ def calc_size(matrix):
     return width, height
 
 
-def calc_pos(pos):
+def calc_pos(pos: tuple[int, int]) -> tuple[int, int] | None:
     """Calculate the key for the current mouse position."""
     x, y = pos
 
@@ -58,10 +64,10 @@ def calc_pos(pos):
         return key
 
 
-def count_neighbors(cell, pos):
+def count_neighbors(cell: Counter[tuple[int, int]], pos: tuple[int, int]) -> Neighbors:
     """Return number of alive neighbors."""
     x, y = pos
-    neighbors = {"alive": 0, "dead": []}
+    neighbors: Neighbors = {"alive": 0, "dead": []}
 
     # Calculate positions of all neighbors.
     nlist = list(
@@ -102,41 +108,42 @@ def count_neighbors(cell, pos):
 class Grid:
     """The 2D grid where the magic happens."""
 
-    def __init__(self):
-        self.cell = Counter()
-        self.cell_sprite = Counter()
+    def __init__(self) -> None:
+        self.cell: Counter[tuple[int, int]] = Counter()
+        self.cell_sprite: dict[tuple[int, int], Cell] = {}
         self.run = False
         self.deaths = 0
         self.generation = 0
 
-    def start(self):
+    def start(self) -> None:
         """Start the algorithm."""
         self.run = True
 
-    def stop(self):
+    def stop(self) -> None:
         """Stop the algorithm."""
         self.run = False
 
-    def reset(self):
+    def reset(self) -> None:
         """Reset the grid."""
         self.stop()
-        self.cell = Counter()
-        self.cell_sprite = Counter()
+        self.cell: Counter[tuple[int, int]] = Counter()
+        self.cell_sprite: dict[tuple[int, int], Cell] = {}
         self.deaths = 0
         self.generation = 0
 
-    def delete_cell(self, key):
+    def delete_cell(self, key: tuple[int, int]) -> None:
         """Remove cell from memory."""
         del self.cell[key]
-        del self.cell_sprite[key]
+        self.cell_sprite.pop(key, None)
 
-    def update_deaths(self):
+    def update_deaths(self) -> None:
         """Keep track of how many cells that has died."""
         self.deaths += 1
 
-    def update(self):
-        dead_neighbors = set()
-        births, deaths = [], []
+    def update(self) -> None:
+        dead_neighbors: set[tuple[int, int]] = set()
+        births: list[tuple[int, int]] = []
+        deaths: list[tuple[int, int]] = []
 
         for key, _ in self.cell_sprite.items():
             neighbors = count_neighbors(self.cell, key)

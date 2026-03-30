@@ -7,7 +7,7 @@ from gameoflife.util.text import InfoText
 class Modal(pygame.sprite.Sprite):
     """Modal background."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         # Make the modal's size 75 % of the screen size.
@@ -16,7 +16,7 @@ class Modal(pygame.sprite.Sprite):
         size = [width, height]
 
         # Position the modal in the center of the screen.
-        pos = [int((settings.WIDTH - width) / 2), int((settings.HEIGHT - height) / 2)]
+        pos = int((settings.WIDTH - width) / 2), int((settings.HEIGHT - height) / 2)
 
         self.color = settings.MODAL_COLOR
         self.image = pygame.Surface(size)

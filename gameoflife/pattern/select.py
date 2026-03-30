@@ -1,7 +1,14 @@
+from typing import Protocol
+
+
+class PasteFunc(Protocol):
+    def __call__(self, pos: tuple[int, int], button: int, name: str | None = None) -> None: ...
+
+
 class Node:
     """Node in the linked list to store a individual pattern in."""
 
-    def __init__(self, data):
+    def __init__(self, data: tuple[str, PasteFunc]) -> None:
         self.data = data
         self.next = None
         self.prev = None
@@ -10,7 +17,7 @@ class Node:
 class PatternSelector:
     """Keeps stored pattern in a circular doubly linked list."""
 
-    def __init__(self, data=None):
+    def __init__(self, data: tuple[str, PasteFunc] | None = None) -> None:
         self.counter = 0
         self.head = None
         self.tail = None
@@ -18,7 +25,7 @@ class PatternSelector:
             self.append(data)
         self.current = self.head
 
-    def append(self, data):
+    def append(self, data: tuple[str, PasteFunc]) -> int:
         """Add data to the circular doubly linked list."""
         # Store the data in a new node.
         new_node = Node(data)
@@ -40,15 +47,15 @@ class PatternSelector:
 
         return self.counter
 
-    def next(self):
+    def next(self) -> None:
         """Go to the next node."""
         self.current = self.current.next
 
-    def previous(self):
+    def previous(self) -> None:
         """Go to the previous node."""
         self.current = self.current.prev
 
-    def get_current(self):
+    def get_current(self) -> tuple[str, PasteFunc]:
         """Get the current node."""
         if not self.current:
             self.current = self.head
@@ -58,7 +65,7 @@ class PatternSelector:
 
         return name, func
 
-    def before_current(self, num):
+    def before_current(self, num: int) -> str:
         """Return pattern name n times before active pattern."""
         name = self.current
 
@@ -70,7 +77,7 @@ class PatternSelector:
 
         return name.data[0]
 
-    def after_current(self, num):
+    def after_current(self, num: int) -> str:
         """Return pattern name n times after active pattern."""
         name = self.current
 

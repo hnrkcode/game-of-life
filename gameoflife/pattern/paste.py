@@ -11,7 +11,7 @@ from .select import PatternSelector
 class PastePattern(Grid):
     """Read in predefined patterns and paste them on the grid."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.select = PatternSelector()
         self.pattern = get_patterns()
@@ -19,12 +19,12 @@ class PastePattern(Grid):
         for name in self.pattern.keys():
             self.select.append((name, self.paste))
 
-    def set_color(self, pos, matrix):
+    def set_color(self, pos: tuple[int, int], matrix: list[list[int]]) -> tuple[int, int, int]:
         if not is_inside_grid(pos, matrix):
             return settings.PASTE_OFF
         return settings.PASTE_ON
 
-    def preview(self, pos, name=None):
+    def preview(self, pos: tuple[int, int], name: str | None = None) -> pygame.Surface:
         """Show preview of selected pattern."""
         if not name:
             pattern_matrix = [[1]]
@@ -50,7 +50,7 @@ class PastePattern(Grid):
 
         return pattern_surface
 
-    def paste(self, pos, button, name=None):
+    def paste(self, pos: tuple[int, int], button: int, name: str | None = None) -> None:
         """Paste any predefined patterns on the grid."""
         if not name:
             matrix = [[1]]

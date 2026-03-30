@@ -33,6 +33,6 @@ def test_info_text_update():
 def test_info_text_position():
     pygame.font.init()
     info_text = InfoText("Test Text", 16)
-    assert info_text.rect == (0, 0)
+    assert info_text.rect.topleft == (0, 0)
     info_text.set_position((25, 25))
-    assert info_text.rect == (25, 25)
+    assert info_text.rect.topleft == (25, 25)

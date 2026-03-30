@@ -73,7 +73,7 @@ def test_init_cell_value(grid):
 
 
 def test_init_cell_sprite_value(grid):
-    assert grid.cell_sprite == Counter()
+    assert grid.cell_sprite == {}
 
 
 def test_init_run_value(grid):
@@ -110,7 +110,7 @@ def test_reset(grid):
 
     for i in range(10):
         grid.cell[(i, i)] = 0
-        grid.cell_sprite[(i, i)] = 0
+        grid.cell_sprite[(i, i)] = Cell((i, i))
 
     # Reset and test if everything now is set to default values.
     grid.reset()
@@ -119,7 +119,7 @@ def test_reset(grid):
     assert grid.deaths == 0
     assert grid.generation == 0
     assert grid.cell == Counter()
-    assert grid.cell_sprite == Counter()
+    assert grid.cell_sprite == {}
 
 
 def test_delete_cell(grid):
@@ -128,18 +128,18 @@ def test_delete_cell(grid):
 
     for i in range(limit):
         grid.cell[(i, i)] = 1
-        grid.cell_sprite[(i, i)] = 1
+        grid.cell_sprite[(i, i)] = Cell((i, i))
 
     # Before delete.
     assert grid.cell[key] == 1
-    assert grid.cell_sprite[key] == 1
+    assert key in grid.cell_sprite
     assert len(grid.cell) == limit
 
     grid.delete_cell(key)
 
     # After delete.
     assert grid.cell[key] == 0
-    assert grid.cell_sprite[key] == 0
+    assert key not in grid.cell_sprite
     assert len(grid.cell) == limit - 1
 
 
@@ -158,7 +158,7 @@ def test_update_deaths(grid):
 
 def test_update(grid):
     grid.cell = Counter({(560, 280): 1, (570, 280): 1})
-    grid.cell_sprite = Counter({(560, 280): Cell((560, 280)), (570, 280): Cell((570, 280))})
+    grid.cell_sprite = {(560, 280): Cell((560, 280)), (570, 280): Cell((570, 280))}
     grid.deaths = 0
     grid.generation = 0
 
@@ -169,4 +169,4 @@ def test_update(grid):
     assert grid.deaths == 2
     assert grid.generation == 1
     assert grid.cell == Counter()
-    assert grid.cell_sprite == Counter()
+    assert grid.cell_sprite == {}
