@@ -35,24 +35,11 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = [
-    "S101",
-    "PLR2004",
-    "ANN",
-    "I001",
-    "SIM",
-    "PT",
-    "E",
-    "N",
-    "B",
-    "RET",
-    "W",
-]
+"tests/**" = ["S101", "PLR2004", "I001", "SIM", "PT", "E", "N", "B", "RET", "W"]
 "run.py" = ["W292"]
 "gameoflife/**" = ["FBT", "PLR", "INP", "SIM", "A", "RET", "PTH", "C", "PERF"]
 
 [tool.ty.rules]
-invalid-argument-type = "ignore"
 
 [tool.ty.src]
-exclude = ["gameoflife/pattern/select.py", "gameoflife/pattern/paste.py"]
+exclude = []

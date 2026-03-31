@@ -3,68 +3,68 @@ from pathlib import PurePath
 from gameoflife import settings
 
 
-def test_fps_is_30():
+def test_fps_is_30() -> None:
     assert settings.FPS == 30
 
 
-def test_base_dir():
+def test_base_dir() -> None:
     assert PurePath(settings.BASE_DIR).name == PurePath(__file__).parent.parent.name
 
 
-def test_data_dir():
+def test_data_dir() -> None:
     assert PurePath(settings.DATA_DIR).name == "data"
 
 
-def test_image_dir():
+def test_image_dir() -> None:
     assert PurePath(settings.IMAGE_DIR).name == "images"
 
 
-def test_font_dir():
+def test_font_dir() -> None:
     assert PurePath(settings.FONT_DIR).name == "fonts"
 
 
-def test_text_dir():
+def test_text_dir() -> None:
     assert PurePath(settings.TEXT_DIR).name == "text"
 
 
-def test_icon_file():
+def test_icon_file() -> None:
     assert PurePath(settings.ICON_FILE).name == "logo.png"
 
 
-def test_font_files():
+def test_font_files() -> None:
     assert PurePath(settings.HEADER_FONT).name == "LLPIXEL3.ttf"
     assert PurePath(settings.TEXT_FONT).name == "Rheiborn_Sans_Clean.ttf"
 
 
-def test_patterns_file():
+def test_patterns_file() -> None:
     assert PurePath(settings.PATTERN_LIST).name == "patterns.txt"
 
 
-def test_text_color():
+def test_text_color() -> None:
     assert settings.TEXT_COLOR == (150, 150, 150)
 
 
-def test_background_color():
+def test_background_color() -> None:
     assert settings.BG_COLOR == (19, 19, 19)
 
 
-def test_modal_color():
+def test_modal_color() -> None:
     assert settings.MODAL_COLOR == (40, 40, 40)
 
 
-def test_overlay_color():
+def test_overlay_color() -> None:
     assert settings.OVERLAY_COLOR == (10, 10, 10)
 
 
-def test_dead_cell_color():
+def test_dead_cell_color() -> None:
     assert settings.DEAD == (27, 27, 27)
 
 
-def test_alive_cell_color():
+def test_alive_cell_color() -> None:
     assert settings.ALIVE == (150, 150, 150)
 
 
-def test_generation_colors():
+def test_generation_colors() -> None:
     assert settings.GEN1 == (40, 160, 255)
     assert settings.GEN2 == (0, 255, 206)
     assert settings.GEN3 == (233, 255, 131)
@@ -72,52 +72,52 @@ def test_generation_colors():
     assert settings.GEN5 == (232, 0, 25)
 
 
-def test_paste_on_color():
+def test_paste_on_color() -> None:
     assert settings.PASTE_ON == (138, 226, 52)
 
 
-def test_paste_off_color():
+def test_paste_off_color() -> None:
     assert settings.PASTE_OFF == (239, 41, 41)
 
 
-def test_active_menu_pattern_color():
+def test_active_menu_pattern_color() -> None:
     assert settings.ACTIVE == (255, 255, 255)
 
 
-def test_width():
+def test_width() -> None:
     assert settings.WIDTH == 1280
 
 
-def test_height():
+def test_height() -> None:
     assert settings.HEIGHT == 720
 
 
-def test_window_size():
+def test_window_size() -> None:
     assert settings.WINDOW_SIZE == (settings.WIDTH, settings.HEIGHT)
 
 
-def test_cell_size():
+def test_cell_size() -> None:
     assert settings.CELL_SIZE == 10
 
 
-def test_board_position():
+def test_board_position() -> None:
     board_pos = (settings.BOARD_X_POS, settings.BOARD_Y_POS)
     assert board_pos == (250, 50)
 
 
-def test_grid_border_limits():
+def test_grid_border_limits() -> None:
     assert settings.MIN_X == 250
     assert settings.MAX_X == 250 + 980 - 10
     assert settings.MIN_Y == 50
     assert settings.MAX_Y == 50 + 620 - 10
 
 
-def test_total_cells():
+def test_total_cells() -> None:
     assert settings.TOTAL_CELLS == int(980 / 10 * 620 / 10)
     assert isinstance(settings.TOTAL_CELLS, int)
 
 
-def test_board_size():
+def test_board_size() -> None:
     board_size = (settings.BOARD_WIDTH_SIZE, settings.BOARD_HEIGHT_SIZE)
     board_width = 980 / 10
     board_height = 620 / 10
@@ -128,14 +128,14 @@ def test_board_size():
     assert isinstance(settings.BOARD_HEIGHT, int)
 
 
-def test_mouse_button_settings():
+def test_mouse_button_settings() -> None:
     assert settings.LEFT_CLICK == (1, 0, 0)
     assert settings.RIGHT_CLICK == (0, 0, 1)
     assert settings.SCROLL_DOWN == 5
     assert settings.SCROLL_UP == 4
 
 
-def test_text_sizes():
+def test_text_sizes() -> None:
     assert settings.H1 == 100
     assert settings.H2 == 35
     assert settings.H3 == 25

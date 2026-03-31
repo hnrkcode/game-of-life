@@ -25,7 +25,7 @@ class ScreenText(pygame.sprite.Sprite):
         letters = []
 
         for letter in list(text):
-            letters.append(InfoText(letter, size=settings.H1, pos=[x, y], alpha=True))
+            letters.append(InfoText(letter, size=settings.H1, pos=(x, y), alpha=True))
             x += 50
 
         # Center text.

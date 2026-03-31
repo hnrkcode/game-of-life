@@ -2,25 +2,25 @@ import pytest
 from gameoflife.pattern.select import Node, PatternSelector
 
 
-def test_node():
-    node = Node(data=None)
+def fn(pos: tuple[int, int], button: tuple[bool, bool, bool], name: str | None = None) -> None: ...
 
-    assert node.data == None
+
+def test_node() -> None:
+    node = Node(data=("test", fn))
+
+    assert node.data == ("test", fn)
     assert node.next == None
     assert node.prev == None
 
 
-def test_init_pattern_selector():
-    def fn(name):
-        return name
-
+def test_init_pattern_selector() -> None:
     selector = PatternSelector(("test", fn))
 
     assert selector.get_current() == ("test", fn)
     assert selector.counter == 1
 
 
-def test_pattern_selector():
+def test_pattern_selector() -> None:
     selector = PatternSelector()
 
     assert selector.counter == 0
@@ -28,9 +28,6 @@ def test_pattern_selector():
     assert selector.tail == None
     assert selector.current == selector.head
     assert not isinstance(selector.head, Node)
-
-    def fn(name):
-        return name
 
     # First entry.
     assert selector.append(("test_1", fn)) == 1

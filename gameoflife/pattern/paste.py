@@ -50,14 +50,17 @@ class PastePattern(Grid):
 
         return pattern_surface
 
-    def paste(self, pos: tuple[int, int], button: int, name: str | None = None) -> None:
+    def paste(self, pos: tuple[int, int], button: tuple[bool, bool, bool], name: str | None = None) -> None:
         """Paste any predefined patterns on the grid."""
         if not name:
             matrix = [[1]]
         else:
             matrix = self.pattern[name]
 
-        x, y = position = calc_pos(pos)
+        if (position := calc_pos(pos)) is None:
+            return
+
+        x, y = position
 
         if is_inside_grid(position, matrix):
             for row in range(len(matrix)):

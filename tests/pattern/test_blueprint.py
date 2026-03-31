@@ -1,12 +1,14 @@
 from gameoflife.pattern.blueprint import get_patterns
 
+Patterns = dict[str, list[list[int]]]
 
-def test_blueprint_length(patterns):
+
+def test_blueprint_length(patterns: Patterns) -> None:
     assert len(patterns.items()) == 34
 
 
-def test_blueprint_names():
-    patterns = get_patterns()
+def test_blueprint_names() -> None:
+    patterns: Patterns = get_patterns()
 
     cellular_automata_patterns = [
         "1. Still life: Block",
@@ -49,11 +51,11 @@ def test_blueprint_names():
         assert actual == expected
 
 
-def test_still_life_pattern_block(patterns):
+def test_still_life_pattern_block(patterns: Patterns) -> None:
     assert patterns["1. Still life: Block"] == [[1, 1], [1, 1]]
 
 
-def test_still_life_pattern_behive(patterns):
+def test_still_life_pattern_behive(patterns: Patterns) -> None:
     assert patterns["2. Still life: Behive"] == [
         [0, 1, 1, 0],
         [1, 0, 0, 1],
@@ -62,7 +64,7 @@ def test_still_life_pattern_behive(patterns):
 
 
 # Repeat the same format for the remaining patterns
-def test_still_life_pattern_loaf(patterns):
+def test_still_life_pattern_loaf(patterns: Patterns) -> None:
     assert patterns["3. Still life: Loaf"] == [
         [0, 1, 1, 0],
         [1, 0, 0, 1],
@@ -71,15 +73,15 @@ def test_still_life_pattern_loaf(patterns):
     ]
 
 
-def test_still_life_pattern_tub(patterns):
+def test_still_life_pattern_tub(patterns: Patterns) -> None:
     assert patterns["4. Still life: Tub"] == [[0, 1, 0], [1, 0, 1], [0, 1, 0]]
 
 
-def test_still_life_pattern_boat(patterns):
+def test_still_life_pattern_boat(patterns: Patterns) -> None:
     assert patterns["5. Still life: Boat"] == [[1, 1, 0], [1, 0, 1], [0, 1, 0]]
 
 
-def test_still_life_pattern_carrier(patterns):
+def test_still_life_pattern_carrier(patterns: Patterns) -> None:
     assert patterns["6. Still life: Carrier"] == [
         [1, 1, 0, 0],
         [1, 0, 0, 1],
@@ -87,11 +89,11 @@ def test_still_life_pattern_carrier(patterns):
     ]
 
 
-def test_oscillator_blinker(patterns):
+def test_oscillator_blinker(patterns: Patterns) -> None:
     assert patterns["7. Oscillator: Blinker"] == [[1, 1, 1]]
 
 
-def test_oscillator_beacon(patterns):
+def test_oscillator_beacon(patterns: Patterns) -> None:
     assert patterns["8. Oscillator: Beacon"] == [
         [1, 1, 0, 0],
         [1, 0, 0, 0],
@@ -100,11 +102,11 @@ def test_oscillator_beacon(patterns):
     ]
 
 
-def test_oscillator_pulsar_line(patterns):
+def test_oscillator_pulsar_line(patterns: Patterns) -> None:
     assert patterns["9. Oscillator: Pulsar line"] == [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
 
 
-def test_oscillator_pulsar(patterns):
+def test_oscillator_pulsar(patterns: Patterns) -> None:
     assert patterns["10. Oscillator: Pulsar"] == [
         [0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -122,11 +124,11 @@ def test_oscillator_pulsar(patterns):
     ]
 
 
-def test_oscillator_toad(patterns):
+def test_oscillator_toad(patterns: Patterns) -> None:
     assert patterns["11. Oscillator: Toad"] == [[0, 1, 1, 1], [1, 1, 1, 0]]
 
 
-def test_oscillator_figure_eight(patterns):
+def test_oscillator_figure_eight(patterns: Patterns) -> None:
     assert patterns["12. Oscillator: Figure eight"] == [
         [1, 1, 0, 0, 0, 0],
         [1, 1, 0, 1, 0, 0],
@@ -137,7 +139,7 @@ def test_oscillator_figure_eight(patterns):
     ]
 
 
-def test_oscillator_octagon_2(patterns):
+def test_oscillator_octagon_2(patterns: Patterns) -> None:
     assert patterns["13. Oscillator: Octagon 2"] == [
         [0, 0, 0, 1, 1, 0, 0, 0],
         [0, 0, 1, 0, 0, 1, 0, 0],
@@ -150,7 +152,7 @@ def test_oscillator_octagon_2(patterns):
     ]
 
 
-def test_oscillator_pentadecathlon(patterns):
+def test_oscillator_pentadecathlon(patterns: Patterns) -> None:
     assert patterns["14. Oscillator: Pentadecathlon"] == [
         [0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
         [1, 1, 0, 1, 1, 1, 1, 0, 1, 1],
@@ -158,7 +160,7 @@ def test_oscillator_pentadecathlon(patterns):
     ]
 
 
-def test_oscillator_spark_coil(patterns):
+def test_oscillator_spark_coil(patterns: Patterns) -> None:
     assert patterns["15. Oscillator: Spark coil"] == [
         [1, 1, 0, 0, 0, 0, 1, 1],
         [1, 0, 1, 0, 0, 1, 0, 1],
@@ -168,7 +170,7 @@ def test_oscillator_spark_coil(patterns):
     ]
 
 
-def test_oscillator_wheel(patterns):
+def test_oscillator_wheel(patterns: Patterns) -> None:
     assert patterns["16. Oscillator: Wheel"] == [
         [0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
@@ -185,7 +187,7 @@ def test_oscillator_wheel(patterns):
     ]
 
 
-def test_spaceship_lightweight_spaceship(patterns):
+def test_spaceship_lightweight_spaceship(patterns: Patterns) -> None:
     assert patterns["17. Spaceship: Lightweight Spaceship"] == [
         [0, 1, 0, 0, 1],
         [1, 0, 0, 0, 0],
@@ -194,7 +196,7 @@ def test_spaceship_lightweight_spaceship(patterns):
     ]
 
 
-def test_spaceship_mediumweight_spaceship(patterns):
+def test_spaceship_mediumweight_spaceship(patterns: Patterns) -> None:
     assert patterns["18. Spaceship: Mediumweight Spaceship"] == [
         [0, 0, 0, 1, 0, 0],
         [0, 1, 0, 0, 0, 1],
@@ -204,7 +206,7 @@ def test_spaceship_mediumweight_spaceship(patterns):
     ]
 
 
-def test_spaceship_heavyweight_spaceship(patterns):
+def test_spaceship_heavyweight_spaceship(patterns: Patterns) -> None:
     assert patterns["19. Spaceship: Heavyweight Spaceship"] == [
         [0, 0, 0, 1, 1, 0, 0],
         [0, 1, 0, 0, 0, 0, 1],
@@ -214,11 +216,11 @@ def test_spaceship_heavyweight_spaceship(patterns):
     ]
 
 
-def test_spaceship_glider(patterns):
+def test_spaceship_glider(patterns: Patterns) -> None:
     assert patterns["20. Spaceship: Glider"] == [[0, 1, 0], [0, 0, 1], [1, 1, 1]]
 
 
-def test_spaceship_loafer(patterns):
+def test_spaceship_loafer(patterns: Patterns) -> None:
     assert patterns["21. Spaceship: Loafer"] == [
         [0, 1, 1, 0, 0, 1, 0, 1, 1],
         [1, 0, 0, 1, 0, 0, 1, 1, 0],
@@ -232,7 +234,7 @@ def test_spaceship_loafer(patterns):
     ]
 
 
-def test_spaceship_25P3H1V0_1(patterns):
+def test_spaceship_25P3H1V0_1(patterns: Patterns) -> None:
     assert patterns["22. Spaceship: 25P3H1V0.1"] == [
         [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0],
@@ -242,7 +244,7 @@ def test_spaceship_25P3H1V0_1(patterns):
     ]
 
 
-def test_spaceship_weekender(patterns):
+def test_spaceship_weekender(patterns: Patterns) -> None:
     assert patterns["23. Spaceship: Weekender"] == [
         [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
         [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
@@ -258,7 +260,7 @@ def test_spaceship_weekender(patterns):
     ]
 
 
-def test_gun_Gospels_glider_gun(patterns):
+def test_gun_Gospels_glider_gun(patterns: Patterns) -> None:
     assert patterns["24. Gun: Gospels glider gun"] == [
         [
             0,
@@ -605,7 +607,7 @@ def test_gun_Gospels_glider_gun(patterns):
     ]
 
 
-def test_methuselah_acorn(patterns):
+def test_methuselah_acorn(patterns: Patterns) -> None:
     assert patterns["25. Methuselah: Acorn"] == [
         [0, 1, 0, 0, 0, 0, 0],
         [0, 0, 0, 1, 0, 0, 0],
@@ -613,7 +615,7 @@ def test_methuselah_acorn(patterns):
     ]
 
 
-def test_methuselah_B_Heptomino(patterns):
+def test_methuselah_B_Heptomino(patterns: Patterns) -> None:
     assert patterns["26. Methuselah: B-Heptomino"] == [
         [1, 0, 1, 1],
         [1, 1, 1, 0],
@@ -621,7 +623,7 @@ def test_methuselah_B_Heptomino(patterns):
     ]
 
 
-def test_methuselah_diehard(patterns):
+def test_methuselah_diehard(patterns: Patterns) -> None:
     assert patterns["27. Methuselah: Diehard"] == [
         [0, 0, 0, 0, 0, 0, 1, 0],
         [1, 1, 0, 0, 0, 0, 0, 0],
@@ -629,7 +631,7 @@ def test_methuselah_diehard(patterns):
     ]
 
 
-def test_methuselah_glider_by_the_dozen(patterns):
+def test_methuselah_glider_by_the_dozen(patterns: Patterns) -> None:
     assert patterns["28. Methuselah: Glider by the dozen"] == [
         [1, 1, 0, 0, 1],
         [1, 0, 0, 0, 1],
@@ -637,11 +639,11 @@ def test_methuselah_glider_by_the_dozen(patterns):
     ]
 
 
-def test_methuselah_Piheptomino(patterns):
+def test_methuselah_Piheptomino(patterns: Patterns) -> None:
     assert patterns["29. Methuselah: Piheptomino"] == [[1, 1, 1], [1, 0, 1], [1, 0, 1]]
 
 
-def test_methuselah_thunderbird(patterns):
+def test_methuselah_thunderbird(patterns: Patterns) -> None:
     assert patterns["30. Methuselah: Thunderbird"] == [
         [1, 1, 1],
         [0, 0, 0],
@@ -651,7 +653,7 @@ def test_methuselah_thunderbird(patterns):
     ]
 
 
-def test_methuselah_GardenofEden(patterns):
+def test_methuselah_GardenofEden(patterns: Patterns) -> None:
     assert patterns["31. Methuselah: GardenofEden"] == [
         [0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0],
         [0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0],
@@ -667,7 +669,7 @@ def test_methuselah_GardenofEden(patterns):
     ]
 
 
-def test_methuselah_Infinite_3(patterns):
+def test_methuselah_Infinite_3(patterns: Patterns) -> None:
     assert patterns["32. Methuselah: Infinite 3"] == [
         [
             1,
@@ -713,7 +715,7 @@ def test_methuselah_Infinite_3(patterns):
     ]
 
 
-def test_wick_Ants(patterns):
+def test_wick_Ants(patterns: Patterns) -> None:
     assert patterns["33. Wick: Ants"] == [
         [
             1,
@@ -902,7 +904,7 @@ def test_wick_Ants(patterns):
     ]
 
 
-def test_wick_Blinker_Fuse(patterns):
+def test_wick_Blinker_Fuse(patterns: Patterns) -> None:
     assert patterns["34. Wick: Blinker Fuse"] == [
         [
             1,

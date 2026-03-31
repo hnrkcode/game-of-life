@@ -65,10 +65,10 @@ def main() -> None:
     )
 
     splash_header.set_position(
-        [
-            settings.WIDTH / 2 - (splash_header.image.get_width() / 2),
-            settings.HEIGHT / 3,
-        ]
+        (
+            int(settings.WIDTH / 2 - (splash_header.image.get_width() / 2)),
+            int(settings.HEIGHT / 3),
+        )
     )
 
     splash_start = InfoText(
@@ -77,10 +77,10 @@ def main() -> None:
     )
 
     splash_start.set_position(
-        [
-            settings.WIDTH / 2 - (splash_start.image.get_width() / 2),
-            settings.HEIGHT / 1.75,
-        ]
+        (
+            int(settings.WIDTH / 2 - (splash_start.image.get_width() / 2)),
+            int(settings.HEIGHT / 1.75),
+        )
     )
 
     splash_screen_group = pygame.sprite.RenderUpdates(splash_header, splash_start)

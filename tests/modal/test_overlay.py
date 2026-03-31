@@ -3,7 +3,7 @@ from gameoflife import settings
 from gameoflife.modal.overlay import Overlay
 
 
-def test_overlay_init():
+def test_overlay_init() -> None:
     pygame.init()
     overlay = Overlay()
 

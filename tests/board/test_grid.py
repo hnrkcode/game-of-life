@@ -7,10 +7,11 @@ from gameoflife.board.grid import (
     calc_size,
     count_neighbors,
     is_inside_grid,
+    Grid,
 )
 
 
-def test_pattern_size():
+def test_pattern_size() -> None:
     pattern = [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
     width, height = (
         len(pattern[0]) * settings.CELL_SIZE,
@@ -19,7 +20,7 @@ def test_pattern_size():
     assert calc_size(pattern) == (width, height)
 
 
-def test_pattern_inside_grids_boundary():
+def test_pattern_inside_grids_boundary() -> None:
     pattern = [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
 
     # Setup where it should work to paste the pattern based on it's size.
@@ -41,16 +42,16 @@ def test_pattern_inside_grids_boundary():
     assert is_inside_grid(pos_bottomright_corner, pattern) == True
 
 
-def test_pattern_outside_grids_boundary():
+def test_pattern_outside_grids_boundary() -> None:
     pattern = [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
     assert is_inside_grid((0, 0), pattern) == False
 
 
-def test_calculate_position():
+def test_calculate_position() -> None:
     assert calc_pos((123, 456)), (120, 450) == True
 
 
-def test_count_neighbors():
+def test_count_neighbors() -> None:
     cell = Counter({(560, 280): 1, (570, 280): 1})
     pos = (560, 280)
 
@@ -68,33 +69,33 @@ def test_count_neighbors():
     ]
 
 
-def test_init_cell_value(grid):
+def test_init_cell_value(grid: Grid) -> None:
     assert grid.cell == Counter()
 
 
-def test_init_cell_sprite_value(grid):
+def test_init_cell_sprite_value(grid: Grid) -> None:
     assert grid.cell_sprite == {}
 
 
-def test_init_run_value(grid):
+def test_init_run_value(grid: Grid) -> None:
     assert grid.run == False
 
 
-def test_init_deaths_value(grid):
+def test_init_deaths_value(grid: Grid) -> None:
     assert grid.deaths == 0
 
 
-def test_init_generation_value(grid):
+def test_init_generation_value(grid: Grid) -> None:
     assert grid.generation == 0
 
 
-def test_start(grid):
+def test_start(grid: Grid) -> None:
     assert grid.run == False
     grid.start()
     assert grid.run == True
 
 
-def test_stop(grid):
+def test_stop(grid: Grid) -> None:
     assert grid.run == False
     grid.start()
     assert grid.run == True
@@ -102,7 +103,7 @@ def test_stop(grid):
     assert grid.run == False
 
 
-def test_reset(grid):
+def test_reset(grid: Grid) -> None:
     # Initialize with some random values.
     grid.start()
     grid.deaths = 1234
@@ -122,7 +123,7 @@ def test_reset(grid):
     assert grid.cell_sprite == {}
 
 
-def test_delete_cell(grid):
+def test_delete_cell(grid: Grid) -> None:
     limit = 10
     key = (5, 5)
 
@@ -143,7 +144,7 @@ def test_delete_cell(grid):
     assert len(grid.cell) == limit - 1
 
 
-def test_update_deaths(grid):
+def test_update_deaths(grid: Grid) -> None:
     start = 1
     end = 5
 
@@ -156,7 +157,7 @@ def test_update_deaths(grid):
     assert grid.deaths == 5
 
 
-def test_update(grid):
+def test_update(grid: Grid) -> None:
     grid.cell = Counter({(560, 280): 1, (570, 280): 1})
     grid.cell_sprite = {(560, 280): Cell((560, 280)), (570, 280): Cell((570, 280))}
     grid.deaths = 0
