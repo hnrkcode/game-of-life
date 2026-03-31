@@ -5,6 +5,7 @@
 [![Package manager: uv](https://img.shields.io/badge/package%20manager-uv-de5fea?logo=astral&logoColor=de5fea)](https://github.com/astral-sh/uv)
 [![code style: ruff](https://img.shields.io/badge/code%20style-ruff-d7ff64?logo=ruff&logoColor=d7ff64)](https://github.com/astral-sh/ruff)
 [![type checked: ty](https://custom-icon-badges.demolab.com/badge/type%20checked-ty-47eae2.svg?logo=ty-astral-logo&labelColor=gray&color=47eae2&logoColor=47eae2)](https://github.com/astral-sh/ty)
+[![codecov](https://codecov.io/github/hnrkcode/game-of-life/graph/badge.svg?token=H0AFNO51XV)](https://codecov.io/github/hnrkcode/game-of-life)
 [![License: MIT](https://img.shields.io/badge/License-MIT-40a43b.svg?logo=opensourceinitiative&logoColor=40a43b)](https://opensource.org/licenses/MIT)
 
 Python implementation of Conway's game of life algorithm

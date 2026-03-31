@@ -19,3 +19,4 @@ clean:
 	rm -rf .coverage
 	find . -type d -name '__pycache__' -exec rm -rf {} +
 	find . -type d -name '.*_cache' -exec rm -rf {} +
+	uv cache clear
