@@ -29,7 +29,7 @@ class ScreenText(pygame.sprite.Sprite):
             x += 50
 
         # Center text.
-        text_width = sum(map(lambda letter: letter.image.get_width(), letters))
+        text_width = sum(map(lambda letter: letter.image.get_width(), letters))  # noqa: C417
         center = int(settings.BOARD_WIDTH_SIZE / 2) - (text_width / 2)
 
         for letter in letters:

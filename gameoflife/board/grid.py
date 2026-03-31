@@ -30,10 +30,7 @@ def is_inside_grid(pos: tuple[int, int], matrix: list[list[int]]) -> bool:
     down = MAX_Y - h + CELL_SIZE
 
     # True if inside the girds boundary.
-    if left <= x <= right and up <= y <= down:
-        return True
-
-    return False
+    return left <= x <= right and up <= y <= down
 
 
 def calc_size(matrix: list[list[int]]) -> tuple[int, int]:
@@ -46,6 +43,7 @@ def calc_size(matrix: list[list[int]]) -> tuple[int, int]:
 
 def calc_pos(pos: tuple[int, int]) -> tuple[int, int] | None:
     """Calculate the key for the current mouse position."""
+    key: tuple[int, int] | None = None
     x, y = pos
 
     # Calculate the acceptable interval the exact coordinate has.
@@ -61,7 +59,7 @@ def calc_pos(pos: tuple[int, int]) -> tuple[int, int] | None:
         y = y // CELL_SIZE * CELL_SIZE
         key = (x, y)
 
-        return key
+    return key
 
 
 def count_neighbors(cell: Counter[tuple[int, int]], pos: tuple[int, int]) -> Neighbors:
@@ -145,7 +143,7 @@ class Grid:
         births: list[tuple[int, int]] = []
         deaths: list[tuple[int, int]] = []
 
-        for key, _ in self.cell_sprite.items():
+        for key in self.cell_sprite:
             neighbors = count_neighbors(self.cell, key)
 
             # Survives to next generation.

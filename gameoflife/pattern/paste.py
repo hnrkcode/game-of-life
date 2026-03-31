@@ -8,6 +8,10 @@ from .blueprint import get_patterns
 from .select import PatternSelector
 
 
+def get_pattern_matrix(patterns: dict, name: str | None) -> list[list[int]]:
+    return patterns[name] if name else [[1]]
+
+
 class PastePattern(Grid):
     """Read in predefined patterns and paste them on the grid."""
 
@@ -16,7 +20,7 @@ class PastePattern(Grid):
         self.select = PatternSelector()
         self.pattern = get_patterns()
 
-        for name in self.pattern.keys():
+        for name in self.pattern:
             self.select.append((name, self.paste))
 
     def set_color(self, pos: tuple[int, int], matrix: list[list[int]]) -> tuple[int, int, int]:
@@ -26,10 +30,7 @@ class PastePattern(Grid):
 
     def preview(self, pos: tuple[int, int], name: str | None = None) -> pygame.Surface:
         """Show preview of selected pattern."""
-        if not name:
-            pattern_matrix = [[1]]
-        else:
-            pattern_matrix = self.pattern[name]
+        pattern_matrix = get_pattern_matrix(self.pattern, name)
 
         size = settings.CELL_SIZE
         w, h = len(pattern_matrix[0]) * size, len(pattern_matrix) * size
@@ -52,10 +53,7 @@ class PastePattern(Grid):
 
     def paste(self, pos: tuple[int, int], button: tuple[bool, bool, bool], name: str | None = None) -> None:
         """Paste any predefined patterns on the grid."""
-        if not name:
-            matrix = [[1]]
-        else:
-            matrix = self.pattern[name]
+        matrix = get_pattern_matrix(self.pattern, name)
 
         if (position := calc_pos(pos)) is None:
             return

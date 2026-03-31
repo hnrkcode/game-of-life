@@ -1,9 +1,11 @@
+from pathlib import Path
+
 from gameoflife.settings import PATTERN_LIST
 
 
 def get_patterns() -> dict[str, list[list[int]]]:
     patterns: dict[str, list[list[int]]] = {}
-    with open(PATTERN_LIST) as patterns_file:
+    with Path(PATTERN_LIST).open() as patterns_file:
         name, layout = None, []
         for line in patterns_file:
             if line[0] == "#":

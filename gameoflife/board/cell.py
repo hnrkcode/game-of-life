@@ -28,6 +28,6 @@ class Cell(pygame.sprite.Sprite):
         elif 50 < self.generation <= 100:
             self.color = settings.GEN4
             self.image.fill(self.color)
-        elif 100 < self.generation:
+        elif self.generation > 100:
             self.color = settings.GEN5
             self.image.fill(self.color)

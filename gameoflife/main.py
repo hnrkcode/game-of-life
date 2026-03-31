@@ -29,7 +29,7 @@ from gameoflife.pattern.paste import PastePattern
 from gameoflife.util.text import InfoText
 
 
-def main() -> None:
+def main() -> None:  # noqa: C901
     # Center the window on the screen.
     os.environ["SDL_VIDEO_CENTERED"] = "1"
 
@@ -135,7 +135,7 @@ def main() -> None:
                 return
 
             # Press F11 to toggle to fullscreen mode.
-            elif event.type == KEYDOWN and event.key == K_F11:
+            if event.type == KEYDOWN and event.key == K_F11:
                 is_fullscreen, screen = toggle_fullscreen(is_fullscreen)
 
             # Events captured only while splash screen is running.
@@ -180,14 +180,13 @@ def main() -> None:
                             is_paused, is_finished = False, False
 
                         # Press P to stop the simulation temporarily.
-                        if event.key == K_p:
-                            # Can only pause if there are cells and the generation is more than zero.
-                            if is_pausable(grid):
-                                if is_paused:
-                                    grid.start()
-                                else:
-                                    grid.stop()
-                                is_paused = not is_paused
+                        # Can only pause if there are cells and the generation is more than zero.
+                        if event.key == K_p and is_pausable(grid):
+                            if is_paused:
+                                grid.start()
+                            else:
+                                grid.stop()
+                            is_paused = not is_paused
 
                         # Choose predefined pattern.
                         if event.key == K_UP:
@@ -269,7 +268,7 @@ def main() -> None:
             preview = preview_patterns(is_ctrl_held, grid, pattern_name)
             screen.blit(*preview)
 
-            for key in grid.cell.keys():
+            for key in grid.cell:
                 if grid.cell[key] == 1:
                     pygame.draw.rect(
                         screen,
@@ -312,41 +311,29 @@ def get_cell_count(grid: PastePattern) -> int:
 
 def has_finished(grid: PastePattern) -> bool:
     """Return true when atleast one generation has passed and all cells are dead."""
-    if not get_cell_count(grid) and grid.generation > 0:
-        return True
-
-    return False
+    return not get_cell_count(grid) and grid.generation > 0
 
 
 def is_pausable(grid: PastePattern) -> bool:
     """Check if the game can be paused."""
     # Can only pause when there are alive cells and
-    if get_cell_count(grid) and grid.generation > 0:
-        return True
-
-    return False
+    return get_cell_count(grid) > 0 and grid.generation > 0
 
 
 def preview_patterns(is_ctrl_held: bool, grid: PastePattern, pattern_name: str) -> tuple[pygame.Surface, tuple[int, int]]:
     """Preview selected patterns and show if you can paste it."""
     pos = pygame.mouse.get_pos()
-
-    if is_ctrl_held:
-        pattern = grid.preview(pos, pattern_name)
-    else:
-        pattern = grid.preview(pos)
+    pattern = grid.preview(pos, pattern_name) if is_ctrl_held else grid.preview(pos)
 
     return pattern, pos
 
 
 def toggle_fullscreen(is_fullscreen: bool) -> tuple[bool, pygame.Surface]:
     """Change to fullscreen mode."""
-    if is_fullscreen:
-        screen = pygame.display.set_mode(settings.WINDOW_SIZE)
-    else:
-        screen = pygame.display.set_mode(settings.WINDOW_SIZE, FULLSCREEN)
+    flags = 0 if is_fullscreen else FULLSCREEN
+    screen = pygame.display.set_mode(settings.WINDOW_SIZE, flags)
 
-    return (not is_fullscreen, screen)
+    return not is_fullscreen, screen
 
 
 def toggle_modal(grid: PastePattern, modal: bool, paused: bool) -> bool:
