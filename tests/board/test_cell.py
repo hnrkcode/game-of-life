@@ -1,5 +1,5 @@
-from gameoflife.board.cell import Cell
 from gameoflife import settings
+from gameoflife.board.cell import Cell
 
 
 def test_init_color_is_alive(cell: Cell) -> None:

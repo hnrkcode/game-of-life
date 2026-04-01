@@ -25,9 +25,10 @@ fixable = ["I001", "W292", "W293", "RUF022"]
 ignore = ["D", "COM812"]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = ["S101", "PLR2004", "I001", "SIM", "PT", "E", "N", "B", "RET", "W"]
-"run.py" = ["W292"]
-"gameoflife/**" = ["FBT", "PLR"]
+"tests/**" = ["PT", "S101", "PLR2004"]
+"gameoflife/**" = ["FBT"]
+"gameoflife/util/text.py" = ["PLR0913"]
+"gameoflife/main.py" = ["C901", "PLR0912", "PLR0915"]
 
 [tool.ty.rules]
 

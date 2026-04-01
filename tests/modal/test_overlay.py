@@ -1,4 +1,5 @@
 import pygame
+
 from gameoflife import settings
 from gameoflife.modal.overlay import Overlay
 

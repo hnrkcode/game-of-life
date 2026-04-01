@@ -113,7 +113,7 @@ def test_grid_border_limits() -> None:
 
 
 def test_total_cells() -> None:
-    assert settings.TOTAL_CELLS == int(980 / 10 * 620 / 10)
+    assert int(980 / 10 * 620 / 10) == settings.TOTAL_CELLS
     assert isinstance(settings.TOTAL_CELLS, int)
 
 
@@ -122,8 +122,8 @@ def test_board_size() -> None:
     board_width = 980 / 10
     board_height = 620 / 10
     assert board_size == (980, 620)
-    assert settings.BOARD_WIDTH == board_width
-    assert settings.BOARD_HEIGHT == board_height
+    assert board_width == settings.BOARD_WIDTH
+    assert board_height == settings.BOARD_HEIGHT
     assert isinstance(settings.BOARD_WIDTH, int)
     assert isinstance(settings.BOARD_HEIGHT, int)
 

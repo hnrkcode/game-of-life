@@ -1,4 +1,5 @@
 import pytest
+
 from gameoflife.pattern.select import Node, PatternSelector
 
 
@@ -9,8 +10,8 @@ def test_node() -> None:
     node = Node(data=("test", fn))
 
     assert node.data == ("test", fn)
-    assert node.next == None
-    assert node.prev == None
+    assert node.next is None
+    assert node.prev is None
 
 
 def test_init_pattern_selector() -> None:
@@ -24,8 +25,8 @@ def test_pattern_selector() -> None:
     selector = PatternSelector()
 
     assert selector.counter == 0
-    assert selector.head == None
-    assert selector.tail == None
+    assert selector.head is None
+    assert selector.tail is None
     assert selector.current == selector.head
     assert not isinstance(selector.head, Node)
 

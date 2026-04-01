@@ -7,7 +7,7 @@ test:
 	uv run pytest -v tests/ --cov=gameoflife/
 
 lint:
-	uv run ruff check .
+	uv run ruff check . --fix --show-fixes
 
 format:
 	uv run ruff format .

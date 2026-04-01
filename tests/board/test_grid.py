@@ -3,11 +3,11 @@ from collections import Counter
 from gameoflife import settings
 from gameoflife.board.cell import Cell
 from gameoflife.board.grid import (
+    Grid,
     calc_pos,
     calc_size,
     count_neighbors,
     is_inside_grid,
-    Grid,
 )
 
 
@@ -36,15 +36,15 @@ def test_pattern_inside_grids_boundary() -> None:
     )
     pos_bottomright_corner = (settings.MAX_X - w, settings.MAX_Y - h)
 
-    assert is_inside_grid(pos_topleft_corner, pattern) == True
-    assert is_inside_grid(pos_topright_corner, pattern) == True
-    assert is_inside_grid(pos_bottomleft_corner, pattern) == True
-    assert is_inside_grid(pos_bottomright_corner, pattern) == True
+    assert is_inside_grid(pos_topleft_corner, pattern)
+    assert is_inside_grid(pos_topright_corner, pattern)
+    assert is_inside_grid(pos_bottomleft_corner, pattern)
+    assert is_inside_grid(pos_bottomright_corner, pattern)
 
 
 def test_pattern_outside_grids_boundary() -> None:
     pattern = [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
-    assert is_inside_grid((0, 0), pattern) == False
+    assert is_inside_grid((0, 0), pattern) is False
 
 
 def test_calculate_position() -> None:
@@ -78,7 +78,7 @@ def test_init_cell_sprite_value(grid: Grid) -> None:
 
 
 def test_init_run_value(grid: Grid) -> None:
-    assert grid.run == False
+    assert grid.run is False
 
 
 def test_init_deaths_value(grid: Grid) -> None:
@@ -90,17 +90,17 @@ def test_init_generation_value(grid: Grid) -> None:
 
 
 def test_start(grid: Grid) -> None:
-    assert grid.run == False
+    assert grid.run is False
     grid.start()
-    assert grid.run == True
+    assert grid.run is True
 
 
 def test_stop(grid: Grid) -> None:
-    assert grid.run == False
+    assert grid.run is False
     grid.start()
-    assert grid.run == True
+    assert grid.run is True
     grid.stop()
-    assert grid.run == False
+    assert grid.run is False
 
 
 def test_reset(grid: Grid) -> None:
@@ -116,7 +116,7 @@ def test_reset(grid: Grid) -> None:
     # Reset and test if everything now is set to default values.
     grid.reset()
 
-    assert grid.run == False
+    assert grid.run is False
     assert grid.deaths == 0
     assert grid.generation == 0
     assert grid.cell == Counter()
@@ -166,7 +166,7 @@ def test_update(grid: Grid) -> None:
     grid.update()
 
     # Values after one generation.
-    assert grid.run == False
+    assert grid.run is False
     assert grid.deaths == 2
     assert grid.generation == 1
     assert grid.cell == Counter()

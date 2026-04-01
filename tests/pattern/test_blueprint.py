@@ -47,7 +47,7 @@ def test_blueprint_names() -> None:
         "34. Wick: Blinker Fuse",
     ]
 
-    for actual, expected in zip(patterns.keys(), cellular_automata_patterns):
+    for actual, expected in zip(patterns.keys(), cellular_automata_patterns, strict=True):
         assert actual == expected
 
 
@@ -234,7 +234,7 @@ def test_spaceship_loafer(patterns: Patterns) -> None:
     ]
 
 
-def test_spaceship_25P3H1V0_1(patterns: Patterns) -> None:
+def test_spaceship_25p3h1v0_1(patterns: Patterns) -> None:
     assert patterns["22. Spaceship: 25P3H1V0.1"] == [
         [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0],
@@ -260,7 +260,7 @@ def test_spaceship_weekender(patterns: Patterns) -> None:
     ]
 
 
-def test_gun_Gospels_glider_gun(patterns: Patterns) -> None:
+def test_gun_gospels_glider_gun(patterns: Patterns) -> None:
     assert patterns["24. Gun: Gospels glider gun"] == [
         [
             0,
@@ -615,7 +615,7 @@ def test_methuselah_acorn(patterns: Patterns) -> None:
     ]
 
 
-def test_methuselah_B_Heptomino(patterns: Patterns) -> None:
+def test_methuselah_b_heptomino(patterns: Patterns) -> None:
     assert patterns["26. Methuselah: B-Heptomino"] == [
         [1, 0, 1, 1],
         [1, 1, 1, 0],
@@ -639,7 +639,7 @@ def test_methuselah_glider_by_the_dozen(patterns: Patterns) -> None:
     ]
 
 
-def test_methuselah_Piheptomino(patterns: Patterns) -> None:
+def test_methuselah_piheptomino(patterns: Patterns) -> None:
     assert patterns["29. Methuselah: Piheptomino"] == [[1, 1, 1], [1, 0, 1], [1, 0, 1]]
 
 
@@ -653,7 +653,7 @@ def test_methuselah_thunderbird(patterns: Patterns) -> None:
     ]
 
 
-def test_methuselah_GardenofEden(patterns: Patterns) -> None:
+def test_methuselah_garden_of_eden(patterns: Patterns) -> None:
     assert patterns["31. Methuselah: GardenofEden"] == [
         [0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0],
         [0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0],
@@ -669,7 +669,7 @@ def test_methuselah_GardenofEden(patterns: Patterns) -> None:
     ]
 
 
-def test_methuselah_Infinite_3(patterns: Patterns) -> None:
+def test_methuselah_infinite_3(patterns: Patterns) -> None:
     assert patterns["32. Methuselah: Infinite 3"] == [
         [
             1,
@@ -715,7 +715,7 @@ def test_methuselah_Infinite_3(patterns: Patterns) -> None:
     ]
 
 
-def test_wick_Ants(patterns: Patterns) -> None:
+def test_wick_ants(patterns: Patterns) -> None:
     assert patterns["33. Wick: Ants"] == [
         [
             1,
@@ -904,7 +904,7 @@ def test_wick_Ants(patterns: Patterns) -> None:
     ]
 
 
-def test_wick_Blinker_Fuse(patterns: Patterns) -> None:
+def test_wick_blinker_fuse(patterns: Patterns) -> None:
     assert patterns["34. Wick: Blinker Fuse"] == [
         [
             1,

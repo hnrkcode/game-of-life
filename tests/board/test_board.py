@@ -1,5 +1,5 @@
-from gameoflife.board import Board
 from gameoflife import settings
+from gameoflife.board import Board
 
 
 def test_init_color_is_dead(board: Board) -> None:

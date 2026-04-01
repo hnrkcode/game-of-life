@@ -12,6 +12,9 @@ from gameoflife.settings import (
 
 from .cell import Cell
 
+BIRTH_NEIGHBORS = 3
+SURVIVE_NEIGHBORS = (2, 3)
+
 
 class Neighbors(TypedDict):
     alive: int
@@ -147,7 +150,7 @@ class Grid:
             neighbors = count_neighbors(self.cell, key)
 
             # Survives to next generation.
-            if neighbors["alive"] == 2 or neighbors["alive"] == 3:
+            if neighbors["alive"] in SURVIVE_NEIGHBORS:
                 self.cell_sprite[key].next_gen()
                 births.append(key)
 
@@ -164,7 +167,7 @@ class Grid:
             neighbors = count_neighbors(self.cell, key)
 
             # New cells that gets born next generation.
-            if neighbors["alive"] == 3:
+            if neighbors["alive"] == BIRTH_NEIGHBORS:
                 self.cell_sprite[key] = Cell(key)
                 births.append(key)
 

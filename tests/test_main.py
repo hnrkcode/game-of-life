@@ -1,6 +1,6 @@
 from gameoflife.board.cell import Cell
-from gameoflife.pattern.paste import PastePattern
 from gameoflife.main import has_finished, is_pausable
+from gameoflife.pattern.paste import PastePattern
 
 
 def test_has_finished_returns_true_when_no_cells_alive_and_generation_greater_than_zero() -> None:

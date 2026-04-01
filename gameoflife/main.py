@@ -29,7 +29,7 @@ from gameoflife.pattern.paste import PastePattern
 from gameoflife.util.text import InfoText
 
 
-def main() -> None:  # noqa: C901
+def main() -> None:
     # Center the window on the screen.
     os.environ["SDL_VIDEO_CENTERED"] = "1"
 
@@ -145,7 +145,7 @@ def main() -> None:  # noqa: C901
                     splash_start_num += 1
 
                 # Press any keyboard key or mouse button to close splash screen and start game.
-                elif event.type == KEYDOWN or event.type == MOUSEBUTTONDOWN:
+                elif event.type in {KEYDOWN, MOUSEBUTTONDOWN}:
                     del splash_screen_group
                     del splash_header
                     del splash_start
@@ -200,10 +200,10 @@ def main() -> None:  # noqa: C901
                             menu_obj = scroll_menu.setup(grid.select)
 
                         # Hold left control button to paste pattern when left clicking.
-                        if event.key == K_LCTRL or event.key == K_RCTRL:
+                        if event.key in {K_LCTRL, K_RCTRL}:
                             is_ctrl_held = True
 
-                    elif event.type == KEYUP and (event.key == K_LCTRL or event.key == K_RCTRL):
+                    elif event.type == KEYUP and event.key in {K_LCTRL, K_RCTRL}:
                         is_ctrl_held = False
 
                     # Scroll through patterns.
