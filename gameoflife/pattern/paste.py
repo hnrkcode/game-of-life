@@ -2,7 +2,7 @@ import pygame
 
 from gameoflife import settings
 from gameoflife.board.cell import Cell
-from gameoflife.board.grid import Grid, calc_pos, is_inside_grid
+from gameoflife.board.grid import Grid
 
 from .blueprint import get_patterns
 from .select import PatternSelector
@@ -23,56 +23,41 @@ class PastePattern(Grid):
         for name in self.pattern:
             self.select.append((name, self.paste))
 
-    def set_color(self, pos: tuple[int, int], matrix: list[list[int]]) -> tuple[int, int, int]:
-        if not is_inside_grid(pos, matrix):
-            return settings.PASTE_OFF
-        return settings.PASTE_ON
-
-    def preview(self, pos: tuple[int, int], name: str | None = None) -> pygame.Surface:
+    def preview(self, name: str | None = None, cell_size: float = 10.0) -> pygame.Surface:
         """Show preview of selected pattern."""
         pattern_matrix = get_pattern_matrix(self.pattern, name)
 
-        size = settings.CELL_SIZE
+        size = max(1, int(cell_size))
         w, h = len(pattern_matrix[0]) * size, len(pattern_matrix) * size
         pattern_surface = pygame.Surface((w, h))
         pattern_surface.set_colorkey((0, 0, 0))
         pattern_surface.set_alpha(50)
-        pattern_color = self.set_color(pos, pattern_matrix)
 
         # Draw pattern to a surface with the same size.
         for row in range(len(pattern_matrix)):
             for col in range(len(pattern_matrix[row])):
-                # Draw only parts of the pattern that is visible.
                 if pattern_matrix[row][col]:
                     xy_coords = [col * size, row * size]
                     wh_size = [size] * 2
                     pattern_rect = pygame.Rect(xy_coords, wh_size)
-                    pygame.draw.rect(pattern_surface, pattern_color, pattern_rect)
+                    pygame.draw.rect(pattern_surface, settings.PASTE_ON, pattern_rect)
 
         return pattern_surface
 
-    def paste(self, pos: tuple[int, int], button: tuple[bool, bool, bool], name: str | None = None) -> None:
+    def paste(self, world_pos: tuple[int, int], button: tuple[bool, bool, bool], name: str | None = None) -> None:
         """Paste any predefined patterns on the grid."""
         matrix = get_pattern_matrix(self.pattern, name)
+        wx, wy = world_pos
 
-        if (position := calc_pos(pos)) is None:
-            return
+        for row in range(len(matrix)):
+            for col in range(len(matrix[row])):
+                key = (wx + col, wy + row)
 
-        x, y = position
+                # Draw cells.
+                if button == settings.LEFT_CLICK and matrix[row][col]:
+                    self.cell[key] = 1
+                    self.cell_sprite[key] = Cell()
 
-        if is_inside_grid(position, matrix):
-            for row in range(len(matrix)):
-                for col in range(len(matrix[row])):
-                    # Draw cells.
-                    if button == settings.LEFT_CLICK and matrix[row][col]:
-                        self.cell[(x, y)] = 1
-                        self.cell_sprite[(x, y)] = Cell((x, y))
-
-                    # Erase cells.
-                    if button == settings.RIGHT_CLICK or not matrix[row][col]:
-                        self.delete_cell((x, y))
-
-                    x += settings.CELL_SIZE
-
-                x = position[0]
-                y += settings.CELL_SIZE
+                # Erase cells.
+                if button == settings.RIGHT_CLICK or not matrix[row][col]:
+                    self.delete_cell(key)

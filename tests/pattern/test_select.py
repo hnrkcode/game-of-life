@@ -3,7 +3,7 @@ import pytest
 from gameoflife.pattern.select import Node, PatternSelector
 
 
-def fn(pos: tuple[int, int], button: tuple[bool, bool, bool], name: str | None = None) -> None: ...
+def fn(world_pos: tuple[int, int], button: tuple[bool, bool, bool], name: str | None = None) -> None: ...
 
 
 def test_node() -> None:

@@ -96,40 +96,26 @@ def test_window_size() -> None:
     assert settings.WINDOW_SIZE == (settings.WIDTH, settings.HEIGHT)
 
 
-def test_cell_size() -> None:
-    assert settings.CELL_SIZE == 10
-
-
 def test_board_position() -> None:
     board_pos = (settings.BOARD_X_POS, settings.BOARD_Y_POS)
     assert board_pos == (250, 50)
 
 
-def test_grid_border_limits() -> None:
-    assert settings.MIN_X == 250
-    assert settings.MAX_X == 250 + 980 - 10
-    assert settings.MIN_Y == 50
-    assert settings.MAX_Y == 50 + 620 - 10
-
-
-def test_total_cells() -> None:
-    assert int(980 / 10 * 620 / 10) == settings.TOTAL_CELLS
-    assert isinstance(settings.TOTAL_CELLS, int)
-
-
 def test_board_size() -> None:
     board_size = (settings.BOARD_WIDTH_SIZE, settings.BOARD_HEIGHT_SIZE)
-    board_width = 980 / 10
-    board_height = 620 / 10
     assert board_size == (980, 620)
-    assert board_width == settings.BOARD_WIDTH
-    assert board_height == settings.BOARD_HEIGHT
-    assert isinstance(settings.BOARD_WIDTH, int)
-    assert isinstance(settings.BOARD_HEIGHT, int)
+
+
+def test_zoom_settings() -> None:
+    assert settings.DEFAULT_ZOOM == 10.0
+    assert settings.MIN_ZOOM == 0.5
+    assert settings.MAX_ZOOM == 100.0
+    assert settings.ZOOM_FACTOR == 1.15
 
 
 def test_mouse_button_settings() -> None:
     assert settings.LEFT_CLICK == (1, 0, 0)
+    assert settings.MIDDLE_CLICK == 2
     assert settings.RIGHT_CLICK == (0, 0, 1)
     assert settings.SCROLL_DOWN == 5
     assert settings.SCROLL_UP == 4

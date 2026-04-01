@@ -11,7 +11,7 @@ def test_has_finished_returns_true_when_no_cells_alive_and_generation_greater_th
 
 def test_has_finished_returns_false_when_cells_alive() -> None:
     grid = PastePattern()
-    grid.cell_sprite[(0, 0)] = Cell((0, 0))
+    grid.cell_sprite[(0, 0)] = Cell()
     grid.generation = 1
     assert has_finished(grid) is False
 
@@ -23,13 +23,13 @@ def test_has_finished_returns_false_when_generation_zero() -> None:
 
 def test_has_finished_returns_false_when_cells_alive_and_generation_zero() -> None:
     grid = PastePattern()
-    grid.cell_sprite[(0, 0)] = Cell((0, 0))
+    grid.cell_sprite[(0, 0)] = Cell()
     assert has_finished(grid) is False
 
 
 def test_is_pausable_returns_true_when_cells_alive_and_generation_greater_than_zero() -> None:
     grid = PastePattern()
-    grid.cell_sprite[(0, 0)] = Cell((0, 0))
+    grid.cell_sprite[(0, 0)] = Cell()
     grid.generation = 1
     assert is_pausable(grid) is True
 
