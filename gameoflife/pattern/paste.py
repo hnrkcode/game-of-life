@@ -23,7 +23,12 @@ class PastePattern(Grid):
         for name in self.pattern:
             self.select.append((name, self.paste))
 
-    def preview(self, name: str | None = None, cell_size: float = 10.0) -> pygame.Surface:
+    def preview(
+        self,
+        name: str | None = None,
+        cell_size: float = 10.0,
+        color: tuple[int, int, int] = settings.PASTE_ON,
+    ) -> pygame.Surface:
         """Show preview of selected pattern."""
         pattern_matrix = get_pattern_matrix(self.pattern, name)
 
@@ -40,7 +45,7 @@ class PastePattern(Grid):
                     xy_coords = [col * size, row * size]
                     wh_size = [size] * 2
                     pattern_rect = pygame.Rect(xy_coords, wh_size)
-                    pygame.draw.rect(pattern_surface, settings.PASTE_ON, pattern_rect)
+                    pygame.draw.rect(pattern_surface, color, pattern_rect)
 
         return pattern_surface
 

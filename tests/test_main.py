@@ -1,6 +1,126 @@
+import pygame
+import pytest
+
+from gameoflife import settings
 from gameoflife.board.cell import Cell
-from gameoflife.main import has_finished, is_pausable
+from gameoflife.camera import Camera
+from gameoflife.main import has_finished, is_inside_viewport, is_pausable, preview_patterns
 from gameoflife.pattern.paste import PastePattern
+
+
+def make_camera(**kwargs: float) -> Camera:
+    defaults: dict[str, float] = {
+        "viewport_x": 0,
+        "viewport_y": 0,
+        "viewport_w": 200,
+        "viewport_h": 200,
+        "cell_size": 10.0,
+    }
+    defaults.update(kwargs)
+    return Camera(**defaults)  # type: ignore[arg-type]
+
+
+def test_is_inside_viewport_fully_inside() -> None:
+    camera = make_camera()
+    pattern = pygame.Surface((10, 10))
+    assert is_inside_viewport((50, 50), pattern, camera) is True
+
+
+def test_is_inside_viewport_at_origin() -> None:
+    camera = make_camera()
+    pattern = pygame.Surface((10, 10))
+    assert is_inside_viewport((0, 0), pattern, camera) is True
+
+
+def test_is_inside_viewport_at_bottom_right_edge() -> None:
+    camera = make_camera()
+    pattern = pygame.Surface((10, 10))
+    assert is_inside_viewport((190, 190), pattern, camera) is True
+
+
+def test_is_inside_viewport_overflows_right() -> None:
+    camera = make_camera()
+    pattern = pygame.Surface((20, 10))
+    assert is_inside_viewport((185, 50), pattern, camera) is False
+
+
+def test_is_inside_viewport_overflows_bottom() -> None:
+    camera = make_camera()
+    pattern = pygame.Surface((10, 20))
+    assert is_inside_viewport((50, 185), pattern, camera) is False
+
+
+def test_is_inside_viewport_before_left_edge() -> None:
+    camera = make_camera(viewport_x=100)
+    pattern = pygame.Surface((10, 10))
+    assert is_inside_viewport((50, 50), pattern, camera) is False
+
+
+def test_is_inside_viewport_before_top_edge() -> None:
+    camera = make_camera(viewport_y=100)
+    pattern = pygame.Surface((10, 10))
+    assert is_inside_viewport((50, 50), pattern, camera) is False
+
+
+def test_preview_patterns_uses_green_when_inside_viewport(monkeypatch: pytest.MonkeyPatch) -> None:
+    camera = make_camera()
+    grid = PastePattern()
+    monkeypatch.setattr(pygame.mouse, "get_pos", lambda: (50, 50))
+
+    surface, _ = preview_patterns(is_ctrl_held=False, grid=grid, pattern_name=None, camera=camera)
+
+    # The default single-cell preview is 10x10; at (50,50) it fits within 200x200 viewport.
+    pixel_color = surface.get_at((0, 0))[:3]
+    assert pixel_color == settings.PASTE_ON
+
+
+def test_preview_patterns_uses_red_when_outside_viewport(monkeypatch: pytest.MonkeyPatch) -> None:
+    camera = make_camera()
+    grid = PastePattern()
+    monkeypatch.setattr(pygame.mouse, "get_pos", lambda: (500, 500))
+
+    surface, _ = preview_patterns(is_ctrl_held=False, grid=grid, pattern_name=None, camera=camera)
+
+    pixel_color = surface.get_at((0, 0))[:3]
+    assert pixel_color == settings.PASTE_OFF
+
+
+def test_preview_patterns_uses_red_when_pattern_overflows_viewport(monkeypatch: pytest.MonkeyPatch) -> None:
+    camera = make_camera()
+    grid = PastePattern()
+    monkeypatch.setattr(pygame.mouse, "get_pos", lambda: (195, 195))
+
+    # Default single-cell preview is 10x10, so at (195,195) it overflows a 200x200 viewport.
+    surface, _ = preview_patterns(is_ctrl_held=False, grid=grid, pattern_name=None, camera=camera)
+
+    pixel_color = surface.get_at((0, 0))[:3]
+    assert pixel_color == settings.PASTE_OFF
+
+
+def test_preview_patterns_returns_mouse_position(monkeypatch: pytest.MonkeyPatch) -> None:
+    camera = make_camera()
+    grid = PastePattern()
+    monkeypatch.setattr(pygame.mouse, "get_pos", lambda: (42, 99))
+
+    _, pos = preview_patterns(is_ctrl_held=False, grid=grid, pattern_name=None, camera=camera)
+
+    assert pos == (42, 99)
+
+
+def test_paste_only_allowed_inside_viewport() -> None:
+    camera = make_camera()
+    grid = PastePattern()
+
+    # Position inside the viewport, paste should add cells.
+    world_pos = camera.screen_to_world(50, 50)
+    assert camera.is_in_viewport(50, 50) is True
+    grid.paste(world_pos=world_pos, button=settings.LEFT_CLICK)
+    assert len(grid.cell_sprite) == 1
+
+    grid.reset()
+
+    # Position outside the viewport, paste must be guarded by is_in_viewport.
+    assert camera.is_in_viewport(500, 500) is False
 
 
 def test_has_finished_returns_true_when_no_cells_alive_and_generation_greater_than_zero() -> None:

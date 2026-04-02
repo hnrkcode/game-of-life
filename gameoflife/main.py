@@ -374,10 +374,26 @@ def is_pausable(grid: PastePattern) -> bool:
     return get_cell_count(grid) > 0 and grid.generation > 0
 
 
-def preview_patterns(is_ctrl_held: bool, grid: PastePattern, pattern_name: str, camera: Camera) -> tuple[pygame.Surface, tuple[int, int]]:
+def is_inside_viewport(pos: tuple[int, int], pattern: pygame.Surface, camera: Camera) -> bool:
+    """Check if the pattern preview fits entirely within the viewport."""
+    x, y = pos
+    w, h = pattern.get_size()
+    return (
+        camera.viewport_x <= x
+        and camera.viewport_y <= y
+        and x + w <= camera.viewport_x + camera.viewport_w
+        and y + h <= camera.viewport_y + camera.viewport_h
+    )
+
+
+def preview_patterns(is_ctrl_held: bool, grid: PastePattern, pattern_name: str | None, camera: Camera) -> tuple[pygame.Surface, tuple[int, int]]:
     """Preview selected patterns and show if you can paste it."""
     pos = pygame.mouse.get_pos()
     pattern = grid.preview(pattern_name, cell_size=camera.cell_size) if is_ctrl_held else grid.preview(cell_size=camera.cell_size)
+    color = settings.PASTE_ON if is_inside_viewport(pos, pattern, camera) else settings.PASTE_OFF
+    pattern = (
+        grid.preview(pattern_name, cell_size=camera.cell_size, color=color) if is_ctrl_held else grid.preview(cell_size=camera.cell_size, color=color)
+    )
     return pattern, pos
 
 
