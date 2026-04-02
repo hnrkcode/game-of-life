@@ -30,6 +30,7 @@ from gameoflife.camera import Camera
 from gameoflife.modal import Modal, Overlay, ScreenText
 from gameoflife.pattern.menu import ScrollMenu
 from gameoflife.pattern.paste import PastePattern
+from gameoflife.util.geometry import bresenham_line
 from gameoflife.util.text import InfoText
 
 
@@ -54,6 +55,7 @@ def main() -> None:
     is_modal_active = False
     is_splash_screen = True
     is_panning = False
+    last_draw_world_pos: tuple[int, int] | None = None
 
     # Initialize camera.
     camera = Camera(
@@ -263,6 +265,7 @@ def main() -> None:
                             is_panning = False
                         else:
                             is_mouse_held = False
+                            last_draw_world_pos = None
 
                     # Pan with middle mouse drag.
                     elif event.type == MOUSEMOTION and is_panning:
@@ -278,10 +281,21 @@ def main() -> None:
 
                 if camera.is_in_viewport(*pos):
                     world_pos = camera.screen_to_world(*pos)
-                    if is_ctrl_held:
-                        paste_pattern(world_pos=world_pos, button=button, name=pattern_name)
+
+                    # Interpolate between last and current position to fill gaps
+                    # caused by fast mouse movement.
+                    if last_draw_world_pos is not None and last_draw_world_pos != world_pos:
+                        points = bresenham_line(*last_draw_world_pos, *world_pos)
                     else:
-                        paste_pattern(world_pos=world_pos, button=button)
+                        points = [world_pos]
+
+                    for pt in points:
+                        if is_ctrl_held:
+                            paste_pattern(world_pos=pt, button=button, name=pattern_name)
+                        else:
+                            paste_pattern(world_pos=pt, button=button)
+
+                    last_draw_world_pos = world_pos
 
             # Update the grid.
             if grid.run:
