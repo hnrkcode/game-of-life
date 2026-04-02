@@ -2,7 +2,7 @@ from typing import Protocol
 
 
 class PasteFunc(Protocol):
-    def __call__(self, pos: tuple[int, int], button: tuple[bool, bool, bool], name: str | None = None) -> None: ...
+    def __call__(self, world_pos: tuple[int, int], button: tuple[bool, bool, bool], name: str | None = None) -> None: ...
 
 
 class Node:

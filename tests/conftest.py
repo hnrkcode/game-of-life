@@ -23,4 +23,4 @@ def board() -> Board:
 
 @pytest.fixture()
 def cell() -> Cell:
-    return Cell(pos=(260, 50))
+    return Cell()

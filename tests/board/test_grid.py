@@ -1,71 +1,27 @@
 from collections import Counter
 
-from gameoflife import settings
 from gameoflife.board.cell import Cell
 from gameoflife.board.grid import (
     Grid,
-    calc_pos,
-    calc_size,
     count_neighbors,
-    is_inside_grid,
 )
 
 
-def test_pattern_size() -> None:
-    pattern = [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
-    width, height = (
-        len(pattern[0]) * settings.CELL_SIZE,
-        len(pattern) * settings.CELL_SIZE,
-    )
-    assert calc_size(pattern) == (width, height)
-
-
-def test_pattern_inside_grids_boundary() -> None:
-    pattern = [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
-
-    # Setup where it should work to paste the pattern based on it's size.
-    w, h = calc_size(pattern)
-    pos_topleft_corner = (settings.MIN_X, settings.MIN_Y)
-    pos_topright_corner = (
-        settings.MAX_X - w + settings.CELL_SIZE,
-        settings.MIN_Y,
-    )
-    pos_bottomleft_corner = (
-        settings.MIN_X,
-        settings.MAX_Y - h + settings.CELL_SIZE,
-    )
-    pos_bottomright_corner = (settings.MAX_X - w, settings.MAX_Y - h)
-
-    assert is_inside_grid(pos_topleft_corner, pattern)
-    assert is_inside_grid(pos_topright_corner, pattern)
-    assert is_inside_grid(pos_bottomleft_corner, pattern)
-    assert is_inside_grid(pos_bottomright_corner, pattern)
-
-
-def test_pattern_outside_grids_boundary() -> None:
-    pattern = [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
-    assert is_inside_grid((0, 0), pattern) is False
-
-
-def test_calculate_position() -> None:
-    assert calc_pos((123, 456)), (120, 450) == True
-
-
 def test_count_neighbors() -> None:
-    cell = Counter({(560, 280): 1, (570, 280): 1})
-    pos = (560, 280)
+    cell = Counter({(56, 28): 1, (57, 28): 1})
+    pos = (56, 28)
 
     result = count_neighbors(cell, pos)
 
     assert result["alive"] == 1
     assert result["dead"] == [
-        (550, 270),
-        (550, 280),
-        (550, 290),
-        (560, 270),
-        (560, 290),
-        (570, 270),
-        (570, 290),
+        (55, 27),
+        (55, 28),
+        (55, 29),
+        (56, 27),
+        (56, 29),
+        (57, 27),
+        (57, 29),
     ]
 
 
@@ -111,7 +67,7 @@ def test_reset(grid: Grid) -> None:
 
     for i in range(10):
         grid.cell[(i, i)] = 0
-        grid.cell_sprite[(i, i)] = Cell((i, i))
+        grid.cell_sprite[(i, i)] = Cell()
 
     # Reset and test if everything now is set to default values.
     grid.reset()
@@ -129,7 +85,7 @@ def test_delete_cell(grid: Grid) -> None:
 
     for i in range(limit):
         grid.cell[(i, i)] = 1
-        grid.cell_sprite[(i, i)] = Cell((i, i))
+        grid.cell_sprite[(i, i)] = Cell()
 
     # Before delete.
     assert grid.cell[key] == 1
@@ -158,8 +114,8 @@ def test_update_deaths(grid: Grid) -> None:
 
 
 def test_update(grid: Grid) -> None:
-    grid.cell = Counter({(560, 280): 1, (570, 280): 1})
-    grid.cell_sprite = {(560, 280): Cell((560, 280)), (570, 280): Cell((570, 280))}
+    grid.cell = Counter({(56, 28): 1, (57, 28): 1})
+    grid.cell_sprite = {(56, 28): Cell(), (57, 28): Cell()}
     grid.deaths = 0
     grid.generation = 0
 

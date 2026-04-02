@@ -8,6 +8,8 @@ from pygame.locals import (
     K_ESCAPE,
     K_F11,
     K_LCTRL,
+    K_MINUS,
+    K_PLUS,
     K_RCTRL,
     K_RETURN,
     K_UP,
@@ -15,6 +17,7 @@ from pygame.locals import (
     KEYUP,
     MOUSEBUTTONDOWN,
     MOUSEBUTTONUP,
+    MOUSEMOTION,
     QUIT,
     K_h,
     K_p,
@@ -23,6 +26,7 @@ from pygame.locals import (
 
 from gameoflife import settings
 from gameoflife.board import Board
+from gameoflife.camera import Camera
 from gameoflife.modal import Modal, Overlay, ScreenText
 from gameoflife.pattern.menu import ScrollMenu
 from gameoflife.pattern.paste import PastePattern
@@ -49,6 +53,18 @@ def main() -> None:
     is_fullscreen = False
     is_modal_active = False
     is_splash_screen = True
+    is_panning = False
+
+    # Initialize camera.
+    camera = Camera(
+        viewport_x=settings.BOARD_X_POS,
+        viewport_y=settings.BOARD_Y_POS,
+        viewport_w=settings.BOARD_WIDTH_SIZE,
+        viewport_h=settings.BOARD_HEIGHT_SIZE,
+        cell_size=settings.DEFAULT_ZOOM,
+        min_cell_size=settings.MIN_ZOOM,
+        max_cell_size=settings.MAX_ZOOM,
+    )
 
     # Initialize menu and board variables.
     grid: PastePattern = PastePattern()
@@ -91,7 +107,7 @@ def main() -> None:
         InfoText(f"Generation: {grid.generation}", size=settings.TEXT),
         InfoText(f"Cells: {get_cell_count(grid)}", size=settings.TEXT),
         InfoText(f"Total deaths: {grid.deaths}", size=settings.TEXT),
-        InfoText(f"Grid: {settings.TOTAL_CELLS}", size=settings.TEXT),
+        InfoText(f"Zoom: {camera.cell_size:.1f}x", size=settings.TEXT),
         InfoText(f"FPS: {clock.get_fps():.1f}", size=settings.TEXT),
         InfoText(None, size=settings.TEXT),
         *scroll_menu.format("PATTERNS", pattern_name, menu_obj),
@@ -203,30 +219,54 @@ def main() -> None:
                         if event.key in {K_LCTRL, K_RCTRL}:
                             is_ctrl_held = True
 
+                        # Zoom in/out with +/- keys.
+                        if event.key == K_PLUS:
+                            camera.zoom(settings.ZOOM_FACTOR, *viewport_center(camera))
+                        if event.key == K_MINUS:
+                            camera.zoom(1.0 / settings.ZOOM_FACTOR, *viewport_center(camera))
+
                     elif event.type == KEYUP and event.key in {K_LCTRL, K_RCTRL}:
                         is_ctrl_held = False
 
-                    # Scroll through patterns.
-                    elif event.type == MOUSEBUTTONDOWN and event.button == settings.SCROLL_DOWN:
-                        grid.select.next()
-                        pattern_name, paste_pattern = grid.select.get_current()
-                        menu_obj = scroll_menu.setup(grid.select)
-
-                    elif event.type == MOUSEBUTTONDOWN and event.button == settings.SCROLL_UP:
-                        grid.select.previous()
-                        pattern_name, paste_pattern = grid.select.get_current()
-                        menu_obj = scroll_menu.setup(grid.select)
-
-                    # Left click to deploy cells or right click to remove cells.
                     elif event.type == MOUSEBUTTONDOWN:
-                        if is_finished:
-                            grid.reset()
-                            is_paused, is_finished = False, False
+                        mods = pygame.key.get_mods()
 
-                        is_mouse_held = True
+                        # Scroll to zoom.
+                        if event.button == settings.SCROLL_UP and not (mods & pygame.KMOD_LCTRL):
+                            camera.zoom(settings.ZOOM_FACTOR, *pygame.mouse.get_pos())
+                        elif event.button == settings.SCROLL_DOWN and not (mods & pygame.KMOD_LCTRL):
+                            camera.zoom(1.0 / settings.ZOOM_FACTOR, *pygame.mouse.get_pos())
+
+                        # Scroll through patterns (with CTRL).
+                        elif event.button == settings.SCROLL_DOWN and (mods & pygame.KMOD_LCTRL):
+                            grid.select.next()
+                            pattern_name, paste_pattern = grid.select.get_current()
+                            menu_obj = scroll_menu.setup(grid.select)
+                        elif event.button == settings.SCROLL_UP and (mods & pygame.KMOD_LCTRL):
+                            grid.select.previous()
+                            pattern_name, paste_pattern = grid.select.get_current()
+                            menu_obj = scroll_menu.setup(grid.select)
+
+                        # Middle mouse button to start panning.
+                        elif event.button == settings.MIDDLE_CLICK:
+                            is_panning = True
+
+                        # Left click to deploy cells or right click to remove cells.
+                        else:
+                            if is_finished:
+                                grid.reset()
+                                is_paused, is_finished = False, False
+                            is_mouse_held = True
 
                     elif event.type == MOUSEBUTTONUP:
-                        is_mouse_held = False
+                        if event.button == settings.MIDDLE_CLICK:
+                            is_panning = False
+                        else:
+                            is_mouse_held = False
+
+                    # Pan with middle mouse drag.
+                    elif event.type == MOUSEMOTION and is_panning:
+                        camera.pan(event.rel[0], event.rel[1])
 
         if is_splash_screen:
             splash_screen_group.draw(screen)
@@ -236,10 +276,12 @@ def main() -> None:
                 pos = pygame.mouse.get_pos()
                 button = pygame.mouse.get_pressed()
 
-                if is_ctrl_held:
-                    paste_pattern(name=pattern_name, pos=pos, button=button)
-                else:
-                    paste_pattern(pos=pos, button=button)
+                if camera.is_in_viewport(*pos):
+                    world_pos = camera.screen_to_world(*pos)
+                    if is_ctrl_held:
+                        paste_pattern(world_pos=world_pos, button=button, name=pattern_name)
+                    else:
+                        paste_pattern(world_pos=world_pos, button=button)
 
             # Update the grid.
             if grid.run:
@@ -249,6 +291,7 @@ def main() -> None:
             sidebar_text[1].update(f"Generation: {grid.generation}")
             sidebar_text[2].update(f"Cells: {get_cell_count(grid)}")
             sidebar_text[3].update(f"Total deaths: {grid.deaths}")
+            sidebar_text[4].update(f"Zoom: {camera.cell_size:.1f}x")
             sidebar_text[5].update(f"FPS: {clock.get_fps():.1f}")
 
             # Update pattern scroll menu.
@@ -265,16 +308,27 @@ def main() -> None:
             board_bg_group.draw(screen)
 
             # Preview of cell or selected pattern.
-            preview = preview_patterns(is_ctrl_held, grid, pattern_name)
+            preview = preview_patterns(is_ctrl_held, grid, pattern_name, camera)
             screen.blit(*preview)
 
-            for key in grid.cell:
-                if grid.cell[key] == 1:
-                    pygame.draw.rect(
-                        screen,
-                        grid.cell_sprite[key].color,
-                        grid.cell_sprite[key],
-                    )
+            # Clip rendering to viewport so cells don't bleed into sidebar.
+            screen.set_clip(pygame.Rect(camera.viewport_x, camera.viewport_y, camera.viewport_w, camera.viewport_h))
+
+            # Render only visible cells.
+            min_wx, min_wy, max_wx, max_wy = camera.get_visible_bounds()
+            cell_px = max(1, int(camera.cell_size))
+            for key, value in grid.cell.items():
+                if value == 1:
+                    wx, wy = key
+                    if min_wx <= wx <= max_wx and min_wy <= wy <= max_wy:
+                        sx, sy = camera.world_to_screen(wx, wy)
+                        pygame.draw.rect(
+                            screen,
+                            grid.cell_sprite[key].color,
+                            pygame.Rect(int(sx), int(sy), cell_px, cell_px),
+                        )
+
+            screen.set_clip(None)
 
             if is_paused:
                 pause_screen_group.draw(screen)
@@ -320,12 +374,19 @@ def is_pausable(grid: PastePattern) -> bool:
     return get_cell_count(grid) > 0 and grid.generation > 0
 
 
-def preview_patterns(is_ctrl_held: bool, grid: PastePattern, pattern_name: str) -> tuple[pygame.Surface, tuple[int, int]]:
+def preview_patterns(is_ctrl_held: bool, grid: PastePattern, pattern_name: str, camera: Camera) -> tuple[pygame.Surface, tuple[int, int]]:
     """Preview selected patterns and show if you can paste it."""
     pos = pygame.mouse.get_pos()
-    pattern = grid.preview(pos, pattern_name) if is_ctrl_held else grid.preview(pos)
-
+    pattern = grid.preview(pattern_name, cell_size=camera.cell_size) if is_ctrl_held else grid.preview(cell_size=camera.cell_size)
     return pattern, pos
+
+
+def viewport_center(camera: Camera) -> tuple[int, int]:
+    """Return the screen center of the viewport."""
+    return (
+        camera.viewport_x + camera.viewport_w // 2,
+        camera.viewport_y + camera.viewport_h // 2,
+    )
 
 
 def toggle_fullscreen(is_fullscreen: bool) -> tuple[bool, pygame.Surface]:

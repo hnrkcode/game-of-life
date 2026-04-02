@@ -43,28 +43,21 @@ WIDTH = 1280
 HEIGHT = 720
 WINDOW_SIZE = (WIDTH, HEIGHT)
 
-# Cell size.
-CELL_SIZE = 10
-
-# Settings for the 2D grids size and position on the screen.
+# Settings for the viewport size and position on the screen.
 BOARD_X_POS = 250
 BOARD_Y_POS = 50
 BOARD_WIDTH_SIZE = 980
 BOARD_HEIGHT_SIZE = 620
-BOARD_WIDTH = int(BOARD_WIDTH_SIZE / CELL_SIZE)
-BOARD_HEIGHT = int(BOARD_HEIGHT_SIZE / CELL_SIZE)
 
-# Grids border limits.
-MIN_X = BOARD_X_POS
-MAX_X = BOARD_X_POS + BOARD_WIDTH_SIZE - CELL_SIZE
-MIN_Y = BOARD_Y_POS
-MAX_Y = BOARD_Y_POS + BOARD_HEIGHT_SIZE - CELL_SIZE
-
-# Maximum amount of cells that can exist on the grid.
-TOTAL_CELLS = BOARD_WIDTH * BOARD_HEIGHT
+# Camera / zoom settings.
+DEFAULT_ZOOM = 10.0
+MIN_ZOOM = 0.5
+MAX_ZOOM = 100.0
+ZOOM_FACTOR = 1.15
 
 # Mouse buttons.
 LEFT_CLICK = (True, False, False)
+MIDDLE_CLICK = 2
 RIGHT_CLICK = (False, False, True)
 SCROLL_DOWN = 5
 SCROLL_UP = 4
