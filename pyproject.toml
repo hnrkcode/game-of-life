@@ -5,7 +5,9 @@ description = "Conway's game of life written in pygame"
 authors = [
     { name = "Henrik Petersson", email = "44243358+hnrkcode@users.noreply.github.com" },
 ]
-dependencies = ["pygame>=2.6.1"]
+dependencies = [
+    "pygame-ce>=2.5.7",
+]
 requires-python = ">=3.11"
 readme = "README.md"
 license = { text = "MIT" }

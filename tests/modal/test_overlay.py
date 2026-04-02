@@ -9,6 +9,8 @@ def test_overlay_init() -> None:
     overlay = Overlay()
 
     assert overlay.color == settings.OVERLAY_COLOR
+    assert overlay.image is not None
     assert overlay.image.get_alpha() == 225
+    assert overlay.rect is not None
     assert overlay.rect.topleft == (0, 0)
     assert overlay.rect.size == (settings.WIDTH, settings.HEIGHT)

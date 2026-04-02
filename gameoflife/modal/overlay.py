@@ -6,6 +6,9 @@ from gameoflife import settings
 class Overlay(pygame.sprite.Sprite):
     """Overlay background."""
 
+    image: pygame.Surface
+    rect: pygame.Rect
+
     def __init__(self) -> None:
         super().__init__()
         self.color = settings.OVERLAY_COLOR

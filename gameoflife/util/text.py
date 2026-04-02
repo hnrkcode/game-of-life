@@ -4,6 +4,9 @@ from gameoflife import settings
 
 
 class InfoText(pygame.sprite.DirtySprite):
+    image: pygame.Surface
+    rect: pygame.Rect
+
     def __init__(
         self,
         text: str | None,
@@ -18,7 +21,7 @@ class InfoText(pygame.sprite.DirtySprite):
         self.text = text
         self.fontsize = size
         self._font = pygame.font.Font(font, size)
-        self.image = self._font.render(text, 1, color)
+        self.image = self._font.render(text, True, color)
         self.rect = self.image.get_rect(topleft=pos)
 
         if alpha:
@@ -29,4 +32,4 @@ class InfoText(pygame.sprite.DirtySprite):
 
     def update(self, text: str | None) -> None:
         self.text = text
-        self.image = self._font.render(self.text, 1, self.color)
+        self.image = self._font.render(self.text, True, self.color)

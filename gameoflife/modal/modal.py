@@ -7,6 +7,9 @@ from gameoflife.util.text import InfoText
 class Modal(pygame.sprite.Sprite):
     """Modal background."""
 
+    image: pygame.Surface
+    rect: pygame.Rect
+
     def __init__(self) -> None:
         super().__init__()
 

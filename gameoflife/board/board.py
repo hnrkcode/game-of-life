@@ -6,6 +6,9 @@ from gameoflife import settings
 class Board(pygame.sprite.Sprite):
     """Grid background."""
 
+    image: pygame.Surface
+    rect: pygame.Rect
+
     def __init__(self) -> None:
         super().__init__()
         self.color = settings.DEAD

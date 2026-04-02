@@ -7,6 +7,9 @@ from gameoflife.util.text import InfoText
 
 
 class ScreenText(pygame.sprite.Sprite):
+    rect: pygame.Rect
+    image: pygame.Surface
+
     def __init__(self, text: str) -> None:
         super().__init__()
         self.text = self.set_text(text)
