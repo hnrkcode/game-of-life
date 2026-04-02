@@ -59,5 +59,5 @@ class PastePattern(Grid):
                     self.cell_sprite[key] = Cell()
 
                 # Erase cells.
-                if button == settings.RIGHT_CLICK or not matrix[row][col]:
+                if (button == settings.RIGHT_CLICK or not matrix[row][col]) and key in self.cell:
                     self.delete_cell(key)
