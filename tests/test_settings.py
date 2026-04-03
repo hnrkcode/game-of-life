@@ -98,7 +98,7 @@ def test_window_size() -> None:
 
 def test_board_position() -> None:
     board_pos = (settings.BOARD_X_POS, settings.BOARD_Y_POS)
-    assert board_pos == (250, 50)
+    assert board_pos == (250, 30)
 
 
 def test_board_size() -> None:

@@ -1,3 +1,4 @@
+import copy
 from collections import Counter
 from typing import TypedDict
 
@@ -39,6 +40,8 @@ class Grid:
         self.run = False
         self.deaths = 0
         self.generation = 0
+        self.history: list[tuple[Counter[tuple[int, int]], dict[tuple[int, int], Cell], int]] = []
+        self.direction: str = "forward"
 
     def start(self) -> None:
         """Start the algorithm."""
@@ -55,6 +58,8 @@ class Grid:
         self.cell_sprite: dict[tuple[int, int], Cell] = {}
         self.deaths = 0
         self.generation = 0
+        self.history = []
+        self.direction = "forward"
 
     def delete_cell(self, key: tuple[int, int]) -> None:
         """Remove cell from memory."""
@@ -65,7 +70,28 @@ class Grid:
         """Keep track of how many cells that has died."""
         self.deaths += 1
 
+    def step_back(self) -> bool:
+        """Restore the previous generation from history. Returns False if no history."""
+        if not self.history:
+            return False
+        self.cell, self.cell_sprite, self.deaths = self.history.pop()
+        self.generation -= 1
+        return True
+
+    def step_forward(self) -> None:
+        """Advance one generation forward."""
+        self.update()
+
     def update(self) -> None:
+        # Save snapshot before mutation.
+        self.history.append(
+            (
+                copy.copy(self.cell),
+                {k: copy.copy(v) for k, v in self.cell_sprite.items()},
+                self.deaths,
+            )
+        )
+
         dead_neighbors: set[tuple[int, int]] = set()
         births: list[tuple[int, int]] = []
         deaths: list[tuple[int, int]] = []

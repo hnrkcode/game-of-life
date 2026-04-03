@@ -27,6 +27,7 @@ from pygame.locals import (
 from gameoflife import settings
 from gameoflife.board import Board
 from gameoflife.camera import Camera
+from gameoflife.controls import MediaControls
 from gameoflife.modal import Modal, Overlay, ScreenText
 from gameoflife.pattern.menu import ScrollMenu
 from gameoflife.pattern.paste import PastePattern
@@ -137,6 +138,9 @@ def main() -> None:
     # Is shown when all cells have died.
     end_screen = ScreenText("GAMEOVER")
     end_screen_group = pygame.sprite.RenderUpdates(end_screen)
+
+    # Media control buttons.
+    controls = MediaControls()
 
     # Update pause text intervall.
     pygame.time.set_timer(pygame.USEREVENT, 200)
@@ -255,10 +259,20 @@ def main() -> None:
 
                         # Left click to deploy cells or right click to remove cells.
                         else:
-                            if is_finished:
-                                grid.reset()
-                                is_paused, is_finished = False, False
-                            is_mouse_held = True
+                            # Check media control buttons first.
+                            action = controls.handle_click(event.pos)
+                            if action:
+                                is_paused, is_finished = handle_control_action(
+                                    action,
+                                    grid,
+                                    is_paused,
+                                    is_finished,
+                                )
+                            else:
+                                if is_finished:
+                                    grid.reset()
+                                    is_paused, is_finished = False, False
+                                is_mouse_held = True
 
                     elif event.type == MOUSEBUTTONUP:
                         if event.button == settings.MIDDLE_CLICK:
@@ -299,7 +313,11 @@ def main() -> None:
 
             # Update the grid.
             if grid.run:
-                grid.update()
+                if grid.direction == "forward":
+                    grid.update()
+                elif not grid.step_back():
+                    grid.stop()
+                    is_paused = True
 
             # Update runtime information.
             sidebar_text[1].update(f"Generation: {grid.generation}")
@@ -353,6 +371,9 @@ def main() -> None:
                 end_screen_group.draw(screen)
                 is_finished = True
                 is_paused = False
+
+            # Draw media controls.
+            controls.draw(screen, grid.run, grid.direction)
 
             if is_modal_active:
                 modal_group.draw(screen)
@@ -441,3 +462,43 @@ def toggle_modal(grid: PastePattern, modal: bool, paused: bool) -> bool:
         grid.start()
 
     return modal
+
+
+def handle_control_action(
+    action: str,
+    grid: PastePattern,
+    is_paused: bool,
+    is_finished: bool,
+) -> tuple[bool, bool]:
+    """Dispatch a media control button action. Returns updated (is_paused, is_finished)."""
+    if action == "rewind":
+        grid.direction = "backward"
+        is_finished = False
+
+    elif action == "skip_back":
+        grid.step_back()
+        is_finished = False
+
+    elif action == "play_pause":
+        if grid.run:
+            grid.stop()
+            is_paused = True
+        elif get_cell_count(grid) or grid.history:
+            grid.start()
+            is_paused = False
+            is_finished = False
+
+    elif action == "stop":
+        grid.reset()
+        is_paused = False
+        is_finished = False
+
+    elif action == "skip_forward":
+        grid.step_forward()
+        is_finished = False
+
+    elif action == "fast_forward":
+        grid.direction = "forward"
+        is_finished = False
+
+    return is_paused, is_finished
