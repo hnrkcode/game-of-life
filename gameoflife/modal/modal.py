@@ -58,6 +58,8 @@ class Modal(pygame.sprite.Sprite):
             InfoText("Scroll", size=settings.TEXT, pos=(180, 335)),
             InfoText("Pan:", size=settings.TEXT, pos=(80, 355)),
             InfoText("Middle mouse + drag", size=settings.TEXT, pos=(180, 355)),
+            # Media controls.
+            InfoText("Media controls below viewport", size=settings.H4, pos=(400, 75)),
         ]
 
         for data in content:

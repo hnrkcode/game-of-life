@@ -5,9 +5,7 @@ description = "Conway's game of life written in pygame"
 authors = [
     { name = "Henrik Petersson", email = "44243358+hnrkcode@users.noreply.github.com" },
 ]
-dependencies = [
-    "pygame-ce>=2.5.7",
-]
+dependencies = ["pygame-ce>=2.5.7"]
 requires-python = ">=3.11"
 readme = "README.md"
 license = { text = "MIT" }
@@ -27,7 +25,7 @@ fixable = ["I001", "W292", "W293", "RUF022"]
 ignore = ["D", "COM812"]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = ["PT", "S101", "PLR2004", "ANN"]
+"tests/**" = ["PT", "S101", "PLR2004", "ANN", "FBT003"]
 "gameoflife/**" = ["FBT"]
 "gameoflife/util/text.py" = ["PLR0913"]
 "gameoflife/camera.py" = ["PLR0913"]

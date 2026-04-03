@@ -4,7 +4,7 @@ import pytest
 from gameoflife import settings
 from gameoflife.board.cell import Cell
 from gameoflife.camera import Camera
-from gameoflife.main import has_finished, is_inside_viewport, is_pausable, preview_patterns
+from gameoflife.main import handle_control_action, has_finished, is_inside_viewport, is_pausable, preview_patterns
 from gameoflife.pattern.paste import PastePattern
 
 
@@ -163,3 +163,74 @@ def test_is_pausable_returns_false_when_no_cells_alive() -> None:
 def test_is_pausable_returns_false_when_generation_zero() -> None:
     grid = PastePattern()
     assert is_pausable(grid) is False
+
+
+def _make_finished_grid() -> PastePattern:
+    """Return a grid with one step of history and no living cells (finished state)."""
+    grid = PastePattern()
+    grid.cell_sprite[(0, 0)] = Cell()
+    grid.cell[(0, 0)] = 1
+    grid.update()  # advances generation; the alive cell dies (no neighbours → death)
+    return grid
+
+
+def test_handle_control_action_stop_resets_grid_and_clears_finished() -> None:
+    grid = _make_finished_grid()
+    is_paused, is_finished = handle_control_action("stop", grid, False, True)
+    assert is_finished is False
+    assert is_paused is False
+    assert grid.generation == 0
+
+
+def test_handle_control_action_skip_back_clears_finished() -> None:
+    grid = _make_finished_grid()
+    _, is_finished = handle_control_action("skip_back", grid, False, True)
+    assert is_finished is False
+
+
+def test_handle_control_action_skip_forward_clears_finished() -> None:
+    grid = _make_finished_grid()
+    _, is_finished = handle_control_action("skip_forward", grid, False, True)
+    assert is_finished is False
+
+
+def test_handle_control_action_rewind_clears_finished() -> None:
+    grid = _make_finished_grid()
+    _, is_finished = handle_control_action("rewind", grid, False, True)
+    assert is_finished is False
+    assert grid.direction == "backward"
+
+
+def test_handle_control_action_fast_forward_clears_finished() -> None:
+    grid = _make_finished_grid()
+    _, is_finished = handle_control_action("fast_forward", grid, False, True)
+    assert is_finished is False
+    assert grid.direction == "forward"
+
+
+def test_handle_control_action_play_pause_starts_and_clears_finished() -> None:
+    grid = _make_finished_grid()
+    # grid has history so play should be allowed
+    is_paused, is_finished = handle_control_action("play_pause", grid, True, True)
+    assert is_paused is False
+    assert is_finished is False
+    assert grid.run is True
+
+
+def test_handle_control_action_play_pause_pauses_does_not_change_finished() -> None:
+    grid = PastePattern()
+    grid.cell_sprite[(0, 0)] = Cell()
+    grid.cell[(0, 0)] = 1
+    grid.generation = 1
+    grid.start()
+    is_paused, is_finished = handle_control_action("play_pause", grid, False, False)
+    assert is_paused is True
+    assert is_finished is False  # was already False, must remain False
+    assert grid.run is False
+
+
+def test_handle_control_action_play_pause_no_cells_no_history_does_not_start() -> None:
+    grid = PastePattern()
+    is_paused, _ = handle_control_action("play_pause", grid, False, False)
+    assert is_paused is False
+    assert grid.run is False
