@@ -1,5 +1,7 @@
+import asyncio
 import math
 import os
+import sys
 
 import pygame
 from pygame.locals import (
@@ -34,8 +36,10 @@ from gameoflife.pattern.paste import PastePattern
 from gameoflife.util.geometry import bresenham_line
 from gameoflife.util.text import InfoText
 
+RUNNING_IN_PYGBAG = sys.platform == "emscripten"
 
-def main() -> None:
+
+async def run() -> None:
     # Center the window on the screen.
     os.environ["SDL_VIDEO_CENTERED"] = "1"
 
@@ -153,11 +157,11 @@ def main() -> None:
         # Handel user inputs.
         for event in pygame.event.get():
             # Exit the program.
-            if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
+            if (event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE)) and not RUNNING_IN_PYGBAG:
                 return
 
             # Press F11 to toggle to fullscreen mode.
-            if event.type == KEYDOWN and event.key == K_F11:
+            if event.type == KEYDOWN and event.key == K_F11 and not RUNNING_IN_PYGBAG:
                 is_fullscreen, screen = toggle_fullscreen(is_fullscreen)
 
             # Events captured only while splash screen is running.
@@ -379,6 +383,7 @@ def main() -> None:
                 modal_group.draw(screen)
 
         pygame.display.update()
+        await asyncio.sleep(0)
 
 
 def format_sidebar(lines: list[InfoText]) -> list[InfoText]:
