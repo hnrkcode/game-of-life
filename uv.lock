@@ -124,6 +124,9 @@ dependencies = [
 ]
 
 [package.dev-dependencies]
+dev = [
+    { name = "pygbag" },
+]
 lint = [
     { name = "ruff" },
     { name = "ty" },
@@ -137,6 +140,7 @@ test = [
 requires-dist = [{ name = "pygame-ce", specifier = ">=2.5.7" }]
 
 [package.metadata.requires-dev]
+dev = [{ name = "pygbag", specifier = ">=0.9.3" }]
 lint = [
     { name = "ruff", specifier = ">=0.15.8" },
     { name = "ty", specifier = ">=0.0.26" },
@@ -211,6 +215,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/1c/da/1506934539127781ea52bd826ceb620c4a7456c52bd5410d12259a95741c/pygame_ce-2.5.7-pp311-pypy311_pp73-manylinux2014_i686.manylinux_2_17_i686.whl", hash = "sha256:01c48daf8fccb66e8750d5d26bf20e3f0dc484a5f7748fa98fd7e2ac69a2f7f5", size = 13186464, upload-time = "2026-03-02T09:26:51.784Z" },
     { url = "https://files.pythonhosted.org/packages/a6/6f/4ba6bd545113767ea1fc8204d2d6616fd749bb4f931c5357f90adf45ddd7/pygame_ce-2.5.7-pp311-pypy311_pp73-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:8ac7120a6c39c042abdc6bd2f5491f7121936c68c425235b52dc451ed9583dbf", size = 12767531, upload-time = "2026-03-02T09:26:54.314Z" },
     { url = "https://files.pythonhosted.org/packages/21/e8/5e3782901f10ce39724797b4ed48138da69ce03332dde7bc21c15475684f/pygame_ce-2.5.7-pp311-pypy311_pp73-win_amd64.whl", hash = "sha256:d79c4f961ffa89183380c4284914ed2f693591baec7fb92e42f05857dd8664bd", size = 10376956, upload-time = "2026-03-02T09:26:56.724Z" },
+]
+
+[[package]]
+name = "pygbag"
+version = "0.9.3"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/9f/85/a71c709305451264abede261cbb58ad964c08fcda4717ebbe2be473962bc/pygbag-0.9.3.tar.gz", hash = "sha256:e1a4d8027ed22fc7e453abe0b4abb35a7bfb4c39fa7f1d1b2a6b1f3a92696349", size = 156287, upload-time = "2026-02-12T19:29:46.935Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/5d/5c/f0c741f4492bc4836625365e4b2e7edba034af0ff424201d49e62e65c67a/pygbag-0.9.3-py3-none-any.whl", hash = "sha256:ada203ff5a214f721029cb3b3741f641b032cde1ccaac60bc8dd9e641f3da3d5", size = 176071, upload-time = "2026-02-12T19:29:45.608Z" },
 ]
 
 [[package]]

@@ -11,8 +11,9 @@ readme = "README.md"
 license = { text = "MIT" }
 
 [dependency-groups]
-test = ["pytest>=9.0.2", "pytest-cov>=7.1.0"]
+dev = ["pygbag>=0.9.3"]
 lint = ["ruff>=0.15.8", "ty>=0.0.26"]
+test = ["pytest>=9.0.2", "pytest-cov>=7.1.0"]
 
 [tool.ruff]
 line-length = 150
@@ -22,14 +23,14 @@ target-version = "py313"
 [tool.ruff.lint]
 select = ["ALL"]
 fixable = ["I001", "W292", "W293", "RUF022"]
-ignore = ["D", "COM812"]
+ignore = ["D", "COM812", "INP001"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["PT", "S101", "PLR2004", "ANN", "FBT003"]
 "gameoflife/**" = ["FBT"]
 "gameoflife/util/text.py" = ["PLR0913"]
 "gameoflife/camera.py" = ["PLR0913"]
-"gameoflife/main.py" = ["C901", "PLR0912", "PLR0915"]
+"gameoflife/app.py" = ["C901", "PLR0912", "PLR0915"]
 
 [tool.ty.rules]
 

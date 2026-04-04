@@ -7,3 +7,9 @@ venv
 .pytest_cache
 .pdm-python
 .ruff_cache
+build/
+dist/
+*.pyc
+*.wav
+*.mp3
+*-pygbag.???

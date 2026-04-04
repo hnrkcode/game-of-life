@@ -2,9 +2,9 @@ import pygame
 import pytest
 
 from gameoflife import settings
+from gameoflife.app import handle_control_action, has_finished, is_inside_viewport, is_pausable, preview_patterns
 from gameoflife.board.cell import Cell
 from gameoflife.camera import Camera
-from gameoflife.main import handle_control_action, has_finished, is_inside_viewport, is_pausable, preview_patterns
 from gameoflife.pattern.paste import PastePattern
 
 
