@@ -44,6 +44,18 @@ This project uses [uv](https://github.com/astral-sh/uv) for fast Python dependen
     make start
     ```
 
+## Development
+
+When adding new features and fixing bugs do it with a new branch and create a pull request because the changes will be automatically be included in the changelog in the next release. Other changes like refactoring and formatting can be done on the master branch.
+
+Make sure `bump-my-version` is installed to use the `release` command, that will automatically bump the version, create a git tag and push it to GitHub were GitHub actions will create a new release and publish the game on itch.io.
+
+There is a pre-commit hook that will only allow you to bump the version with `bump-my-version` if there are no lint, formatting, type checking or test errors.
+
+```bash
+make release
+```
+
 ## Controls
 
 | key | description |
