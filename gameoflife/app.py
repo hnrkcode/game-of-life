@@ -108,6 +108,10 @@ async def run() -> None:
 
     splash_screen_group = pygame.sprite.RenderUpdates(splash_header, splash_start)
 
+    # Version label in the bottom left corner.
+    version_label = InfoText(f"v{settings.VERSION}", size=settings.TEXT)
+    version_label.set_position((10, settings.HEIGHT - version_label.image.get_height() - 10))
+
     # Layout the text on the left side of the board.
     sidebar_layout = [
         InfoText("INFORMATION", size=settings.H3),
@@ -382,6 +386,7 @@ async def run() -> None:
             if is_modal_active:
                 modal_group.draw(screen)
 
+        screen.blit(version_label.image, version_label.rect)
         pygame.display.update()
         await asyncio.sleep(0)
 

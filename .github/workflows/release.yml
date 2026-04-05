@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "${{ github.ref_name }}" --generate-notes
+
+  upload-to-itch:
+    runs-on: ubuntu-latest
+    needs: release
+    if: success()
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --locked --group dev
+
+      - name: Build web package
+        run: |
+          uv run pygbag \
+            --build \
+            --archive \
+            --title "GAME OF LIFE" \
+            --package hnrkcode-game-of-life \
+            --width 1280 \
+            --height 720 \
+            --icon data/images/logo.png \
+            .
+
+      - name: Install butler
+        run: |
+          curl -L -o butler.zip https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default
+          unzip butler.zip
+          chmod +x butler
+          ./butler -V
+
+      - name: Upload to itch.io
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          ./butler push build/web.zip ${{ vars.ITCHIO_GAME }}:html5 --userversion "$VERSION"
+
+      - name: Prune uv cache
+        run: uv cache prune --ci

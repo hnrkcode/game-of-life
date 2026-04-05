@@ -1,4 +1,5 @@
-from pathlib import PurePath
+import tomllib
+from pathlib import Path, PurePath
 
 GAME_NAME = "GAME OF LIFE"
 
@@ -76,3 +77,6 @@ H2 = 35
 H3 = 25
 H4 = 20
 TEXT = 15
+
+with Path(BASE_DIR / "pyproject.toml").open("rb") as f:
+    VERSION = tomllib.load(f)["project"]["version"]
