@@ -50,12 +50,19 @@ tag = true
 sign_tags = false
 tag_name = "v{new_version}"
 tag_message = "Bump version: {current_version} → {new_version}"
-allow_dirty = true
+allow_dirty = false
 commit = true
 message = "Bump version: {current_version} → {new_version}"
 moveable_tags = []
 commit_args = ""
 setup_hooks = []
-pre_commit_hooks = []
+pre_commit_hooks = [
+    "uv sync",
+    "git add uv.lock",
+    "uv run --group lint ruff check .",
+    "uv run --group lint ruff format --check .",
+    "uv run --group lint --group test ty check",
+    "uv run --group test pytest -v tests/ --cov=gameoflife/",
+]
 post_commit_hooks = []
 allow_shell_hooks = true
