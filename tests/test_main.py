@@ -88,23 +88,26 @@ def test_preview_patterns_uses_red_when_outside_viewport(monkeypatch: pytest.Mon
 def test_preview_patterns_uses_red_when_pattern_overflows_viewport(monkeypatch: pytest.MonkeyPatch) -> None:
     camera = make_camera()
     grid = PastePattern()
-    monkeypatch.setattr(pygame.mouse, "get_pos", lambda: (195, 195))
+    monkeypatch.setattr(pygame.mouse, "get_pos", lambda: (200, 200))
 
-    # Default single-cell preview is 10x10, so at (195,195) it overflows a 200x200 viewport.
+    # Default single-cell preview is 10x10, centered at (200,200) → top-left (195,195).
+    # 195+10=205 > 200 (viewport edge), so it overflows.
     surface, _ = preview_patterns(is_ctrl_held=False, grid=grid, pattern_name=None, camera=camera)
 
     pixel_color = surface.get_at((0, 0))[:3]
     assert pixel_color == settings.PASTE_OFF
 
 
-def test_preview_patterns_returns_mouse_position(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_preview_patterns_returns_centered_position(monkeypatch: pytest.MonkeyPatch) -> None:
     camera = make_camera()
     grid = PastePattern()
     monkeypatch.setattr(pygame.mouse, "get_pos", lambda: (42, 99))
 
-    _, pos = preview_patterns(is_ctrl_held=False, grid=grid, pattern_name=None, camera=camera)
+    surface, pos = preview_patterns(is_ctrl_held=False, grid=grid, pattern_name=None, camera=camera)
+    w, h = surface.get_size()
 
-    assert pos == (42, 99)
+    # Preview is now centered on the cursor.
+    assert pos == (42 - w // 2, 99 - h // 2)
 
 
 def test_paste_only_allowed_inside_viewport() -> None:

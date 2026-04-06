@@ -69,6 +69,10 @@ make release
 | `RIGHT MOUSE BUTTON` | Click or hold to erase cells |
 | `UP`, `DOWN` or `SCROLL WHEEL` | Choose pattern from predefined patterns |
 | Hold `CTRL` + click `LEFT MOUSE BUTTON` | Paste chosen pattern onto the grid |
+| `CTRL` + `Q` | Rotate pattern 90° counter-clockwise |
+| `CTRL` + `E` | Rotate pattern 90° clockwise |
+| `CTRL` + `W` | Flip pattern vertically |
+| `CTRL` + `S` | Flip pattern horizontally |
 
 ## Commands
 

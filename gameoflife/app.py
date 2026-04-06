@@ -21,9 +21,13 @@ from pygame.locals import (
     MOUSEBUTTONUP,
     MOUSEMOTION,
     QUIT,
+    K_e,
     K_h,
     K_p,
+    K_q,
     K_r,
+    K_s,
+    K_w,
 )
 
 from gameoflife import settings
@@ -223,15 +227,28 @@ async def run() -> None:
                             grid.select.previous()
                             pattern_name, paste_pattern = grid.select.get_current()
                             menu_obj = scroll_menu.setup(grid.select)
+                            grid.reset_transform()
 
                         if event.key == K_DOWN:
                             grid.select.next()
                             pattern_name, paste_pattern = grid.select.get_current()
                             menu_obj = scroll_menu.setup(grid.select)
+                            grid.reset_transform()
 
                         # Hold left control button to paste pattern when left clicking.
                         if event.key in {K_LCTRL, K_RCTRL}:
                             is_ctrl_held = True
+
+                        # Transform pattern (rotation / flip) while Ctrl is held.
+                        if is_ctrl_held:
+                            if event.key == K_q:
+                                grid.rotate_pattern_ccw(pattern_name)
+                            elif event.key == K_e:
+                                grid.rotate_pattern_cw(pattern_name)
+                            elif event.key == K_w:
+                                grid.flip_pattern_v(pattern_name)
+                            elif event.key == K_s:
+                                grid.flip_pattern_h(pattern_name)
 
                         # Zoom in/out with +/- keys.
                         if event.key == K_PLUS:
@@ -256,10 +273,12 @@ async def run() -> None:
                             grid.select.next()
                             pattern_name, paste_pattern = grid.select.get_current()
                             menu_obj = scroll_menu.setup(grid.select)
+                            grid.reset_transform()
                         elif event.button == settings.SCROLL_UP and (mods & pygame.KMOD_LCTRL):
                             grid.select.previous()
                             pattern_name, paste_pattern = grid.select.get_current()
                             menu_obj = scroll_menu.setup(grid.select)
+                            grid.reset_transform()
 
                         # Middle mouse button to start panning.
                         elif event.button == settings.MIDDLE_CLICK:
@@ -313,7 +332,12 @@ async def run() -> None:
 
                     for pt in points:
                         if is_ctrl_held:
-                            paste_pattern(world_pos=pt, button=button, name=pattern_name)
+                            # Only allow pasting when the entire pattern fits inside the viewport.
+                            pattern_surface = grid.preview(pattern_name, cell_size=camera.cell_size)
+                            pw, ph = pattern_surface.get_size()
+                            centered = (pos[0] - pw // 2, pos[1] - ph // 2)
+                            if is_inside_viewport(centered, pattern_surface, camera):
+                                paste_pattern(world_pos=pt, button=button, name=pattern_name)
                         else:
                             paste_pattern(world_pos=pt, button=button)
 
@@ -435,11 +459,14 @@ def preview_patterns(is_ctrl_held: bool, grid: PastePattern, pattern_name: str |
     """Preview selected patterns and show if you can paste it."""
     pos = pygame.mouse.get_pos()
     pattern = grid.preview(pattern_name, cell_size=camera.cell_size) if is_ctrl_held else grid.preview(cell_size=camera.cell_size)
-    color = settings.PASTE_ON if is_inside_viewport(pos, pattern, camera) else settings.PASTE_OFF
+    # Center the preview on the cursor so rotation/flip doesn't shift it.
+    w, h = pattern.get_size()
+    centered_pos = (pos[0] - w // 2, pos[1] - h // 2)
+    color = settings.PASTE_ON if is_inside_viewport(centered_pos, pattern, camera) else settings.PASTE_OFF
     pattern = (
         grid.preview(pattern_name, cell_size=camera.cell_size, color=color) if is_ctrl_held else grid.preview(cell_size=camera.cell_size, color=color)
     )
-    return pattern, pos
+    return pattern, centered_pos
 
 
 def viewport_center(camera: Camera) -> tuple[int, int]:
