@@ -2,6 +2,7 @@ import asyncio
 import math
 import os
 import sys
+import time
 
 import pygame
 from pygame.locals import (
@@ -41,6 +42,7 @@ from gameoflife.util.geometry import bresenham_line
 from gameoflife.util.text import InfoText
 
 RUNNING_IN_PYGBAG = sys.platform == "emscripten"
+ONE_MINUTE = 60
 
 
 async def run() -> None:
@@ -65,6 +67,7 @@ async def run() -> None:
     is_splash_screen = True
     is_panning = False
     last_draw_world_pos: tuple[int, int] | None = None
+    last_activity_time = time.monotonic()
 
     # Initialize camera.
     camera = Camera(
@@ -164,6 +167,8 @@ async def run() -> None:
 
         # Handel user inputs.
         for event in pygame.event.get():
+            if event.type in {KEYDOWN, KEYUP, MOUSEBUTTONDOWN, MOUSEBUTTONUP, MOUSEMOTION}:
+                last_activity_time = time.monotonic()
             # Exit the program.
             if (event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE)) and not RUNNING_IN_PYGBAG:
                 return
@@ -394,7 +399,7 @@ async def run() -> None:
 
             screen.set_clip(None)
 
-            if is_paused:
+            if is_paused and time.monotonic() - last_activity_time >= ONE_MINUTE:
                 pause_screen_group.draw(screen)
 
             # Show end screen when there are no more cells left on the board.
