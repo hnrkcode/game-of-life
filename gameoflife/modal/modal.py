@@ -58,6 +58,16 @@ class Modal(pygame.sprite.Sprite):
             InfoText("Scroll", size=settings.TEXT, pos=(180, 335)),
             InfoText("Pan:", size=settings.TEXT, pos=(80, 355)),
             InfoText("Middle mouse + drag", size=settings.TEXT, pos=(180, 355)),
+            # Pattern transform controls.
+            InfoText("Pattern transforms", size=settings.H4, pos=(400, 230)),
+            InfoText("Rotate CCW:", size=settings.TEXT, pos=(400, 255)),
+            InfoText("Ctrl + Q", size=settings.TEXT, pos=(530, 255)),
+            InfoText("Rotate CW:", size=settings.TEXT, pos=(400, 275)),
+            InfoText("Ctrl + E", size=settings.TEXT, pos=(530, 275)),
+            InfoText("Flip vertical:", size=settings.TEXT, pos=(400, 295)),
+            InfoText("Ctrl + W", size=settings.TEXT, pos=(530, 295)),
+            InfoText("Flip horizontal:", size=settings.TEXT, pos=(400, 315)),
+            InfoText("Ctrl + S", size=settings.TEXT, pos=(530, 315)),
             # Media controls.
             InfoText("Media controls below viewport", size=settings.H4, pos=(400, 75)),
         ]
