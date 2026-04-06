@@ -50,5 +50,8 @@ clean:
 	uv cache clear
 
 release:
-	uvx bump-my-version bump patch
+ifeq ($(filter $(BUMP),patch minor major),)
+	$(error BUMP must be patch, minor, or major. Usage: make release BUMP=patch)
+endif
+	uvx bump-my-version bump $(BUMP)
 	git push origin master --tags
