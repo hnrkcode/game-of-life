@@ -96,7 +96,7 @@ async def run() -> None:
 
     splash_header.set_position(
         (
-            int(settings.WIDTH / 2 - (splash_header.image.get_width() / 2)),
+            int(settings.WIDTH / 2 - (splash_header.surface.get_width() / 2)),
             int(settings.HEIGHT / 3),
         )
     )
@@ -108,7 +108,7 @@ async def run() -> None:
 
     splash_start.set_position(
         (
-            int(settings.WIDTH / 2 - (splash_start.image.get_width() / 2)),
+            int(settings.WIDTH / 2 - (splash_start.surface.get_width() / 2)),
             int(settings.HEIGHT / 1.75),
         )
     )
@@ -117,7 +117,7 @@ async def run() -> None:
 
     # Version label in the bottom left corner.
     version_label = InfoText(f"v{settings.VERSION}", size=settings.TEXT)
-    version_label.set_position((10, settings.HEIGHT - version_label.image.get_height() - 10))
+    version_label.set_position((10, settings.HEIGHT - version_label.surface.get_height() - 10))
 
     # Layout the text on the left side of the board.
     sidebar_layout = [
@@ -180,7 +180,7 @@ async def run() -> None:
             # Events captured only while splash screen is running.
             if is_splash_screen:
                 if event.type == pygame.USEREVENT:
-                    splash_start.rect[1] = int(settings.HEIGHT / 1.75 + 5 * math.sin(splash_start_num) + 5)
+                    splash_start.bounds[1] = int(settings.HEIGHT / 1.75 + 5 * math.sin(splash_start_num) + 5)
                     splash_start_num += 1
 
                 # Press any keyboard key or mouse button to close splash screen and start game.
@@ -415,7 +415,7 @@ async def run() -> None:
             if is_modal_active:
                 modal_group.draw(screen)
 
-        screen.blit(version_label.image, version_label.rect)
+        screen.blit(version_label.surface, version_label.bounds)
         pygame.display.update()
         await asyncio.sleep(0)
 

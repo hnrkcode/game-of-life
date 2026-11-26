@@ -4,9 +4,6 @@ from gameoflife import settings
 
 
 class InfoText(pygame.sprite.DirtySprite):
-    image: pygame.Surface
-    rect: pygame.Rect
-
     def __init__(
         self,
         text: str | None,
@@ -21,14 +18,31 @@ class InfoText(pygame.sprite.DirtySprite):
         self.text = text
         self.fontsize = size
         self._font = pygame.font.Font(font, size)
-        self.image = self._font.render(text, True, color)
-        self.rect = self.image.get_rect(topleft=pos)
+        image = self._font.render(text, True, color)
+        self.image = image
+        self.rect = image.get_rect(topleft=pos)
 
         if alpha:
-            self.image.set_alpha(150)
+            image.set_alpha(150)
+
+    @property
+    def surface(self) -> pygame.Surface:
+        image = self.image
+        if image is None:
+            msg = "Text sprite has no image"
+            raise ValueError(msg)
+        return image
+
+    @property
+    def bounds(self) -> pygame.Rect | pygame.FRect:
+        rect = self.rect
+        if rect is None:
+            msg = "Text sprite has no rectangle"
+            raise ValueError(msg)
+        return rect
 
     def set_position(self, pos: tuple[int, int]) -> None:
-        self.rect.topleft = pos
+        self.bounds.topleft = pos
 
     def update(self, text: str | None) -> None:
         self.text = text
