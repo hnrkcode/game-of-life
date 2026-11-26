@@ -35,10 +35,10 @@ test:
 	uv run pytest -v tests/ --cov=gameoflife/
 
 lint:
-	uv run ruff check . --fix --show-fixes
+	uv run --locked --group lint ruff check . --fix --show-fixes
 
 format:
-	uv run ruff format .
+	uv run --locked --group lint ruff format .
 
 typecheck:
 	uv run ty check

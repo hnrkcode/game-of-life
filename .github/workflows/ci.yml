@@ -20,12 +20,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: astral-sh/ruff-action@v3
+      - uses: astral-sh/setup-uv@v7
         with:
-          args: "check --output-format=github"
-      - uses: astral-sh/ruff-action@v3
-        with:
-          args: "format --diff"
+          enable-cache: true
+      - run: uv run --locked --group lint ruff check --output-format=github .
+      - run: uv run --locked --group lint ruff format --diff .
 
   typecheck:
     runs-on: ubuntu-latest
