@@ -12,7 +12,7 @@ license = { text = "MIT" }
 
 [dependency-groups]
 dev = ["pygbag>=0.9.3"]
-lint = ["ruff>=0.15.8", "ty>=0.0.26"]
+lint = ["ruff>=0.17.6", "ty>=0.0.26"]
 test = ["pytest>=9.0.2", "pytest-cov>=7.1.0"]
 
 [tool.ruff]
