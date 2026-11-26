@@ -7,9 +7,6 @@ from gameoflife.util.text import InfoText
 class Modal(pygame.sprite.Sprite):
     """Modal background."""
 
-    image: pygame.Surface
-    rect: pygame.Rect
-
     def __init__(self) -> None:
         super().__init__()
 
@@ -22,10 +19,10 @@ class Modal(pygame.sprite.Sprite):
         pos = int((settings.WIDTH - width) / 2), int((settings.HEIGHT - height) / 2)
 
         self.color = settings.MODAL_COLOR
-        self.image = pygame.Surface(size)
-        self.image.fill(self.color)
-        self.rect = self.image.get_rect()
-        self.rect.topleft = pos
+        image = pygame.Surface(size)
+        image.fill(self.color)
+        self.image = image
+        self.rect = image.get_rect(topleft=pos)
 
         # Content inside modal.
         content = [
@@ -73,4 +70,4 @@ class Modal(pygame.sprite.Sprite):
         ]
 
         for data in content:
-            self.image.blit(data.image, data.rect)
+            image.blit(data.surface, data.bounds)

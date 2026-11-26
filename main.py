@@ -2,6 +2,9 @@
 # dependencies = [
 #  "pygame-ce",
 # ]
+#
+# [tool.ty.environment]
+# root = ["."]
 # ///
 
 import asyncio
